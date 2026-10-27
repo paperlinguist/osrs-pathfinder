@@ -1,0 +1,6927 @@
+{
+ "meta": {
+  "sources": [
+   "wvanderp/osrs-db (MIT, cache-derived quest registry)",
+   "oldschool.runescape.wiki Quests/Requirements_by_quest (requirements)",
+   "oldschool.runescape.wiki Quest experience rewards (XP)"
+  ],
+  "generated": "2026-10-27"
+ },
+ "quests": [
+  {
+   "key": "a kingdom divided",
+   "name": "A Kingdom Divided",
+   "registryName": "A Kingdom Divided",
+   "enum": "A_KINGDOM_DIVIDED",
+   "cacheId": 81,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 54,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 42,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 38,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 35,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "ascent of arceuus",
+    "client of kourend",
+    "depths of despair",
+    "forsaken tower",
+    "queen of thieves",
+    "tale of righteous",
+    "x marks spot"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "16 June 2021",
+   "members": true
+  },
+  {
+   "key": "a night at theatre",
+   "name": "A Night at the Theatre",
+   "registryName": "A Night at the Theatre",
+   "enum": "A_NIGHT_AT_THE_THEATRE",
+   "cacheId": 104,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "a taste of hope",
+    "darkness of hallowvale",
+    "in aid of myreque",
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "3 June 2021",
+   "members": true
+  },
+  {
+   "key": "a porcine of interest",
+   "name": "A Porcine of Interest",
+   "registryName": "A Porcine of Interest",
+   "enum": "A_PORCINE_OF_INTEREST",
+   "cacheId": 110,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Slayer": 1000
+   },
+   "length": "Very Short",
+   "release": "10 September 2020",
+   "members": true
+  },
+  {
+   "key": "a ruff situation",
+   "name": "A Ruff Situation",
+   "registryName": "A Ruff Situation",
+   "enum": "A_RUFF_SITUATION",
+   "cacheId": 16971,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 1000
+   },
+   "length": "Short",
+   "release": "8 September 2026",
+   "members": true
+  },
+  {
+   "key": "a souls bane",
+   "name": "A Soul's Bane",
+   "registryName": "A Soul's Bane",
+   "enum": "A_SOULS_BANE",
+   "cacheId": 138,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Defence": 500,
+    "Hitpoints": 500
+   },
+   "length": "Short",
+   "release": "3 April 2006",
+   "members": true
+  },
+  {
+   "key": "a tail of two cats",
+   "name": "A Tail of Two Cats",
+   "registryName": "A Tail of Two Cats",
+   "enum": "A_TAIL_OF_TWO_CATS",
+   "cacheId": 142,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "gertrudes cat",
+    "icthlarins little helper"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "26 September 2005",
+   "members": true
+  },
+  {
+   "key": "a taste of hope",
+   "name": "A Taste of Hope",
+   "registryName": "A Taste of Hope",
+   "enum": "A_TASTE_OF_HOPE",
+   "cacheId": 144,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Attack": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 38,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "darkness of hallowvale",
+    "in aid of myreque",
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "24 May 2018",
+   "members": true
+  },
+  {
+   "key": "animal magnetism",
+   "name": "Animal Magnetism",
+   "registryName": "Animal Magnetism",
+   "enum": "ANIMAL_MAGNETISM",
+   "cacheId": 0,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 18,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 19,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 35,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "ernest chicken",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Crafting": 1000,
+    "Fletching": 1000,
+    "Slayer": 1000,
+    "Woodcutting": 2500
+   },
+   "length": "Medium",
+   "release": "12 December 2006",
+   "members": true
+  },
+  {
+   "key": "another slice of ham",
+   "name": "Another Slice of H.A.M.",
+   "registryName": "Another Slice of H.A.M.",
+   "enum": "ANOTHER_SLICE_OF_HAM",
+   "cacheId": 1,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Attack": {
+     "level": 15,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Prayer": {
+     "level": 25,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death to dorgeshuun",
+    "dig site",
+    "giant dwarf",
+    "goblin diplomacy",
+    "lost tribe",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Mining": 3000,
+    "Prayer": 3000
+   },
+   "length": "Short",
+   "release": "24 April 2007",
+   "members": true
+  },
+  {
+   "key": "at first light",
+   "name": "At First Light",
+   "registryName": "At First Light",
+   "enum": "AT_FIRST_LIGHT",
+   "cacheId": 3513,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Hunter": {
+     "level": 46,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 27,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun",
+    "eagles peak"
+   ],
+   "xp": {
+    "Construction": 800,
+    "Herblore": 500,
+    "Hunter": 4500
+   },
+   "length": "Short",
+   "release": "20 March 2024",
+   "members": true
+  },
+  {
+   "key": "barbarian training",
+   "name": "Barbarian Training",
+   "registryName": "Barbarian Training",
+   "enum": "BARBARIAN_TRAINING",
+   "cacheId": 3451,
+   "difficulty": "Activity",
+   "qp": null,
+   "f2p": false,
+   "members": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "noReqData": true
+  },
+  {
+   "key": "below ice mountain",
+   "name": "Below Ice Mountain",
+   "registryName": "Below Ice Mountain",
+   "enum": "BELOW_ICE_MOUNTAIN",
+   "cacheId": 6,
+   "difficulty": "Novice",
+   "qp": 16,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "14 April 2021",
+   "members": false
+  },
+  {
+   "key": "beneath cursed sands",
+   "name": "Beneath Cursed Sands",
+   "registryName": "Beneath Cursed Sands",
+   "enum": "BENEATH_CURSED_SANDS",
+   "cacheId": 168,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "contact",
+    "gertrudes cat",
+    "icthlarins little helper",
+    "prince ali rescue"
+   ],
+   "xp": {
+    "Agility": 50000
+   },
+   "length": "Medium",
+   "release": "27 April 2022",
+   "members": true
+  },
+  {
+   "key": "between a rock",
+   "name": "Between a Rock...",
+   "registryName": "Between a Rock...",
+   "enum": "BETWEEN_A_ROCK",
+   "cacheId": 7,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Defence": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dwarf cannon",
+    "fishing contest"
+   ],
+   "xp": {
+    "Defence": 5000,
+    "Mining": 5000,
+    "Smithing": 5000
+   },
+   "length": "Medium",
+   "release": "21 March 2005",
+   "members": true
+  },
+  {
+   "key": "big chompy bird hunting",
+   "name": "Big Chompy Bird Hunting",
+   "registryName": "Big Chompy Bird Hunting",
+   "enum": "BIG_CHOMPY_BIRD_HUNTING",
+   "cacheId": 8,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Fletching": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Cooking": 1470,
+    "Fletching": 262,
+    "Ranged": 735
+   },
+   "length": "Short",
+   "release": "18 May 2004",
+   "members": true
+  },
+  {
+   "key": "biohazard",
+   "name": "Biohazard",
+   "registryName": "Biohazard",
+   "enum": "BIOHAZARD",
+   "cacheId": 9,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "plague city"
+   ],
+   "xp": {
+    "Thieving": 1250
+   },
+   "length": "Short",
+   "release": "23 October 2002",
+   "members": true
+  },
+  {
+   "key": "black knights fortress",
+   "name": "Black Knights' Fortress",
+   "registryName": "Black Knights' Fortress",
+   "enum": "BLACK_KNIGHTS_FORTRESS",
+   "cacheId": 10,
+   "difficulty": "Intermediate",
+   "qp": 12,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "6 April 2001",
+   "members": false
+  },
+  {
+   "key": "bone voyage",
+   "name": "Bone Voyage",
+   "registryName": "Bone Voyage",
+   "enum": "BONE_VOYAGE",
+   "cacheId": 11,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "dig site"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "7 September 2017",
+   "members": true
+  },
+  {
+   "key": "cabin fever",
+   "name": "Cabin Fever",
+   "registryName": "Cabin Fever",
+   "enum": "CABIN_FEVER",
+   "cacheId": 12,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 42,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "druidic ritual",
+    "jungle potion",
+    "pirates treasure",
+    "priest in peril",
+    "rum deal",
+    "zogre flesh eaters"
+   ],
+   "xp": {
+    "Agility": 7000,
+    "Crafting": 7000,
+    "Smithing": 7000
+   },
+   "length": "Short",
+   "release": "7 February 2006",
+   "members": true
+  },
+  {
+   "key": "children of sun",
+   "name": "Children of the Sun",
+   "registryName": "Children of the Sun",
+   "enum": "CHILDREN_OF_THE_SUN",
+   "cacheId": 3450,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "10 January 2024",
+   "members": true
+  },
+  {
+   "key": "client of kourend",
+   "name": "Client of Kourend",
+   "registryName": "Client of Kourend",
+   "enum": "CLIENT_OF_KOUREND",
+   "cacheId": 13,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "x marks spot"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "20 April 2017",
+   "members": true
+  },
+  {
+   "key": "clock tower",
+   "name": "Clock Tower",
+   "registryName": "Clock Tower",
+   "enum": "CLOCK_TOWER",
+   "cacheId": 14,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "17 June 2002",
+   "members": true
+  },
+  {
+   "key": "cold war",
+   "name": "Cold War",
+   "registryName": "Cold War",
+   "enum": "COLD_WAR",
+   "cacheId": 15,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Hunter": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 34,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 15,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Agility": 5000,
+    "Construction": 1500,
+    "Crafting": 2000
+   },
+   "length": "Medium",
+   "release": "29 January 2007",
+   "members": true
+  },
+  {
+   "key": "contact",
+   "name": "Contact!",
+   "registryName": "Contact!",
+   "enum": "CONTACT",
+   "cacheId": 16,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "gertrudes cat",
+    "icthlarins little helper",
+    "prince ali rescue"
+   ],
+   "xp": {
+    "Thieving": 7000
+   },
+   "length": "Short",
+   "release": "10 January 2007",
+   "members": true
+  },
+  {
+   "key": "cooks assistant",
+   "name": "Cook's Assistant",
+   "registryName": "Cook's Assistant",
+   "enum": "COOKS_ASSISTANT",
+   "cacheId": 17,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Cooking": 300
+   },
+   "length": "Very Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "crab quest",
+   "name": "Crab Quest",
+   "registryName": "Crab Quest",
+   "enum": "CRAB_QUEST",
+   "cacheId": 16972,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Sailing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Fishing": 3000,
+    "Sailing": 10000
+   },
+   "length": "Short",
+   "release": "8 September 2026",
+   "members": true
+  },
+  {
+   "key": "creature of fenkenstrain",
+   "name": "Creature of Fenkenstrain",
+   "registryName": "Creature of Fenkenstrain",
+   "enum": "CREATURE_OF_FENKENSTRAIN",
+   "cacheId": 19,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Thieving": 1000
+   },
+   "length": "Medium",
+   "release": "31 January 2005",
+   "members": true
+  },
+  {
+   "key": "current affairs",
+   "name": "Current Affairs",
+   "registryName": "Current Affairs",
+   "enum": "CURRENT_AFFAIRS",
+   "cacheId": 7105,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Sailing": {
+     "level": 22,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "pandemonium"
+   ],
+   "xp": {
+    "Fishing": 1000,
+    "Sailing": 1400
+   },
+   "length": "Short",
+   "release": "19 November 2025",
+   "members": true
+  },
+  {
+   "key": "darkness of hallowvale",
+   "name": "Darkness of Hallowvale",
+   "registryName": "Darkness of Hallowvale",
+   "enum": "DARKNESS_OF_HALLOWVALE",
+   "cacheId": 22,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Construction": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 22,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 26,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 32,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 33,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Strength": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "in aid of myreque",
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Agility": 7000,
+    "Construction": 2000,
+    "Thieving": 6000
+   },
+   "length": "Long",
+   "release": "4 September 2006",
+   "members": true
+  },
+  {
+   "key": "death plateau",
+   "name": "Death Plateau",
+   "registryName": "Death Plateau",
+   "enum": "DEATH_PLATEAU",
+   "cacheId": 23,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Attack": 3000
+   },
+   "length": "Short",
+   "release": "9 August 2004",
+   "members": true
+  },
+  {
+   "key": "death on isle",
+   "name": "Death on the Isle",
+   "registryName": "Death on the Isle",
+   "enum": "DEATH_ON_THE_ISLE",
+   "cacheId": 3711,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 34,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 32,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Agility": 7500,
+    "Crafting": 5000,
+    "Thieving": 10000
+   },
+   "length": "Medium",
+   "release": "25 September 2024",
+   "members": true
+  },
+  {
+   "key": "death to dorgeshuun",
+   "name": "Death to the Dorgeshuun",
+   "registryName": "Death to the Dorgeshuun",
+   "enum": "DEATH_TO_THE_DORGESHUUN",
+   "cacheId": 24,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "goblin diplomacy",
+    "lost tribe",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Ranged": 2000,
+    "Thieving": 2000
+   },
+   "length": "Medium",
+   "release": "21 June 2006",
+   "members": true
+  },
+  {
+   "key": "defender of varrock",
+   "name": "Defender of Varrock",
+   "registryName": "Defender of Varrock",
+   "enum": "DEFENDER_OF_VARROCK",
+   "cacheId": 3466,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Smithing": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "below ice mountain",
+    "creature of fenkenstrain",
+    "demon slayer",
+    "family crest",
+    "garden of tranquillity",
+    "priest in peril",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "shield of arrav",
+    "temple of ikov",
+    "what lies below"
+   ],
+   "xp": {
+    "Hunter": 15000,
+    "Smithing": 15000
+   },
+   "length": "Medium",
+   "release": "21 February 2024",
+   "members": true
+  },
+  {
+   "key": "demon slayer",
+   "name": "Demon Slayer",
+   "registryName": "Demon Slayer",
+   "enum": "DEMON_SLAYER",
+   "cacheId": 25,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "desert treasure i",
+   "name": "Desert Treasure I",
+   "registryName": "Desert Treasure I",
+   "enum": "DESERT_TREASURE_I",
+   "cacheId": 27,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 53,
+     "boostable": false,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "death plateau",
+    "dig site",
+    "plague city",
+    "priest in peril",
+    "temple of ikov",
+    "tourist trap",
+    "troll stronghold",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Magic": 20000
+   },
+   "length": "Long",
+   "release": "18 April 2005",
+   "members": true
+  },
+  {
+   "key": "desert treasure ii fallen empire",
+   "name": "Desert Treasure II - The Fallen Empire",
+   "registryName": "Desert Treasure II - The Fallen Empire",
+   "enum": "DESERT_TREASURE_II__THE_FALLEN_EMPIRE",
+   "cacheId": 2343,
+   "difficulty": "Grandmaster",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 75,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 75,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "below ice mountain",
+    "black knights fortress",
+    "cold war",
+    "creature of fenkenstrain",
+    "curse of empty lord",
+    "death plateau",
+    "desert treasure i",
+    "devious minds",
+    "dig site",
+    "dorics quest",
+    "druidic ritual",
+    "eadgars ruse",
+    "enakhras lament",
+    "enter abyss",
+    "feud",
+    "fight arena",
+    "garden of death",
+    "garden of tranquillity",
+    "generals shadow",
+    "goblin diplomacy",
+    "hazeel cult",
+    "his faithful servants",
+    "jungle potion",
+    "lost tribe",
+    "making friends with my arm",
+    "my arms big adventure",
+    "one small favour",
+    "priest in peril",
+    "recruitment drive",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "secrets of north",
+    "shilo village",
+    "swan song",
+    "temple of eye",
+    "temple of ikov",
+    "tourist trap",
+    "troll stronghold",
+    "wanted",
+    "waterfall quest"
+   ],
+   "xp": {},
+   "length": "Very Long",
+   "release": "26 July 2023",
+   "members": true
+  },
+  {
+   "key": "devious minds",
+   "name": "Devious Minds",
+   "registryName": "Devious Minds",
+   "enum": "DEVIOUS_MINDS",
+   "cacheId": 28,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Smithing": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "black knights fortress",
+    "death plateau",
+    "dorics quest",
+    "druidic ritual",
+    "enter abyss",
+    "goblin diplomacy",
+    "lost tribe",
+    "priest in peril",
+    "recruitment drive",
+    "rune mysteries",
+    "troll stronghold",
+    "wanted"
+   ],
+   "xp": {
+    "Fletching": 5000,
+    "Runecraft": 5000,
+    "Smithing": 6500
+   },
+   "length": "Short",
+   "release": "19 December 2005",
+   "members": true
+  },
+  {
+   "key": "dorics quest",
+   "name": "Doric's Quest",
+   "registryName": "Doric's Quest",
+   "enum": "DORICS_QUEST",
+   "cacheId": 30,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Mining": 1300
+   },
+   "length": "Very Short",
+   "release": "6 April 2001",
+   "members": false
+  },
+  {
+   "key": "dragon slayer i",
+   "name": "Dragon Slayer I",
+   "registryName": "Dragon Slayer I",
+   "enum": "DRAGON_SLAYER_I",
+   "cacheId": 31,
+   "difficulty": "Experienced",
+   "qp": 32,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Defence": 18650,
+    "Strength": 18650
+   },
+   "length": "Medium",
+   "release": "23 September 2001",
+   "members": false
+  },
+  {
+   "key": "dragon slayer ii",
+   "name": "Dragon Slayer II",
+   "registryName": "Dragon Slayer II",
+   "enum": "DRAGON_SLAYER_II",
+   "cacheId": 32,
+   "difficulty": "Grandmaster",
+   "qp": 200,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 75,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 68,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hitpoints": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "a tail of two cats",
+    "animal magnetism",
+    "barbarian training",
+    "biohazard",
+    "bone voyage",
+    "client of kourend",
+    "death plateau",
+    "dig site",
+    "dragon slayer i",
+    "dream mentor",
+    "druidic ritual",
+    "eadgars ruse",
+    "ernest chicken",
+    "family crest",
+    "fremennik trials",
+    "gertrudes cat",
+    "ghosts ahoy",
+    "heroes quest",
+    "icthlarins little helper",
+    "jungle potion",
+    "legends quest",
+    "lost city",
+    "lunar diplomacy",
+    "merlins crystal",
+    "plague city",
+    "priest in peril",
+    "restless ghost",
+    "rune mysteries",
+    "shield of arrav",
+    "shilo village",
+    "troll stronghold",
+    "underground pass",
+    "waterfall quest",
+    "x marks spot"
+   ],
+   "xp": {
+    "Agility": 50000,
+    "Mining": 60000,
+    "Smithing": 80000,
+    "Thieving": 50000
+   },
+   "length": "Very Long",
+   "release": "4 January 2018",
+   "members": true
+  },
+  {
+   "key": "dream mentor",
+   "name": "Dream Mentor",
+   "registryName": "Dream Mentor",
+   "enum": "DREAM_MENTOR",
+   "cacheId": 33,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death plateau",
+    "druidic ritual",
+    "eadgars ruse",
+    "fremennik trials",
+    "jungle potion",
+    "lost city",
+    "lunar diplomacy",
+    "rune mysteries",
+    "shilo village",
+    "troll stronghold"
+   ],
+   "xp": {
+    "Hitpoints": 15000,
+    "Magic": 10000
+   },
+   "length": "Medium",
+   "release": "15 May 2007",
+   "members": true
+  },
+  {
+   "key": "druidic ritual",
+   "name": "Druidic Ritual",
+   "registryName": "Druidic Ritual",
+   "enum": "DRUIDIC_RITUAL",
+   "cacheId": 34,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Herblore": 250
+   },
+   "length": "Very Short",
+   "release": "27 February 2002",
+   "members": true
+  },
+  {
+   "key": "dwarf cannon",
+   "name": "Dwarf Cannon",
+   "registryName": "Dwarf Cannon",
+   "enum": "DWARF_CANNON",
+   "cacheId": 35,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 750
+   },
+   "length": "Short",
+   "release": "27 May 2003",
+   "members": true
+  },
+  {
+   "key": "eadgars ruse",
+   "name": "Eadgar's Ruse",
+   "registryName": "Eadgar's Ruse",
+   "enum": "EADGARS_RUSE",
+   "cacheId": 36,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Herblore": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death plateau",
+    "druidic ritual",
+    "troll stronghold"
+   ],
+   "xp": {
+    "Herblore": 11000
+   },
+   "length": "Medium",
+   "release": "5 October 2004",
+   "members": true
+  },
+  {
+   "key": "eagles peak",
+   "name": "Eagles' Peak",
+   "registryName": "Eagles' Peak",
+   "enum": "EAGLES_PEAK",
+   "cacheId": 37,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Hunter": {
+     "level": 27,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Hunter": 2500
+   },
+   "length": "Short",
+   "release": "28 November 2006",
+   "members": true
+  },
+  {
+   "key": "elemental workshop i",
+   "name": "Elemental Workshop I",
+   "registryName": "Elemental Workshop I",
+   "enum": "ELEMENTAL_WORKSHOP_I",
+   "cacheId": 38,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Mining": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 5000,
+    "Smithing": 5000
+   },
+   "length": "Very Short",
+   "release": "2 June 2004",
+   "members": true
+  },
+  {
+   "key": "elemental workshop ii",
+   "name": "Elemental Workshop II",
+   "registryName": "Elemental Workshop II",
+   "enum": "ELEMENTAL_WORKSHOP_II",
+   "cacheId": 39,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "elemental workshop i"
+   ],
+   "xp": {
+    "Crafting": 7500,
+    "Smithing": 7500
+   },
+   "length": "Short",
+   "release": "2 October 2006",
+   "members": true
+  },
+  {
+   "key": "enakhras lament",
+   "name": "Enakhra's Lament",
+   "registryName": "Enakhra's Lament",
+   "enum": "ENAKHRAS_LAMENT",
+   "cacheId": 40,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 43,
+     "boostable": false,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 39,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 7000,
+    "Firemaking": 7000,
+    "Magic": 7000,
+    "Mining": 7000
+   },
+   "length": "Medium",
+   "release": "23 January 2006",
+   "members": true
+  },
+  {
+   "key": "enlightened journey",
+   "name": "Enlightened Journey",
+   "registryName": "Enlightened Journey",
+   "enum": "ENLIGHTENED_JOURNEY",
+   "cacheId": 42,
+   "difficulty": "Intermediate",
+   "qp": 20,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Farming": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 2000,
+    "Farming": 3000,
+    "Firemaking": 4000,
+    "Woodcutting": 1500
+   },
+   "length": "Short",
+   "release": "6 November 2006",
+   "members": true
+  },
+  {
+   "key": "ernest chicken",
+   "name": "Ernest the Chicken",
+   "registryName": "Ernest the Chicken",
+   "enum": "ERNEST_THE_CHICKEN",
+   "cacheId": 44,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "21 January 2001",
+   "members": false
+  },
+  {
+   "key": "ethically acquired antiquities",
+   "name": "Ethically Acquired Antiquities",
+   "registryName": "Ethically Acquired Antiquities",
+   "enum": "ETHICALLY_ACQUIRED_ANTIQUITIES",
+   "cacheId": 3713,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 25,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun",
+    "shield of arrav"
+   ],
+   "xp": {
+    "Thieving": 6000
+   },
+   "length": "Short",
+   "release": "25 September 2024",
+   "members": true
+  },
+  {
+   "key": "fairytale i growing pains",
+   "name": "Fairytale I - Growing Pains",
+   "registryName": "Fairytale I - Growing Pains",
+   "enum": "FAIRYTALE_I__GROWING_PAINS",
+   "cacheId": 46,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "lost city",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Attack": 2000,
+    "Farming": 3500,
+    "Magic": 1000
+   },
+   "length": "Medium",
+   "release": "27 February 2006",
+   "members": true
+  },
+  {
+   "key": "fairytale ii cure a queen",
+   "name": "Fairytale II - Cure a Queen",
+   "registryName": "Fairytale II - Cure a Queen",
+   "enum": "FAIRYTALE_II__CURE_A_QUEEN",
+   "cacheId": 47,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 57,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "fairytale i growing pains",
+    "lost city",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Herblore": 3500,
+    "Thieving": 2500
+   },
+   "length": "Medium",
+   "release": "11 July 2006",
+   "members": true
+  },
+  {
+   "key": "fallen from grace",
+   "name": "Fallen From Grace",
+   "registryName": "Fallen From Grace",
+   "enum": "FALLEN_FROM_GRACE",
+   "cacheId": 7133,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Sailing": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 47,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 53,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "pandemonium"
+   ],
+   "xp": {
+    "Crafting": 10000,
+    "Mining": 5000,
+    "Runecraft": 5000,
+    "Sailing": 12500
+   },
+   "length": "Short",
+   "release": "29 July 2026",
+   "members": true
+  },
+  {
+   "key": "family crest",
+   "name": "Family Crest",
+   "registryName": "Family Crest",
+   "enum": "FAMILY_CREST",
+   "cacheId": 48,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": "Medium",
+   "release": "9 April 2002",
+   "members": true
+  },
+  {
+   "key": "fight arena",
+   "name": "Fight Arena",
+   "registryName": "Fight Arena",
+   "enum": "FIGHT_ARENA",
+   "cacheId": 51,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Attack": 12175,
+    "Thieving": 2175
+   },
+   "length": "Short",
+   "release": "23 July 2002",
+   "members": true
+  },
+  {
+   "key": "fishing contest",
+   "name": "Fishing Contest",
+   "registryName": "Fishing Contest",
+   "enum": "FISHING_CONTEST",
+   "cacheId": 52,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Fishing": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Fishing": 2437
+   },
+   "length": "Very Short",
+   "release": "28 May 2002",
+   "members": true
+  },
+  {
+   "key": "forgettable tale",
+   "name": "Forgettable Tale...",
+   "registryName": "Forgettable Tale...",
+   "enum": "FORGETTABLE_TALE",
+   "cacheId": 53,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 17,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "fishing contest",
+    "giant dwarf"
+   ],
+   "xp": {
+    "Cooking": 5000,
+    "Farming": 5000
+   },
+   "length": "Long",
+   "release": "26 July 2005",
+   "members": true
+  },
+  {
+   "key": "garden of tranquillity",
+   "name": "Garden of Tranquillity",
+   "registryName": "Garden of Tranquillity",
+   "enum": "GARDEN_OF_TRANQUILLITY",
+   "cacheId": 58,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Farming": {
+     "level": 25,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "creature of fenkenstrain",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Farming": 5000
+   },
+   "length": "Long",
+   "release": "30 August 2005",
+   "members": true
+  },
+  {
+   "key": "gertrudes cat",
+   "name": "Gertrude's Cat",
+   "registryName": "Gertrude's Cat",
+   "enum": "GERTRUDES_CAT",
+   "cacheId": 60,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Cooking": 1525
+   },
+   "length": "Very Short",
+   "release": "28 July 2003",
+   "members": true
+  },
+  {
+   "key": "getting ahead",
+   "name": "Getting Ahead",
+   "registryName": "Getting Ahead",
+   "enum": "GETTING_AHEAD",
+   "cacheId": 61,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 26,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Construction": 3200,
+    "Crafting": 4000
+   },
+   "length": "Short",
+   "release": "25 November 2020",
+   "members": true
+  },
+  {
+   "key": "ghosts ahoy",
+   "name": "Ghosts Ahoy",
+   "registryName": "Ghosts Ahoy",
+   "enum": "GHOSTS_AHOY",
+   "cacheId": 62,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Prayer": 2400
+   },
+   "length": "Medium",
+   "release": "15 February 2005",
+   "members": true
+  },
+  {
+   "key": "goblin diplomacy",
+   "name": "Goblin Diplomacy",
+   "registryName": "Goblin Diplomacy",
+   "enum": "GOBLIN_DIPLOMACY",
+   "cacheId": 64,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 200
+   },
+   "length": "Very Short",
+   "release": "8 May 2001",
+   "members": false
+  },
+  {
+   "key": "grim tales",
+   "name": "Grim Tales",
+   "registryName": "Grim Tales",
+   "enum": "GRIM_TALES",
+   "cacheId": 68,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Farming": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 58,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 71,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "witchs house"
+   ],
+   "xp": {
+    "Agility": 25000,
+    "Farming": 10000,
+    "Herblore": 15000,
+    "Hitpoints": 5000,
+    "Thieving": 25000,
+    "Woodcutting": 60000
+   },
+   "length": "Medium",
+   "release": "4 June 2007",
+   "members": true
+  },
+  {
+   "key": "haunted mine",
+   "name": "Haunted Mine",
+   "registryName": "Haunted Mine",
+   "enum": "HAUNTED_MINE",
+   "cacheId": 70,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "priest in peril"
+   ],
+   "xp": {
+    "Strength": 22000
+   },
+   "length": "Short",
+   "release": "21 December 2004",
+   "members": true
+  },
+  {
+   "key": "hazeel cult",
+   "name": "Hazeel Cult",
+   "registryName": "Hazeel Cult",
+   "enum": "HAZEEL_CULT",
+   "cacheId": 71,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Thieving": 1500
+   },
+   "length": "Very Short",
+   "release": "15 August 2002",
+   "members": true
+  },
+  {
+   "key": "heroes quest",
+   "name": "Heroes' Quest",
+   "registryName": "Heroes' Quest",
+   "enum": "HEROES_QUEST",
+   "cacheId": 72,
+   "difficulty": "Experienced",
+   "qp": 55,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dragon slayer i",
+    "lost city",
+    "merlins crystal",
+    "shield of arrav"
+   ],
+   "xp": {
+    "Attack": 3075,
+    "Cooking": 2825,
+    "Defence": 3075,
+    "Firemaking": 1575,
+    "Fishing": 2725,
+    "Herblore": 1325,
+    "Hitpoints": 3075,
+    "Mining": 2575,
+    "Ranged": 2075,
+    "Smithing": 2275,
+    "Strength": 3075,
+    "Woodcutting": 1575
+   },
+   "length": "Medium",
+   "release": "27 February 2002",
+   "members": true
+  },
+  {
+   "key": "holy grail",
+   "name": "Holy Grail",
+   "registryName": "Holy Grail",
+   "enum": "HOLY_GRAIL",
+   "cacheId": 73,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Attack": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "merlins crystal"
+   ],
+   "xp": {
+    "Defence": 15300,
+    "Prayer": 11000
+   },
+   "length": "Short",
+   "release": "23 July 2002",
+   "members": true
+  },
+  {
+   "key": "horror from deep",
+   "name": "Horror from the Deep",
+   "registryName": "Horror from the Deep",
+   "enum": "HORROR_FROM_THE_DEEP",
+   "cacheId": 74,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl"
+   ],
+   "xp": {
+    "Magic": 4662,
+    "Ranged": 4662,
+    "Strength": 4662
+   },
+   "length": "Short",
+   "release": "17 November 2004",
+   "members": true
+  },
+  {
+   "key": "icthlarins little helper",
+   "name": "Icthlarin's Little Helper",
+   "registryName": "Icthlarin's Little Helper",
+   "enum": "ICTHLARINS_LITTLE_HELPER",
+   "cacheId": 75,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "gertrudes cat"
+   ],
+   "xp": {
+    "Agility": 4000,
+    "Thieving": 4500,
+    "Woodcutting": 4000
+   },
+   "length": "Medium",
+   "release": "26 April 2005",
+   "members": true
+  },
+  {
+   "key": "imp catcher",
+   "name": "Imp Catcher",
+   "registryName": "Imp Catcher",
+   "enum": "IMP_CATCHER",
+   "cacheId": 76,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Magic": 875
+   },
+   "length": "Short",
+   "release": "16 February 2001",
+   "members": false
+  },
+  {
+   "key": "in aid of myreque",
+   "name": "In Aid of the Myreque",
+   "registryName": "In Aid of the Myreque",
+   "enum": "IN_AID_OF_THE_MYREQUE",
+   "cacheId": 77,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 25,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 15,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 7,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Attack": 2000,
+    "Crafting": 2000,
+    "Defence": 2000,
+    "Strength": 2000
+   },
+   "length": "Medium",
+   "release": "22 March 2006",
+   "members": true
+  },
+  {
+   "key": "in search of myreque",
+   "name": "In Search of the Myreque",
+   "registryName": "In Search of the Myreque",
+   "enum": "IN_SEARCH_OF_THE_MYREQUE",
+   "cacheId": 79,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "nature spirit",
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Attack": 600,
+    "Crafting": 600,
+    "Defence": 600,
+    "Hitpoints": 600,
+    "Strength": 600
+   },
+   "length": "Short",
+   "release": "10 January 2005",
+   "members": true
+  },
+  {
+   "key": "jungle potion",
+   "name": "Jungle Potion",
+   "registryName": "Jungle Potion",
+   "enum": "JUNGLE_POTION",
+   "cacheId": 80,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Herblore": {
+     "level": 3,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "druidic ritual"
+   ],
+   "xp": {
+    "Herblore": 775
+   },
+   "length": "Short",
+   "release": "23 October 2002",
+   "members": true
+  },
+  {
+   "key": "kings ransom",
+   "name": "King's Ransom",
+   "registryName": "King's Ransom",
+   "enum": "KINGS_RANSOM",
+   "cacheId": 82,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Defence": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "black knights fortress",
+    "druidic ritual",
+    "holy grail",
+    "jungle potion",
+    "merlins crystal",
+    "murder mystery",
+    "one small favour",
+    "rune mysteries",
+    "shilo village"
+   ],
+   "xp": {
+    "Defence": 33000,
+    "Magic": 5000
+   },
+   "length": "Medium",
+   "release": "24 July 2007",
+   "members": true
+  },
+  {
+   "key": "land of goblins",
+   "name": "Land of the Goblins",
+   "registryName": "Land of the Goblins",
+   "enum": "LAND_OF_THE_GOBLINS",
+   "cacheId": 165,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 38,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "another slice of ham",
+    "death to dorgeshuun",
+    "dig site",
+    "fishing contest",
+    "giant dwarf",
+    "goblin diplomacy",
+    "lost tribe",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Agility": 8000,
+    "Fishing": 8000,
+    "Herblore": 8000,
+    "Thieving": 8000
+   },
+   "length": "Medium",
+   "release": "9 February 2022",
+   "members": true
+  },
+  {
+   "key": "learning ropes",
+   "name": "Learning the Ropes",
+   "registryName": "Learning the Ropes",
+   "enum": "LEARNING_THE_ROPES",
+   "cacheId": 9643,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "22 October 2025",
+   "members": false
+  },
+  {
+   "key": "legends quest",
+   "name": "Legends' Quest",
+   "registryName": "Legends' Quest",
+   "enum": "LEGENDS_QUEST",
+   "cacheId": 85,
+   "difficulty": "Master",
+   "qp": 107,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "biohazard",
+    "dragon slayer i",
+    "druidic ritual",
+    "family crest",
+    "heroes quest",
+    "jungle potion",
+    "lost city",
+    "merlins crystal",
+    "plague city",
+    "shield of arrav",
+    "shilo village",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "20 August 2003",
+   "members": true
+  },
+  {
+   "key": "lost city",
+   "name": "Lost City",
+   "registryName": "Lost City",
+   "enum": "LOST_CITY",
+   "cacheId": 86,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "27 February 2002",
+   "members": true
+  },
+  {
+   "key": "lunar diplomacy",
+   "name": "Lunar Diplomacy",
+   "registryName": "Lunar Diplomacy",
+   "enum": "LUNAR_DIPLOMACY",
+   "cacheId": 88,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Herblore": {
+     "level": 5,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "druidic ritual",
+    "fremennik trials",
+    "jungle potion",
+    "lost city",
+    "rune mysteries",
+    "shilo village"
+   ],
+   "xp": {
+    "Magic": 5000,
+    "Runecraft": 5000
+   },
+   "length": "Long",
+   "release": "24 July 2006",
+   "members": true
+  },
+  {
+   "key": "making friends with my arm",
+   "name": "Making Friends with My Arm",
+   "registryName": "Making Friends with My Arm",
+   "enum": "MAKING_FRIENDS_WITH_MY_ARM",
+   "cacheId": 91,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 66,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "cold war",
+    "creature of fenkenstrain",
+    "death plateau",
+    "druidic ritual",
+    "eadgars ruse",
+    "feud",
+    "garden of tranquillity",
+    "jungle potion",
+    "my arms big adventure",
+    "one small favour",
+    "priest in peril",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "shilo village",
+    "swan song",
+    "troll stronghold"
+   ],
+   "xp": {
+    "Agility": 50000,
+    "Construction": 10000,
+    "Firemaking": 40000,
+    "Mining": 50000
+   },
+   "length": "Medium",
+   "release": "6 September 2018",
+   "members": true
+  },
+  {
+   "key": "making history",
+   "name": "Making History",
+   "registryName": "Making History",
+   "enum": "MAKING_HISTORY",
+   "cacheId": 92,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Crafting": 1000,
+    "Prayer": 1000
+   },
+   "length": "Short",
+   "release": "22 November 2005",
+   "members": true
+  },
+  {
+   "key": "meat and greet",
+   "name": "Meat and Greet",
+   "registryName": "Meat and Greet",
+   "enum": "MEAT_AND_GREET",
+   "cacheId": 3712,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Cooking": 8000
+   },
+   "length": "Short",
+   "release": "25 September 2024",
+   "members": true
+  },
+  {
+   "key": "merlins crystal",
+   "name": "Merlin's Crystal",
+   "registryName": "Merlin's Crystal",
+   "enum": "MERLINS_CRYSTAL",
+   "cacheId": 93,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "27 February 2002",
+   "members": true
+  },
+  {
+   "key": "misthalin mystery",
+   "name": "Misthalin Mystery",
+   "registryName": "Misthalin Mystery",
+   "enum": "MISTHALIN_MYSTERY",
+   "cacheId": 94,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 600
+   },
+   "length": "Short",
+   "release": "26 January 2017",
+   "members": false
+  },
+  {
+   "key": "monks friend",
+   "name": "Monk's Friend",
+   "registryName": "Monk's Friend",
+   "enum": "MONKS_FRIEND",
+   "cacheId": 97,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Woodcutting": 2000
+   },
+   "length": "Very Short",
+   "release": "28 May 2002",
+   "members": true
+  },
+  {
+   "key": "monkey madness i",
+   "name": "Monkey Madness I",
+   "registryName": "Monkey Madness I",
+   "enum": "MONKEY_MADNESS_I",
+   "cacheId": 95,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "grand tree",
+    "tree gnome village"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "6 December 2004",
+   "members": true
+  },
+  {
+   "key": "monkey madness ii",
+   "name": "Monkey Madness II",
+   "registryName": "Monkey Madness II",
+   "enum": "MONKEY_MADNESS_II",
+   "cacheId": 96,
+   "difficulty": "Grandmaster",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 69,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death plateau",
+    "enlightened journey",
+    "eyes of glouphrie",
+    "grand tree",
+    "monkey madness i",
+    "recipe for disaster king awowogei",
+    "tree gnome village",
+    "troll stronghold",
+    "watchtower"
+   ],
+   "xp": {
+    "Agility": 60000,
+    "Hunter": 50000,
+    "Slayer": 80000,
+    "Thieving": 50000
+   },
+   "length": "Very Long",
+   "release": "6 May 2016",
+   "members": true
+  },
+  {
+   "key": "mountain daughter",
+   "name": "Mountain Daughter",
+   "registryName": "Mountain Daughter",
+   "enum": "MOUNTAIN_DAUGHTER",
+   "cacheId": 98,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Attack": 1000,
+    "Prayer": 2000
+   },
+   "length": "Medium",
+   "release": "7 March 2005",
+   "members": true
+  },
+  {
+   "key": "mournings end part i",
+   "name": "Mourning's End Part I",
+   "registryName": "Mourning's End Part I",
+   "enum": "MOURNINGS_END_PART_I",
+   "cacheId": 99,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Ranged": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "biohazard",
+    "plague city",
+    "regicide",
+    "roving elves",
+    "sheep herder",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Hitpoints": 25000,
+    "Thieving": 40000
+   },
+   "length": "Medium",
+   "release": "19 July 2005",
+   "members": true
+  },
+  {
+   "key": "mournings end part ii",
+   "name": "Mourning's End Part II",
+   "registryName": "Mourning's End Part II",
+   "enum": "MOURNINGS_END_PART_II",
+   "cacheId": 100,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "big chompy bird hunting",
+    "biohazard",
+    "mournings end part i",
+    "plague city",
+    "regicide",
+    "roving elves",
+    "sheep herder",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Agility": 60000
+   },
+   "length": "Long",
+   "release": "17 October 2005",
+   "members": true
+  },
+  {
+   "key": "murder mystery",
+   "name": "Murder Mystery",
+   "registryName": "Murder Mystery",
+   "enum": "MURDER_MYSTERY",
+   "cacheId": 101,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 1406
+   },
+   "length": "Short",
+   "release": "9 June 2003",
+   "members": true
+  },
+  {
+   "key": "my arms big adventure",
+   "name": "My Arm's Big Adventure",
+   "registryName": "My Arm's Big Adventure",
+   "enum": "MY_ARMS_BIG_ADVENTURE",
+   "cacheId": 102,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Farming": {
+     "level": 29,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death plateau",
+    "druidic ritual",
+    "eadgars ruse",
+    "feud",
+    "jungle potion",
+    "troll stronghold"
+   ],
+   "xp": {
+    "Farming": 5000,
+    "Herblore": 10000
+   },
+   "length": "Medium",
+   "release": "23 October 2006",
+   "members": true
+  },
+  {
+   "key": "nature spirit",
+   "name": "Nature Spirit",
+   "registryName": "Nature Spirit",
+   "enum": "NATURE_SPIRIT",
+   "cacheId": 103,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "priest in peril",
+    "restless ghost"
+   ],
+   "xp": {
+    "Crafting": 3000,
+    "Defence": 2000,
+    "Hitpoints": 2000
+   },
+   "length": "Short",
+   "release": "13 July 2004",
+   "members": true
+  },
+  {
+   "key": "observatory quest",
+   "name": "Observatory Quest",
+   "registryName": "Observatory Quest",
+   "enum": "OBSERVATORY_QUEST",
+   "cacheId": 105,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 2250
+   },
+   "length": "Short",
+   "release": "17 March 2003",
+   "members": true
+  },
+  {
+   "key": "olafs quest",
+   "name": "Olaf's Quest",
+   "registryName": "Olaf's Quest",
+   "enum": "OLAFS_QUEST",
+   "cacheId": 106,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "fremennik trials"
+   ],
+   "xp": {
+    "Defence": 12000
+   },
+   "length": "Short",
+   "release": "10 April 2007",
+   "members": true
+  },
+  {
+   "key": "one small favour",
+   "name": "One Small Favour",
+   "registryName": "One Small Favour",
+   "enum": "ONE_SMALL_FAVOUR",
+   "cacheId": 107,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "druidic ritual",
+    "jungle potion",
+    "rune mysteries",
+    "shilo village"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "28 February 2005",
+   "members": true
+  },
+  {
+   "key": "pandemonium",
+   "name": "Pandemonium",
+   "registryName": "Pandemonium",
+   "enum": "PANDEMONIUM",
+   "cacheId": 7103,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Sailing": 300
+   },
+   "length": "Short",
+   "release": "19 November 2025",
+   "members": true
+  },
+  {
+   "key": "perilous moons",
+   "name": "Perilous Moons",
+   "registryName": "Perilous Moons",
+   "enum": "PERILOUS_MOONS",
+   "cacheId": 3514,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun",
+    "twilights promise"
+   ],
+   "xp": {
+    "Fishing": 5000,
+    "Hunter": 5000,
+    "Runecraft": 5000,
+    "Slayer": 40000
+   },
+   "length": "Medium",
+   "release": "20 March 2024",
+   "members": true
+  },
+  {
+   "key": "pirates treasure",
+   "name": "Pirate's Treasure",
+   "registryName": "Pirate's Treasure",
+   "enum": "PIRATES_TREASURE",
+   "cacheId": 108,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "11 June 2001",
+   "members": false
+  },
+  {
+   "key": "plague city",
+   "name": "Plague City",
+   "registryName": "Plague City",
+   "enum": "PLAGUE_CITY",
+   "cacheId": 109,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Mining": 2425
+   },
+   "length": "Very Short",
+   "release": "27 August 2002",
+   "members": true
+  },
+  {
+   "key": "priest in peril",
+   "name": "Priest in Peril",
+   "registryName": "Priest in Peril",
+   "enum": "PRIEST_IN_PERIL",
+   "cacheId": 111,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Prayer": 1406
+   },
+   "length": "Short",
+   "release": "29 June 2004",
+   "members": true
+  },
+  {
+   "key": "prince ali rescue",
+   "name": "Prince Ali Rescue",
+   "registryName": "Prince Ali Rescue",
+   "enum": "PRINCE_ALI_RESCUE",
+   "cacheId": 112,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "28 February 2001",
+   "members": false
+  },
+  {
+   "key": "prying times",
+   "name": "Prying Times",
+   "registryName": "Prying Times",
+   "enum": "PRYING_TIMES",
+   "cacheId": 7104,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Smithing": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Sailing": {
+     "level": 12,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "knights sword",
+    "pandemonium"
+   ],
+   "xp": {
+    "Sailing": 800,
+    "Smithing": 1000
+   },
+   "length": "Short",
+   "release": "19 November 2025",
+   "members": true
+  },
+  {
+   "key": "rag and bone man i",
+   "name": "Rag and Bone Man I",
+   "registryName": "Rag and Bone Man I",
+   "enum": "RAG_AND_BONE_MAN_I",
+   "cacheId": 114,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Cooking": 500,
+    "Prayer": 500
+   },
+   "length": "Short",
+   "release": "10 April 2006",
+   "members": true
+  },
+  {
+   "key": "rag and bone man ii",
+   "name": "Rag and Bone Man II",
+   "registryName": "Rag and Bone Man II",
+   "enum": "RAG_AND_BONE_MAN_II",
+   "cacheId": 115,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "creature of fenkenstrain",
+    "rag and bone man i",
+    "skippy and mogres"
+   ],
+   "xp": {
+    "Prayer": 5000
+   },
+   "length": "Medium",
+   "release": "10 April 2006",
+   "members": true
+  },
+  {
+   "key": "ratcatchers",
+   "name": "Ratcatchers",
+   "registryName": "Ratcatchers",
+   "enum": "RATCATCHERS",
+   "cacheId": 116,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "gertrudes cat",
+    "giant dwarf",
+    "icthlarins little helper"
+   ],
+   "xp": {
+    "Thieving": 4500
+   },
+   "length": "Medium",
+   "release": "28 November 2005",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster",
+   "name": "Recipe for Disaster",
+   "registryName": "Recipe for Disaster",
+   "enum": "RECIPE_FOR_DISASTER",
+   "cacheId": 117,
+   "difficulty": "Special",
+   "qp": 175,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl",
+    "big chompy bird hunting",
+    "biohazard",
+    "cooks assistant",
+    "death plateau",
+    "demon slayer",
+    "desert treasure i",
+    "dig site",
+    "dragon slayer i",
+    "druidic ritual",
+    "family crest",
+    "fishing contest",
+    "gertrudes cat",
+    "goblin diplomacy",
+    "golem",
+    "grand tree",
+    "heroes quest",
+    "horror from deep",
+    "jungle potion",
+    "legends quest",
+    "lost city",
+    "merlins crystal",
+    "monkey madness i",
+    "murder mystery",
+    "nature spirit",
+    "plague city",
+    "priest in peril",
+    "recipe for disaster another cooks quest",
+    "restless ghost",
+    "shadow of storm",
+    "shield of arrav",
+    "shilo village",
+    "temple of ikov",
+    "tourist trap",
+    "tree gnome village",
+    "troll stronghold",
+    "underground pass",
+    "waterfall quest",
+    "witchs house"
+   ],
+   "xp": {
+    "Agility": 10000,
+    "Cooking": 10000,
+    "Crafting": 1500,
+    "Farming": 1000,
+    "Fishing": 1000,
+    "Hitpoints": 4000,
+    "Magic": 2500,
+    "Ranged": 1500,
+    "Slayer": 1000,
+    "Smithing": 1000
+   },
+   "length": "Very Long",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster another cooks quest",
+   "name": "Recipe for Disaster/Another Cook's Quest",
+   "registryName": "Recipe for Disaster - Another Cook's Quest",
+   "enum": "RECIPE_FOR_DISASTER__ANOTHER_COOKS_QUEST",
+   "cacheId": 2307,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "cooks assistant"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster culinaromancer",
+   "name": "Recipe for Disaster/Defeating the Culinaromancer",
+   "registryName": "Recipe for Disaster - Culinaromancer",
+   "enum": "RECIPE_FOR_DISASTER__CULINAROMANCER",
+   "cacheId": 2316,
+   "difficulty": "Special",
+   "qp": 175,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "alfred grimhands barcrawl",
+    "death plateau",
+    "desert treasure i",
+    "dig site",
+    "horror from deep",
+    "priest in peril",
+    "recipe for disaster evil dave",
+    "recipe for disaster king awowogei",
+    "recipe for disaster lumbridge guide",
+    "recipe for disaster mountain dwarf",
+    "recipe for disaster pirate pete",
+    "recipe for disaster sir amik varze",
+    "recipe for disaster skrach uglogwee",
+    "temple of ikov",
+    "tourist trap",
+    "troll stronghold",
+    "waterfall quest"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster evil dave",
+   "name": "Recipe for Disaster/Freeing Evil Dave",
+   "registryName": "Recipe for Disaster - Evil Dave",
+   "enum": "RECIPE_FOR_DISASTER__EVIL_DAVE",
+   "cacheId": 2312,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "cooks assistant",
+    "demon slayer",
+    "gertrudes cat",
+    "golem",
+    "recipe for disaster another cooks quest",
+    "shadow of storm"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster king awowogei",
+   "name": "Recipe for Disaster/Freeing King Awowogei",
+   "registryName": "Recipe for Disaster - King Awowogei",
+   "enum": "RECIPE_FOR_DISASTER__KING_AWOWOGEI",
+   "cacheId": 2315,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "cooks assistant",
+    "grand tree",
+    "monkey madness i",
+    "recipe for disaster another cooks quest",
+    "tree gnome village"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster pirate pete",
+   "name": "Recipe for Disaster/Freeing Pirate Pete",
+   "registryName": "Recipe for Disaster - Pirate Pete",
+   "enum": "RECIPE_FOR_DISASTER__PIRATE_PETE",
+   "cacheId": 2310,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "cooks assistant",
+    "recipe for disaster another cooks quest"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster sir amik varze",
+   "name": "Recipe for Disaster/Freeing Sir Amik Varze",
+   "registryName": "Recipe for Disaster - Sir Amik Varze",
+   "enum": "RECIPE_FOR_DISASTER__SIR_AMIK_VARZE",
+   "cacheId": 2314,
+   "difficulty": "Special",
+   "qp": 107,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "biohazard",
+    "cooks assistant",
+    "dragon slayer i",
+    "druidic ritual",
+    "family crest",
+    "heroes quest",
+    "jungle potion",
+    "legends quest",
+    "lost city",
+    "merlins crystal",
+    "plague city",
+    "recipe for disaster another cooks quest",
+    "shield of arrav",
+    "shilo village",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster skrach uglogwee",
+   "name": "Recipe for Disaster/Freeing Skrach Uglogwee",
+   "registryName": "Recipe for Disaster - Skrach Uglogwee",
+   "enum": "RECIPE_FOR_DISASTER__SKRACH_UGLOGWEE",
+   "cacheId": 2313,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 41,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "cooks assistant",
+    "recipe for disaster another cooks quest"
+   ],
+   "xp": {
+    "Woodcutting": 1500
+   },
+   "length": "Medium",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster goblin generals",
+   "name": "Recipe for Disaster/Freeing the Goblin generals",
+   "registryName": "Recipe for Disaster - Wartface & Bentnoze",
+   "enum": "RECIPE_FOR_DISASTER__WARTFACE__BENTNOZE",
+   "cacheId": 2309,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "cooks assistant",
+    "goblin diplomacy",
+    "recipe for disaster another cooks quest"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster lumbridge guide",
+   "name": "Recipe for Disaster/Freeing the Lumbridge Guide",
+   "registryName": "Recipe for Disaster - Lumbridge Guide",
+   "enum": "RECIPE_FOR_DISASTER__LUMBRIDGE_GUIDE",
+   "cacheId": 2311,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "biohazard",
+    "cooks assistant",
+    "demon slayer",
+    "murder mystery",
+    "nature spirit",
+    "plague city",
+    "priest in peril",
+    "recipe for disaster another cooks quest",
+    "restless ghost",
+    "witchs house"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recipe for disaster mountain dwarf",
+   "name": "Recipe for Disaster/Freeing the Mountain Dwarf",
+   "registryName": "Recipe for Disaster - Mountain Dwarf",
+   "enum": "RECIPE_FOR_DISASTER__MOUNTAIN_DWARF",
+   "cacheId": 2308,
+   "difficulty": "Special",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "cooks assistant",
+    "fishing contest",
+    "recipe for disaster another cooks quest"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "15 March 2006",
+   "members": true
+  },
+  {
+   "key": "recruitment drive",
+   "name": "Recruitment Drive",
+   "registryName": "Recruitment Drive",
+   "enum": "RECRUITMENT_DRIVE",
+   "cacheId": 118,
+   "difficulty": "Novice",
+   "qp": 12,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "black knights fortress",
+    "druidic ritual"
+   ],
+   "xp": {
+    "Agility": 1000,
+    "Herblore": 1000,
+    "Prayer": 1000
+   },
+   "length": "Short",
+   "release": "27 June 2005",
+   "members": true
+  },
+  {
+   "key": "regicide",
+   "name": "Regicide",
+   "registryName": "Regicide",
+   "enum": "REGICIDE",
+   "cacheId": 119,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "biohazard",
+    "plague city",
+    "underground pass"
+   ],
+   "xp": {
+    "Agility": 13750
+   },
+   "length": "Long",
+   "release": "20 September 2004",
+   "members": true
+  },
+  {
+   "key": "romeo juliet",
+   "name": "Romeo & Juliet",
+   "registryName": "Romeo & Juliet",
+   "enum": "ROMEO__JULIET",
+   "cacheId": 121,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "roving elves",
+   "name": "Roving Elves",
+   "registryName": "Roving Elves",
+   "enum": "ROVING_ELVES",
+   "cacheId": 122,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "biohazard",
+    "plague city",
+    "regicide",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Strength": 10000
+   },
+   "length": "Short",
+   "release": "7 February 2005",
+   "members": true
+  },
+  {
+   "key": "royal trouble",
+   "name": "Royal Trouble",
+   "registryName": "Royal Trouble",
+   "enum": "ROYAL_TROUBLE",
+   "cacheId": 123,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dragon slayer i",
+    "fremennik trials",
+    "heroes quest",
+    "lost city",
+    "merlins crystal",
+    "shield of arrav",
+    "throne of miscellania"
+   ],
+   "xp": {
+    "Agility": 5000,
+    "Hitpoints": 5000,
+    "Slayer": 5000
+   },
+   "length": "Medium",
+   "release": "22 May 2006",
+   "members": true
+  },
+  {
+   "key": "rum deal",
+   "name": "Rum Deal",
+   "registryName": "Rum Deal",
+   "enum": "RUM_DEAL",
+   "cacheId": 124,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 42,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "druidic ritual",
+    "jungle potion",
+    "priest in peril",
+    "zogre flesh eaters"
+   ],
+   "xp": {
+    "Farming": 7000,
+    "Fishing": 7000,
+    "Prayer": 7000
+   },
+   "length": "Medium",
+   "release": "31 October 2005",
+   "members": true
+  },
+  {
+   "key": "rune mysteries",
+   "name": "Rune Mysteries",
+   "registryName": "Rune Mysteries",
+   "enum": "RUNE_MYSTERIES",
+   "cacheId": 125,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "29 March 2004",
+   "members": false
+  },
+  {
+   "key": "scorpion catcher",
+   "name": "Scorpion Catcher",
+   "registryName": "Scorpion Catcher",
+   "enum": "SCORPION_CATCHER",
+   "cacheId": 126,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Prayer": {
+     "level": 31,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl"
+   ],
+   "xp": {
+    "Strength": 6625
+   },
+   "length": "Short",
+   "release": "25 March 2002",
+   "members": true
+  },
+  {
+   "key": "scrambled",
+   "name": "Scrambled!",
+   "registryName": "Scrambled!",
+   "enum": "SCRAMBLED",
+   "cacheId": 5191,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Construction": {
+     "level": 38,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Cooking": {
+     "level": 36,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 35,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Construction": 5000,
+    "Cooking": 5000,
+    "Smithing": 5000
+   },
+   "length": "Short",
+   "release": "23 July 2025",
+   "members": true
+  },
+  {
+   "key": "sea slug",
+   "name": "Sea Slug",
+   "registryName": "Sea Slug",
+   "enum": "SEA_SLUG",
+   "cacheId": 127,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Fishing": 7175
+   },
+   "length": "Short",
+   "release": "9 September 2002",
+   "members": true
+  },
+  {
+   "key": "secrets of north",
+   "name": "Secrets of the North",
+   "registryName": "Secrets of the North",
+   "enum": "SECRETS_OF_THE_NORTH",
+   "cacheId": 2338,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 69,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 64,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 56,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "black knights fortress",
+    "cold war",
+    "creature of fenkenstrain",
+    "curse of empty lord",
+    "death plateau",
+    "desert treasure i",
+    "devious minds",
+    "dorics quest",
+    "druidic ritual",
+    "eadgars ruse",
+    "enter abyss",
+    "feud",
+    "fight arena",
+    "garden of tranquillity",
+    "generals shadow",
+    "goblin diplomacy",
+    "hazeel cult",
+    "jungle potion",
+    "lost tribe",
+    "making friends with my arm",
+    "my arms big adventure",
+    "one small favour",
+    "priest in peril",
+    "recruitment drive",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "shilo village",
+    "swan song",
+    "troll stronghold",
+    "wanted"
+   ],
+   "xp": {
+    "Agility": 60000,
+    "Hunter": 40000,
+    "Thieving": 50000
+   },
+   "length": "Medium",
+   "release": "11 January 2023",
+   "members": true
+  },
+  {
+   "key": "shades of mortton",
+   "name": "Shades of Mort'ton",
+   "registryName": "Shades of Mort'ton",
+   "enum": "SHADES_OF_MORTTON",
+   "cacheId": 128,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "priest in peril"
+   ],
+   "xp": {
+    "Crafting": 2000,
+    "Herblore": 2000
+   },
+   "length": "Short",
+   "release": "18 October 2004",
+   "members": true
+  },
+  {
+   "key": "shadow of storm",
+   "name": "Shadow of the Storm",
+   "registryName": "Shadow of the Storm",
+   "enum": "SHADOW_OF_THE_STORM",
+   "cacheId": 129,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "demon slayer",
+    "golem"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "14 November 2005",
+   "members": true
+  },
+  {
+   "key": "shadows of custodia",
+   "name": "Shadows of Custodia",
+   "registryName": "Shadows of Custodia",
+   "enum": "SHADOWS_OF_CUSTODIA",
+   "cacheId": 5190,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 54,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 41,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 36,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Construction": 3000,
+    "Fishing": 3000,
+    "Hunter": 4000,
+    "Slayer": 10000
+   },
+   "length": "Short",
+   "release": "23 July 2025",
+   "members": true
+  },
+  {
+   "key": "sheep herder",
+   "name": "Sheep Herder",
+   "registryName": "Sheep Herder",
+   "enum": "SHEEP_HERDER",
+   "cacheId": 130,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "15 August 2002",
+   "members": true
+  },
+  {
+   "key": "sheep shearer",
+   "name": "Sheep Shearer",
+   "registryName": "Sheep Shearer",
+   "enum": "SHEEP_SHEARER",
+   "cacheId": 131,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Crafting": 150
+   },
+   "length": "Very Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "shield of arrav",
+   "name": "Shield of Arrav",
+   "registryName": "Shield of Arrav",
+   "enum": "SHIELD_OF_ARRAV",
+   "cacheId": 132,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "shilo village",
+   "name": "Shilo Village",
+   "registryName": "Shilo Village",
+   "enum": "SHILO_VILLAGE",
+   "cacheId": 133,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 32,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "druidic ritual",
+    "jungle potion"
+   ],
+   "xp": {
+    "Crafting": 3875
+   },
+   "length": "Medium",
+   "release": "27 January 2003",
+   "members": true
+  },
+  {
+   "key": "sins of father",
+   "name": "Sins of the Father",
+   "registryName": "Sins of the Father",
+   "enum": "SINS_OF_THE_FATHER",
+   "cacheId": 134,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Woodcutting": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 56,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Attack": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 49,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "a taste of hope",
+    "darkness of hallowvale",
+    "in aid of myreque",
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost",
+    "vampyre slayer"
+   ],
+   "xp": {},
+   "length": "Long",
+   "release": "4 June 2020",
+   "members": true
+  },
+  {
+   "key": "sleeping giants",
+   "name": "Sleeping Giants",
+   "registryName": "Sleeping Giants",
+   "enum": "SLEEPING_GIANTS",
+   "cacheId": 169,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Smithing": {
+     "level": 15,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Smithing": 6000
+   },
+   "length": "Very Short",
+   "release": "8 June 2022",
+   "members": true
+  },
+  {
+   "key": "song of elves",
+   "name": "Song of the Elves",
+   "registryName": "Song of the Elves",
+   "enum": "SONG_OF_THE_ELVES",
+   "cacheId": 137,
+   "difficulty": "Grandmaster",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Farming": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "biohazard",
+    "druidic ritual",
+    "making history",
+    "mournings end part i",
+    "mournings end part ii",
+    "plague city",
+    "priest in peril",
+    "regicide",
+    "restless ghost",
+    "roving elves",
+    "sheep herder",
+    "underground pass",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Agility": 40000,
+    "Construction": 40000,
+    "Farming": 40000,
+    "Herblore": 40000,
+    "Hunter": 40000,
+    "Mining": 40000,
+    "Smithing": 40000,
+    "Woodcutting": 40000
+   },
+   "length": "Very Long",
+   "release": "25 July 2019",
+   "members": true
+  },
+  {
+   "key": "spirits of elid",
+   "name": "Spirits of the Elid",
+   "registryName": "Spirits of the Elid",
+   "enum": "SPIRITS_OF_THE_ELID",
+   "cacheId": 139,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 33,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Magic": 1000,
+    "Prayer": 8000,
+    "Thieving": 1000
+   },
+   "length": "Short",
+   "release": "5 December 2005",
+   "members": true
+  },
+  {
+   "key": "swan song",
+   "name": "Swan Song",
+   "registryName": "Swan Song",
+   "enum": "SWAN_SONG",
+   "cacheId": 140,
+   "difficulty": "Master",
+   "qp": 100,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "creature of fenkenstrain",
+    "druidic ritual",
+    "garden of tranquillity",
+    "jungle potion",
+    "one small favour",
+    "priest in peril",
+    "restless ghost",
+    "rune mysteries",
+    "shilo village"
+   ],
+   "xp": {
+    "Fishing": 50000,
+    "Magic": 15000,
+    "Prayer": 10000
+   },
+   "length": "Medium",
+   "release": "2 May 2006",
+   "members": true
+  },
+  {
+   "key": "tai bwo wannai trio",
+   "name": "Tai Bwo Wannai Trio",
+   "registryName": "Tai Bwo Wannai Trio",
+   "enum": "TAI_BWO_WANNAI_TRIO",
+   "cacheId": 141,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "druidic ritual",
+    "jungle potion"
+   ],
+   "xp": {
+    "Attack": 2500,
+    "Cooking": 5000,
+    "Fishing": 5000,
+    "Strength": 2500
+   },
+   "length": "Medium",
+   "release": "14 September 2004",
+   "members": true
+  },
+  {
+   "key": "tale of righteous",
+   "name": "Tale of the Righteous",
+   "registryName": "Tale of the Righteous",
+   "enum": "TALE_OF_THE_RIGHTEOUS",
+   "cacheId": 143,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Strength": {
+     "level": 16,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "client of kourend",
+    "x marks spot"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "19 April 2018",
+   "members": true
+  },
+  {
+   "key": "tears of guthix",
+   "name": "Tears of Guthix",
+   "registryName": "Tears of Guthix",
+   "enum": "TEARS_OF_GUTHIX",
+   "cacheId": 145,
+   "difficulty": "Intermediate",
+   "qp": 43,
+   "f2p": false,
+   "skills": {
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 1000
+   },
+   "length": "Very Short",
+   "release": "4 May 2005",
+   "members": true
+  },
+  {
+   "key": "temple of ikov",
+   "name": "Temple of Ikov",
+   "registryName": "Temple of Ikov",
+   "enum": "TEMPLE_OF_IKOV",
+   "cacheId": 146,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Fletching": 8000,
+    "Ranged": 10500
+   },
+   "length": "Medium",
+   "release": "17 June 2002",
+   "members": true
+  },
+  {
+   "key": "temple of eye",
+   "name": "Temple of the Eye",
+   "registryName": "Temple of the Eye",
+   "enum": "TEMPLE_OF_THE_EYE",
+   "cacheId": 167,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Runecraft": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "enter abyss",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Runecraft": 5000
+   },
+   "length": "Short",
+   "release": "23 March 2022",
+   "members": true
+  },
+  {
+   "key": "ascent of arceuus",
+   "name": "The Ascent of Arceuus",
+   "registryName": "The Ascent of Arceuus",
+   "enum": "THE_ASCENT_OF_ARCEUUS",
+   "cacheId": 3,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Hunter": {
+     "level": 12,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "client of kourend",
+    "x marks spot"
+   ],
+   "xp": {
+    "Hunter": 1500,
+    "Runecraft": 500
+   },
+   "length": "Short",
+   "release": "10 January 2019",
+   "members": true
+  },
+  {
+   "key": "blood moon rises",
+   "name": "The Blood Moon Rises",
+   "registryName": "The Blood Moon Rises",
+   "enum": "THE_BLOOD_MOON_RISES",
+   "cacheId": 16414,
+   "difficulty": "Grandmaster",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 74,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 74,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 72,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Cooking": {
+     "level": 72,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 70,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 66,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 64,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 64,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 57,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "a night at theatre",
+    "a taste of hope",
+    "darkness of hallowvale",
+    "in aid of myreque",
+    "in search of myreque",
+    "nature spirit",
+    "priest in peril",
+    "restless ghost",
+    "sins of father",
+    "vampyre slayer"
+   ],
+   "xp": {},
+   "length": "Very Long",
+   "release": "30 June 2026",
+   "members": true
+  },
+  {
+   "key": "corsair curse",
+   "name": "The Corsair Curse",
+   "registryName": "The Corsair Curse",
+   "enum": "THE_CORSAIR_CURSE",
+   "cacheId": 18,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "7 December 2017",
+   "members": false
+  },
+  {
+   "key": "curse of arrav",
+   "name": "The Curse of Arrav",
+   "registryName": "The Curse of Arrav",
+   "enum": "THE_CURSE_OF_ARRAV",
+   "cacheId": 3937,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Mining": {
+     "level": 64,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 61,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Strength": {
+     "level": 58,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "below ice mountain",
+    "creature of fenkenstrain",
+    "death plateau",
+    "defender of varrock",
+    "demon slayer",
+    "family crest",
+    "garden of tranquillity",
+    "priest in peril",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "shield of arrav",
+    "temple of ikov",
+    "troll romance",
+    "troll stronghold",
+    "what lies below"
+   ],
+   "xp": {
+    "Agility": 40000,
+    "Mining": 40000,
+    "Thieving": 40000
+   },
+   "length": "Medium",
+   "release": "6 November 2024",
+   "members": true
+  },
+  {
+   "key": "depths of despair",
+   "name": "The Depths of Despair",
+   "registryName": "The Depths of Despair",
+   "enum": "THE_DEPTHS_OF_DESPAIR",
+   "cacheId": 26,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 18,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "client of kourend",
+    "x marks spot"
+   ],
+   "xp": {
+    "Agility": 1500
+   },
+   "length": "Short",
+   "release": "9 November 2017",
+   "members": true
+  },
+  {
+   "key": "dig site",
+   "name": "The Dig Site",
+   "registryName": "The Dig Site",
+   "enum": "THE_DIG_SITE",
+   "cacheId": 29,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Herblore": 2000,
+    "Mining": 15300
+   },
+   "length": "Medium",
+   "release": "9 July 2003",
+   "members": true
+  },
+  {
+   "key": "eyes of glouphrie",
+   "name": "The Eyes of Glouphrie",
+   "registryName": "The Eyes of Glouphrie",
+   "enum": "THE_EYES_OF_GLOUPHRIE",
+   "cacheId": 45,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Construction": {
+     "level": 5,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 46,
+     "boostable": false,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "grand tree"
+   ],
+   "xp": {
+    "Construction": 250,
+    "Magic": 12000,
+    "Runecraft": 6000,
+    "Woodcutting": 2500
+   },
+   "length": "Medium",
+   "release": "15 August 2006",
+   "members": true
+  },
+  {
+   "key": "feud",
+   "name": "The Feud",
+   "registryName": "The Feud",
+   "enum": "THE_FEUD",
+   "cacheId": 50,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Thieving": 15000
+   },
+   "length": "Medium",
+   "release": "4 April 2005",
+   "members": true
+  },
+  {
+   "key": "final dawn",
+   "name": "The Final Dawn",
+   "registryName": "The Final Dawn",
+   "enum": "THE_FINAL_DAWN",
+   "cacheId": 5189,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 66,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun",
+    "heart of darkness",
+    "perilous moons",
+    "twilights promise"
+   ],
+   "xp": {
+    "Fletching": 25000,
+    "Runecraft": 25000,
+    "Thieving": 55000
+   },
+   "length": "Long",
+   "release": "23 July 2025",
+   "members": true
+  },
+  {
+   "key": "forsaken tower",
+   "name": "The Forsaken Tower",
+   "registryName": "The Forsaken Tower",
+   "enum": "THE_FORSAKEN_TOWER",
+   "cacheId": 54,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "client of kourend",
+    "x marks spot"
+   ],
+   "xp": {
+    "Mining": 500,
+    "Smithing": 500
+   },
+   "length": "Short",
+   "release": "10 January 2019",
+   "members": true
+  },
+  {
+   "key": "fractured archive",
+   "name": "The Fractured Archive",
+   "registryName": "The Fractured Archive",
+   "enum": "THE_FRACTURED_ARCHIVE",
+   "cacheId": 17027,
+   "difficulty": "Activity",
+   "qp": null,
+   "f2p": false,
+   "members": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "noReqData": true
+  },
+  {
+   "key": "fremennik exiles",
+   "name": "The Fremennik Exiles",
+   "registryName": "The Fremennik Exiles",
+   "enum": "THE_FREMENNIK_EXILES",
+   "cacheId": 55,
+   "difficulty": "Master",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Fishing": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dragon slayer i",
+    "druidic ritual",
+    "fremennik isles",
+    "fremennik trials",
+    "heroes quest",
+    "jungle potion",
+    "lost city",
+    "lunar diplomacy",
+    "merlins crystal",
+    "mountain daughter",
+    "rune mysteries",
+    "shield of arrav",
+    "shilo village"
+   ],
+   "xp": {
+    "Crafting": 50000,
+    "Runecraft": 30000,
+    "Slayer": 50000
+   },
+   "length": "Medium",
+   "release": "26 September 2019",
+   "members": true
+  },
+  {
+   "key": "fremennik isles",
+   "name": "The Fremennik Isles",
+   "registryName": "The Fremennik Isles",
+   "enum": "THE_FREMENNIK_ISLES",
+   "cacheId": 56,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Construction": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "fremennik trials"
+   ],
+   "xp": {
+    "Construction": 5000,
+    "Crafting": 5000,
+    "Woodcutting": 10000
+   },
+   "length": "Medium",
+   "release": "6 February 2007",
+   "members": true
+  },
+  {
+   "key": "fremennik trials",
+   "name": "The Fremennik Trials",
+   "registryName": "The Fremennik Trials",
+   "enum": "THE_FREMENNIK_TRIALS",
+   "cacheId": 57,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Agility": 2812,
+    "Attack": 2812,
+    "Crafting": 2812,
+    "Defence": 2812,
+    "Fishing": 2812,
+    "Fletching": 2812,
+    "Hitpoints": 2812,
+    "Strength": 2812,
+    "Thieving": 2812,
+    "Woodcutting": 2812
+   },
+   "length": "Medium",
+   "release": "2 November 2004",
+   "members": true
+  },
+  {
+   "key": "garden of death",
+   "name": "The Garden of Death",
+   "registryName": "The Garden of Death",
+   "enum": "THE_GARDEN_OF_DEATH",
+   "cacheId": 180,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Farming": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Farming": 10000
+   },
+   "length": "Short",
+   "release": "30 November 2022",
+   "members": true
+  },
+  {
+   "key": "giant dwarf",
+   "name": "The Giant Dwarf",
+   "registryName": "The Giant Dwarf",
+   "enum": "THE_GIANT_DWARF",
+   "cacheId": 63,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 12,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 33,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 14,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 2500,
+    "Firemaking": 1500,
+    "Magic": 1500,
+    "Mining": 2500,
+    "Smithing": 2500,
+    "Thieving": 1500
+   },
+   "length": "Medium",
+   "release": "31 May 2005",
+   "members": true
+  },
+  {
+   "key": "golem",
+   "name": "The Golem",
+   "registryName": "The Golem",
+   "enum": "THE_GOLEM",
+   "cacheId": 65,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 1000,
+    "Thieving": 1000
+   },
+   "length": "Short",
+   "release": "11 April 2005",
+   "members": true
+  },
+  {
+   "key": "grand tree",
+   "name": "The Grand Tree",
+   "registryName": "The Grand Tree",
+   "enum": "THE_GRAND_TREE",
+   "cacheId": 66,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Agility": 7900,
+    "Attack": 18400,
+    "Magic": 2150
+   },
+   "length": "Medium",
+   "release": "12 December 2002",
+   "members": true
+  },
+  {
+   "key": "great brain robbery",
+   "name": "The Great Brain Robbery",
+   "registryName": "The Great Brain Robbery",
+   "enum": "THE_GREAT_BRAIN_ROBBERY",
+   "cacheId": 67,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 16,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Prayer": {
+     "level": 50,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "cabin fever",
+    "cooks assistant",
+    "creature of fenkenstrain",
+    "druidic ritual",
+    "jungle potion",
+    "pirates treasure",
+    "priest in peril",
+    "recipe for disaster another cooks quest",
+    "recipe for disaster pirate pete",
+    "rum deal",
+    "zogre flesh eaters"
+   ],
+   "xp": {
+    "Construction": 2000,
+    "Crafting": 3000,
+    "Prayer": 6000
+   },
+   "length": "Medium",
+   "release": "6 March 2007",
+   "members": true
+  },
+  {
+   "key": "hand in sand",
+   "name": "The Hand in the Sand",
+   "registryName": "The Hand in the Sand",
+   "enum": "THE_HAND_IN_THE_SAND",
+   "cacheId": 69,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 17,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 49,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Crafting": 9000,
+    "Thieving": 1000
+   },
+   "length": "Short",
+   "release": "10 January 2006",
+   "members": true
+  },
+  {
+   "key": "heart of darkness",
+   "name": "The Heart of Darkness",
+   "registryName": "The Heart of Darkness",
+   "enum": "THE_HEART_OF_DARKNESS",
+   "cacheId": 3710,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Mining": {
+     "level": 55,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 46,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun",
+    "twilights promise"
+   ],
+   "xp": {
+    "Agility": 8000,
+    "Mining": 8000,
+    "Slayer": 8000,
+    "Thieving": 8000
+   },
+   "length": "Medium",
+   "release": "25 September 2024",
+   "members": true
+  },
+  {
+   "key": "ides of milk",
+   "name": "The Ides of Milk",
+   "registryName": "The Ides of Milk",
+   "enum": "THE_IDES_OF_MILK",
+   "cacheId": 9645,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Short",
+   "release": "25 February 2026",
+   "members": false
+  },
+  {
+   "key": "knights sword",
+   "name": "The Knight's Sword",
+   "registryName": "The Knight's Sword",
+   "enum": "THE_KNIGHTS_SWORD",
+   "cacheId": 83,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": true,
+   "skills": {
+    "Mining": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Smithing": 12725
+   },
+   "length": "Short",
+   "release": "6 April 2001",
+   "members": false
+  },
+  {
+   "key": "lost tribe",
+   "name": "The Lost Tribe",
+   "registryName": "The Lost Tribe",
+   "enum": "THE_LOST_TRIBE",
+   "cacheId": 87,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 17,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "goblin diplomacy",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Mining": 3000
+   },
+   "length": "Short",
+   "release": "31 May 2005",
+   "members": true
+  },
+  {
+   "key": "path of glouphrie",
+   "name": "The Path of Glouphrie",
+   "registryName": "The Path of Glouphrie",
+   "enum": "THE_PATH_OF_GLOUPHRIE",
+   "cacheId": 3425,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Strength": {
+     "level": 60,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 56,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 56,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 47,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "eyes of glouphrie",
+    "grand tree",
+    "tree gnome village",
+    "waterfall quest"
+   ],
+   "xp": {
+    "Magic": 5000,
+    "Slayer": 20000,
+    "Strength": 30000,
+    "Thieving": 5000
+   },
+   "length": "Medium",
+   "release": "13 September 2023",
+   "members": true
+  },
+  {
+   "key": "queen of thieves",
+   "name": "The Queen of Thieves",
+   "registryName": "The Queen of Thieves",
+   "enum": "THE_QUEEN_OF_THIEVES",
+   "cacheId": 113,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 20,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "client of kourend",
+    "x marks spot"
+   ],
+   "xp": {
+    "Thieving": 2000
+   },
+   "length": "Very Short",
+   "release": "9 November 2017",
+   "members": true
+  },
+  {
+   "key": "red reef",
+   "name": "The Red Reef",
+   "registryName": "The Red Reef",
+   "enum": "THE_RED_REEF",
+   "cacheId": 7107,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Sailing": {
+     "level": 52,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "pandemonium",
+    "troubled tortugans"
+   ],
+   "xp": {
+    "Sailing": 15000,
+    "Smithing": 5000
+   },
+   "length": "Medium",
+   "release": "20 May 2026",
+   "members": true
+  },
+  {
+   "key": "restless ghost",
+   "name": "The Restless Ghost",
+   "registryName": "The Restless Ghost",
+   "enum": "THE_RESTLESS_GHOST",
+   "cacheId": 120,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Prayer": 1125
+   },
+   "length": "Short",
+   "release": "4 January 2001",
+   "members": false
+  },
+  {
+   "key": "ribbiting tale of a lily pad labour dispute",
+   "name": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+   "registryName": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+   "enum": "THE_RIBBITING_TALE_OF_A_LILY_PAD_LABOUR_DISPUTE",
+   "cacheId": 3515,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Woodcutting": {
+     "level": 15,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Woodcutting": 2000
+   },
+   "length": "Very Short",
+   "release": "20 March 2024",
+   "members": true
+  },
+  {
+   "key": "slug menace",
+   "name": "The Slug Menace",
+   "registryName": "The Slug Menace",
+   "enum": "THE_SLUG_MENACE",
+   "cacheId": 136,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Runecraft": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "black knights fortress",
+    "druidic ritual",
+    "enter abyss",
+    "goblin diplomacy",
+    "lost tribe",
+    "priest in peril",
+    "recruitment drive",
+    "rune mysteries",
+    "sea slug",
+    "wanted"
+   ],
+   "xp": {
+    "Crafting": 3500,
+    "Runecraft": 3500,
+    "Thieving": 3500
+   },
+   "length": "Medium",
+   "release": "20 September 2006",
+   "members": true
+  },
+  {
+   "key": "tourist trap",
+   "name": "The Tourist Trap",
+   "registryName": "The Tourist Trap",
+   "enum": "THE_TOURIST_TRAP",
+   "cacheId": 148,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": "Medium",
+   "release": "14 April 2003",
+   "members": true
+  },
+  {
+   "key": "throne of miscellania",
+   "name": "Throne of Miscellania",
+   "registryName": "Throne of Miscellania",
+   "enum": "THRONE_OF_MISCELLANIA",
+   "cacheId": 147,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "dragon slayer i",
+    "fremennik trials",
+    "heroes quest",
+    "lost city",
+    "merlins crystal",
+    "shield of arrav"
+   ],
+   "xp": {},
+   "length": "Medium",
+   "release": "29 November 2004",
+   "members": true
+  },
+  {
+   "key": "tower of life",
+   "name": "Tower of Life",
+   "registryName": "Tower of Life",
+   "enum": "TOWER_OF_LIFE",
+   "cacheId": 149,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Construction": {
+     "level": 10,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Construction": 1000,
+    "Crafting": 500,
+    "Thieving": 500
+   },
+   "length": "Medium",
+   "release": "19 February 2007",
+   "members": true
+  },
+  {
+   "key": "tree gnome village",
+   "name": "Tree Gnome Village",
+   "registryName": "Tree Gnome Village",
+   "enum": "TREE_GNOME_VILLAGE",
+   "cacheId": 150,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Attack": 11450
+   },
+   "length": "Short",
+   "release": "23 July 2002",
+   "members": true
+  },
+  {
+   "key": "tribal totem",
+   "name": "Tribal Totem",
+   "registryName": "Tribal Totem",
+   "enum": "TRIBAL_TOTEM",
+   "cacheId": 151,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 21,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Thieving": 1775
+   },
+   "length": "Very Short",
+   "release": "30 April 2002",
+   "members": true
+  },
+  {
+   "key": "troll romance",
+   "name": "Troll Romance",
+   "registryName": "Troll Romance",
+   "enum": "TROLL_ROMANCE",
+   "cacheId": 152,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 28,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "death plateau",
+    "troll stronghold"
+   ],
+   "xp": {
+    "Agility": 8000,
+    "Strength": 4000
+   },
+   "length": "Short",
+   "release": "5 January 2005",
+   "members": true
+  },
+  {
+   "key": "troll stronghold",
+   "name": "Troll Stronghold",
+   "registryName": "Troll Stronghold",
+   "enum": "TROLL_STRONGHOLD",
+   "cacheId": 153,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "death plateau"
+   ],
+   "xp": {},
+   "length": "Short",
+   "release": "24 August 2004",
+   "members": true
+  },
+  {
+   "key": "troubled tortugans",
+   "name": "Troubled Tortugans",
+   "registryName": "Troubled Tortugans",
+   "enum": "TROUBLED_TORTUGANS",
+   "cacheId": 7106,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Slayer": {
+     "level": 51,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Construction": {
+     "level": 48,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Sailing": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 45,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Woodcutting": {
+     "level": 40,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 34,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "pandemonium"
+   ],
+   "xp": {
+    "Sailing": 10000,
+    "Slayer": 8000
+   },
+   "length": "Medium",
+   "release": "19 November 2025",
+   "members": true
+  },
+  {
+   "key": "twilights promise",
+   "name": "Twilight's Promise",
+   "registryName": "Twilight's Promise",
+   "enum": "TWILIGHTS_PROMISE",
+   "cacheId": 3512,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "children of sun"
+   ],
+   "xp": {
+    "Thieving": 3000
+   },
+   "length": "Short",
+   "release": "20 March 2024",
+   "members": true
+  },
+  {
+   "key": "underground pass",
+   "name": "Underground Pass",
+   "registryName": "Underground Pass",
+   "enum": "UNDERGROUND_PASS",
+   "cacheId": 154,
+   "difficulty": "Experienced",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Ranged": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "biohazard",
+    "plague city"
+   ],
+   "xp": {
+    "Agility": 3000,
+    "Attack": 3000
+   },
+   "length": "Long",
+   "release": "3 March 2003",
+   "members": true
+  },
+  {
+   "key": "vale totems",
+   "name": "Vale Totems",
+   "registryName": "Vale Totems",
+   "enum": "VALE_TOTEMS",
+   "cacheId": 5194,
+   "difficulty": "Activity",
+   "qp": null,
+   "f2p": false,
+   "members": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "noReqData": true
+  },
+  {
+   "key": "vampyre slayer",
+   "name": "Vampyre Slayer",
+   "registryName": "Vampyre Slayer",
+   "enum": "VAMPYRE_SLAYER",
+   "cacheId": 155,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Attack": 4825
+   },
+   "length": "Very Short",
+   "release": "28 January 2001",
+   "members": false
+  },
+  {
+   "key": "wanted",
+   "name": "Wanted!",
+   "registryName": "Wanted!",
+   "enum": "WANTED",
+   "cacheId": 156,
+   "difficulty": "Intermediate",
+   "qp": 32,
+   "f2p": false,
+   "skills": {},
+   "quests": [
+    "black knights fortress",
+    "druidic ritual",
+    "enter abyss",
+    "goblin diplomacy",
+    "lost tribe",
+    "priest in peril",
+    "recruitment drive",
+    "rune mysteries"
+   ],
+   "xp": {
+    "Slayer": 5000
+   },
+   "length": "Medium",
+   "release": "17 October 2005",
+   "members": true
+  },
+  {
+   "key": "watchtower",
+   "name": "Watchtower",
+   "registryName": "Watchtower",
+   "enum": "WATCHTOWER",
+   "cacheId": 157,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 14,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 14,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Magic": 15250
+   },
+   "length": "Medium",
+   "release": "7 May 2003",
+   "members": true
+  },
+  {
+   "key": "waterfall quest",
+   "name": "Waterfall Quest",
+   "registryName": "Waterfall Quest",
+   "enum": "WATERFALL_QUEST",
+   "cacheId": 158,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Attack": 13750,
+    "Strength": 13750
+   },
+   "length": "Short",
+   "release": "24 September 2002",
+   "members": true
+  },
+  {
+   "key": "what lies below",
+   "name": "What Lies Below",
+   "registryName": "What Lies Below",
+   "enum": "WHAT_LIES_BELOW",
+   "cacheId": 159,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Runecraft": {
+     "level": 35,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "rune mysteries"
+   ],
+   "xp": {
+    "Defence": 2000,
+    "Runecraft": 8000
+   },
+   "length": "Short",
+   "release": "27 March 2007",
+   "members": true
+  },
+  {
+   "key": "while guthix sleeps",
+   "name": "While Guthix Sleeps",
+   "registryName": "While Guthix Sleeps",
+   "enum": "WHILE_GUTHIX_SLEEPS",
+   "cacheId": 3467,
+   "difficulty": "Grandmaster",
+   "qp": 180,
+   "f2p": false,
+   "skills": {
+    "Thieving": {
+     "level": 72,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 67,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Agility": {
+     "level": 66,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Farming": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 65,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Hunter": {
+     "level": 62,
+     "boostable": false,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Attack": {
+     "level": 99,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Strength": {
+     "level": 99,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "a tail of two cats",
+    "below ice mountain",
+    "black knights fortress",
+    "creature of fenkenstrain",
+    "death plateau",
+    "defender of varrock",
+    "demon slayer",
+    "dream mentor",
+    "druidic ritual",
+    "eadgars ruse",
+    "enter abyss",
+    "eyes of glouphrie",
+    "family crest",
+    "fight arena",
+    "fremennik trials",
+    "garden of tranquillity",
+    "gertrudes cat",
+    "goblin diplomacy",
+    "grand tree",
+    "hand in sand",
+    "icthlarins little helper",
+    "jungle potion",
+    "lost city",
+    "lost tribe",
+    "lunar diplomacy",
+    "nature spirit",
+    "path of glouphrie",
+    "priest in peril",
+    "recruitment drive",
+    "restless ghost",
+    "romeo juliet",
+    "rune mysteries",
+    "shield of arrav",
+    "shilo village",
+    "tears of guthix",
+    "temple of eye",
+    "temple of ikov",
+    "tree gnome village",
+    "troll stronghold",
+    "wanted",
+    "waterfall quest",
+    "what lies below"
+   ],
+   "xp": {
+    "Farming": 75000,
+    "Herblore": 75000,
+    "Hunter": 50000,
+    "Thieving": 80000
+   },
+   "length": "Very Long",
+   "release": "10 July 2024",
+   "members": true
+  },
+  {
+   "key": "witchs house",
+   "name": "Witch's House",
+   "registryName": "Witch's House",
+   "enum": "WITCHS_HOUSE",
+   "cacheId": 160,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Hitpoints": 6325
+   },
+   "length": "Very Short",
+   "release": "27 February 2002",
+   "members": true
+  },
+  {
+   "key": "witchs potion",
+   "name": "Witch's Potion",
+   "registryName": "Witch's Potion",
+   "enum": "WITCHS_POTION",
+   "cacheId": 161,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Magic": 325
+   },
+   "length": "Very Short",
+   "release": "6 April 2001",
+   "members": false
+  },
+  {
+   "key": "x marks spot",
+   "name": "X Marks the Spot",
+   "registryName": "X Marks the Spot",
+   "enum": "X_MARKS_THE_SPOT",
+   "cacheId": 162,
+   "difficulty": "Novice",
+   "qp": null,
+   "f2p": true,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": "Very Short",
+   "release": "7 February 2019",
+   "members": false
+  },
+  {
+   "key": "zogre flesh eaters",
+   "name": "Zogre Flesh Eaters",
+   "registryName": "Zogre Flesh Eaters",
+   "enum": "ZOGRE_FLESH_EATERS",
+   "cacheId": 163,
+   "difficulty": "Intermediate",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Smithing": {
+     "level": 4,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 8,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 30,
+     "boostable": false,
+     "requiredToStart": true
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "druidic ritual",
+    "jungle potion"
+   ],
+   "xp": {
+    "Fletching": 2000,
+    "Herblore": 2000,
+    "Ranged": 2000
+   },
+   "length": "Short",
+   "release": "17 May 2005",
+   "members": true
+  },
+  {
+   "key": "alfred grimhands barcrawl",
+   "name": "alfred grimhands barcrawl",
+   "registryName": "Alfred Grimhand's Barcrawl",
+   "enum": "ALFRED_GRIMHANDS_BARCRAWL",
+   "cacheId": 4,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "architectural alliance",
+   "name": "architectural alliance",
+   "registryName": null,
+   "enum": "ARCHITECTURAL_ALLIANCE",
+   "cacheId": null,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Mining": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "bear your soul",
+   "name": "bear your soul",
+   "registryName": "Bear Your Soul",
+   "enum": "BEAR_YOUR_SOUL",
+   "cacheId": 5,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "curse of empty lord",
+   "name": "curse of empty lord",
+   "registryName": "Curse of the Empty Lord",
+   "enum": "CURSE_OF_THE_EMPTY_LORD",
+   "cacheId": 20,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "daddys home",
+   "name": "daddys home",
+   "registryName": "Daddy's Home",
+   "enum": "DADDYS_HOME",
+   "cacheId": 21,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Construction": 400
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "enchanted key",
+   "name": "enchanted key",
+   "registryName": "The Enchanted Key",
+   "enum": "THE_ENCHANTED_KEY",
+   "cacheId": 41,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "enter abyss",
+   "name": "enter abyss",
+   "registryName": "Enter the Abyss",
+   "enum": "ENTER_THE_ABYSS",
+   "cacheId": 43,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Runecraft": 1000
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "family pest",
+   "name": "family pest",
+   "registryName": "Family Pest",
+   "enum": "FAMILY_PEST",
+   "cacheId": 49,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "frozen door",
+   "name": "frozen door",
+   "registryName": "The Frozen Door",
+   "enum": "THE_FROZEN_DOOR",
+   "cacheId": 164,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Hitpoints": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Strength": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "generals shadow",
+   "name": "generals shadow",
+   "registryName": "The General's Shadow",
+   "enum": "THE_GENERALS_SHADOW",
+   "cacheId": 59,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Magic": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Slayer": 2000
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "his faithful servants",
+   "name": "his faithful servants",
+   "registryName": "His Faithful Servants",
+   "enum": "HIS_FAITHFUL_SERVANTS",
+   "cacheId": 3250,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {
+    "Prayer": 20000
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "hopespears will",
+   "name": "hopespears will",
+   "registryName": "Hopespear's Will",
+   "enum": "HOPESPEARS_WILL",
+   "cacheId": 166,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Prayer": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Prayer": 38750
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "in search of knowledge",
+   "name": "in search of knowledge",
+   "registryName": "In Search of Knowledge",
+   "enum": "IN_SEARCH_OF_KNOWLEDGE",
+   "cacheId": 78,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "into tombs",
+   "name": "into tombs",
+   "registryName": "Into the Tombs",
+   "enum": "INTO_THE_TOMBS",
+   "cacheId": 2306,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {},
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "lair of tarn razorlor",
+   "name": "lair of tarn razorlor",
+   "registryName": "Lair of Tarn Razorlor",
+   "enum": "LAIR_OF_TARN_RAZORLOR",
+   "cacheId": 84,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Crafting": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": true
+    },
+    "Slayer": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {
+    "Slayer": 5000
+   },
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "mage arena i",
+   "name": "mage arena i",
+   "registryName": "Mage Arena I",
+   "enum": "MAGE_ARENA_I",
+   "cacheId": 89,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "mage arena ii",
+   "name": "mage arena ii",
+   "registryName": "Mage Arena II",
+   "enum": "MAGE_ARENA_II",
+   "cacheId": 90,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Magic": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  },
+  {
+   "key": "skippy and mogres",
+   "name": "skippy and mogres",
+   "registryName": "Skippy and the Mogres",
+   "enum": "SKIPPY_AND_THE_MOGRES",
+   "cacheId": 135,
+   "difficulty": "Miniquest",
+   "qp": null,
+   "f2p": false,
+   "skills": {
+    "Cooking": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": true
+    }
+   },
+   "quests": [],
+   "xp": {},
+   "length": null,
+   "release": null,
+   "members": true
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+# Keep the Docker build context small and clean
+.git
+.github
+node_modules
+.next
+dev.log
+server.log
+
+# Repo files not needed inside the image
+nginx
+download
+upload
+tests
+db
+prisma
+.env
+*.md
+*.sh
+Dockerfile
+tools
