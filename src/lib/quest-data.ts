@@ -115,6 +115,28 @@ export function formatXp(n: number): string {
   return n.toLocaleString("en-US");
 }
 
+/* ------------------------------------------------------ quest points model */
+
+/**
+ * Quest points awarded for completing a quest. The dataset records `qp` as the
+ * points REQUIRED TO START (a gate like Dragon Slayer I's 32 QP), and has no
+ * per-quest "awarded" field — so the app models awarded points as 1 for every
+ * real quest and 0 for miniquests and activities (which award none in game).
+ */
+export function questPointsAwarded(q: Quest): number {
+  return q.difficulty === "Miniquest" || q.difficulty === "Activity" ? 0 : 1;
+}
+
+/** Total quest points earned for a set of completed quest keys. */
+export function totalQuestPoints(completed: Iterable<string>): number {
+  let sum = 0;
+  for (const key of completed) {
+    const q = QUEST_BY_KEY[key];
+    if (q) sum += questPointsAwarded(q);
+  }
+  return sum;
+}
+
 /* ------------------------------------------------- shared UI color tokens */
 
 /** Badge color classes per difficulty — shared by the list rows and the graph nodes. */

@@ -1,14 +1,53 @@
 # OSRS Quest Pathfinder
 
-OSRS prerequisite planner — pick any quest (or classic endgame goal) and get the
-optimal prerequisite chain: quest order, skill gaps with training gates, boost
-flags, XP and playtime estimates, quest-XP coverage, and character import via
-the OSRS hiscores / Wise Old Man.
+OSRS prerequisite planner — track one or more target quests and get the optimal
+prerequisite chain: quest order, skill gaps with training gates, boost flags,
+XP and playtime estimates, quest-XP coverage (with visual XP-cascade edges),
+character import via the OSRS hiscores / Wise Old Man, and a dedicated page for
+bulk-setting your quest completions.
 
 215 quests · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
 Fully stateless: no database, no accounts — all player progress lives in each
 visitor's browser (with export/import character backups in-app).
+
+---
+
+## Using the app
+
+- **Track multiple targets** — the target picker *adds* quests instead of
+  replacing one; selected targets show as removable chips and the planner
+  resolves one merged, topologically-ordered prerequisite tree for all of them
+  (Quest Cape mixes fine with regular quests).
+- **Completions page** (`/completions`) — search/filter all 215 quests and
+  bulk-set or unset what you've already finished (with a live quest-points
+  tally). The planner reads the same saved progress; the old reset-everything
+  button is gone — unchecking on this page is the deliberate way to do that.
+- **Import from RuneLite** — on the completions page, upload the JSON written
+  by the [Quest State Exporter](https://runelite.net/plugin-hub/show/quest-state-exporter)
+  Plugin Hub plugin to set every finished quest in one go (step-by-step setup
+  instructions included on the page). **Add** marks the file's FINISHED quests;
+  **Sync** also unchecks everything the file says isn't finished (quests the
+  plugin doesn't track are left untouched).
+- **Full-graph PNG export** — the graph's PNG button downloads the *entire*
+  plan, not just the visible viewport; huge graphs (e.g. Quest Cape) are
+  scaled down just enough to fit inside browser canvas limits.
+- **Build identity in the footer** — every page footer shows the app version
+  and the short commit SHA it was built from (matching the `sha-xxxxxxx` GHCR
+  image tag), so you can always tell what's actually deployed.
+- **Quest-XP cascades** — in the graph view, a thin dotted red edge runs from
+  any quest whose XP reward raises a skill down to the next node needing that
+  skill. It points at the quest itself when the level-up is enough to complete
+  it (labelled e.g. `Herblore 3→9`), or at its training-gate diamond when the
+  level-up helps but isn't enough (e.g. `Magic 14` against the `65` gate).
+  Assumes you can complete the granting quest (its own requirement is your
+  starting level).
+- **Backups (v2)** — the Backup dialog and per-character exports now include
+  your tracked targets and a total-quest-points figure (1 QP per quest,
+  miniquests/activities 0). v1 files import unchanged.
+- **"Gated by training"** counts every quest in the path whose skill levels
+  need real grinding — including the target quest itself (e.g. Lunar
+  Diplomacy's own 65 Magic now shows up).
 
 ---
 

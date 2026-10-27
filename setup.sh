@@ -3,11 +3,11 @@
 # OSRS Quest Pathfinder — server install / update script (plain `docker run`)
 #
 # Usage on the server:
-#   IMAGE=ghcr.io/YOUR_GITHUB_USERNAME/osrs-pathfinder:latest bash setup.sh
+#   IMAGE=ghcr.io/paperlinguist/osrs-pathfinder:latest bash setup.sh
 #
 # Or one-liner (after the image is public on GHCR):
-#   curl -fsSL https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/osrs-pathfinder/main/setup.sh \
-#     | IMAGE=ghcr.io/YOUR_GITHUB_USERNAME/osrs-pathfinder:latest bash
+#   curl -fsSL https://raw.githubusercontent.com/paperlinguist/osrs-pathfinder/main/setup.sh \
+#     | bash
 #
 # Re-running the same command = pull latest + recreate container (an update).
 # Optional env overrides: PORT (host loopback port, default 3001),
@@ -15,15 +15,9 @@
 # ============================================================================
 set -euo pipefail
 
-IMAGE="${IMAGE:-ghcr.io/YOUR_GITHUB_USERNAME/osrs-pathfinder:latest}"
+IMAGE="${IMAGE:-ghcr.io/paperlinguist/osrs-pathfinder:latest}"
 NAME="${NAME:-osrs-pathfinder}"
 PORT="${PORT:-3001}"
-
-if [[ "$IMAGE" == *"YOUR_GITHUB_USERNAME"* ]]; then
-  echo "ERROR: IMAGE still contains the placeholder." >&2
-  echo "Run with:  IMAGE=ghcr.io/<your-github-username>/osrs-pathfinder:latest bash setup.sh" >&2
-  exit 1
-fi
 
 command -v docker >/dev/null || { echo "ERROR: docker not installed" >&2; exit 1; }
 command -v curl   >/dev/null || { echo "ERROR: curl not installed (apt install curl)" >&2; exit 1; }

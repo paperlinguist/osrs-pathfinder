@@ -7,7 +7,9 @@ import {
   Quest,
   SkillReq,
   effectiveLevel,
+  levelForXp,
   xpForLevel,
+  questPointsAwarded,
 } from "./quest-data";
 
 export type GapStatus = "met" | "covered-by-quest-xp" | "boost-ok" | "train";
@@ -40,15 +42,37 @@ export interface ResolveOptions {
   includeQuestXp: boolean; // factor quest-given xp into later requirements
 }
 
+/** a tracked target quest with its own (post-chain-XP) skill requirements */
+export interface TargetResult {
+  quest: Quest;
+  requirements: SkillGap[]; // all skill reqs (met included)
+  gaps: SkillGap[]; // unmet only
+}
+
+/**
+ * Quest-XP cascade: completing `from` raises `skill` from `levelFrom` to
+ * `levelTo`, reaching the first downstream node that requires the same skill.
+ * When the new level still isn't enough to complete that node, the edge should
+ * attach to its training gate (`gate:${skill}:${toGateLevel}`) instead of the
+ * quest node itself.
+ */
+export interface XpCascade {
+  from: string;
+  skill: string;
+  levelFrom: number;
+  levelTo: number;
+  toQuest: string;
+  toGateLevel: number | null;
+}
+
 export interface ResolveResult {
-  target: Quest;
+  targets: TargetResult[]; // every tracked target, in the order requested
   steps: ChainStep[];
   skillTotals: SkillGap[]; // aggregated real training needs per skill
   totalQuests: number;
   qpRequired: number | null;
   estQp: number;
-  targetRequirements: SkillGap[]; // target's own skill reqs (met included)
-  targetGaps: SkillGap[]; // target's own unmet reqs
+  cascades: XpCascade[];
 }
 
 const difficultyRank: Record<string, number> = {
@@ -157,22 +181,34 @@ export function missingPrereqClosure(
 }
 
 export function resolveChain(
-  targetKey: string,
+  targetKeys: string[],
   player: PlayerSkills,
   completed: Set<string>,
   opts: ResolveOptions,
   extras: string[] = [], // user-added XP quests, merged into the plan
 ): ResolveResult | null {
   // Quest Cape: synthetic "plan everything" target — every non-completed quest
-  // becomes the prerequisite set, ordered by the same greedy as a normal run
-  const isCape = targetKey === QUEST_CAPE_KEY;
-  const target = isCape ? QUEST_CAPE_QUEST : QUEST_BY_KEY[targetKey];
-  if (!target) return null;
+  // becomes the prerequisite set, ordered by the same greedy as a normal run.
+  // Multiple targets (tracked together) share one merged prerequisite plan.
+  const isCape = targetKeys.includes(QUEST_CAPE_KEY);
+  const targets: TargetResult[] = [];
+  const targetKeysClean: string[] = [];
+  for (const k of targetKeys) {
+    const q = k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[k];
+    if (q && !targetKeysClean.includes(k)) {
+      targets.push({ quest: q, requirements: [], gaps: [] }); // filled in after the XP walk
+      targetKeysClean.push(k);
+    }
+  }
+  if (targetKeysClean.length === 0) return null;
+  const targetKeySet = new Set(targetKeysClean);
 
-  // 1. transitive prerequisite closure (excluding completed quests)
+  // 1. transitive prerequisite closure (excluding completed quests).
+  // A tracked target that is also another target's prerequisite stays in the
+  // closure — it's a real step AND a tracked target (UI dedupes the display).
   const prereqClosure = new Set<string>();
   const collect = (key: string) => {
-    if (completed.has(key) || prereqClosure.has(key) || key === targetKey) return;
+    if (completed.has(key) || prereqClosure.has(key)) return;
     const q = QUEST_BY_KEY[key];
     if (!q) return;
     prereqClosure.add(key);
@@ -183,13 +219,15 @@ export function resolveChain(
       if (!completed.has(q.key)) prereqClosure.add(q.key);
     }
   } else {
-    for (const p of target.quests) collect(p);
+    for (const tk of targetKeysClean) {
+      for (const p of QUEST_BY_KEY[tk]?.quests ?? []) collect(p);
+    }
   }
 
   // user-added quests: merged into the plan WITHOUT pulling in their own prereqs
   const extraKeys: string[] = [];
   for (const k of extras) {
-    if (k === targetKey || completed.has(k) || !QUEST_BY_KEY[k]) continue;
+    if (targetKeySet.has(k) || completed.has(k) || !QUEST_BY_KEY[k]) continue;
     if (prereqClosure.has(k)) continue; // already a true prerequisite
     if (!extraKeys.includes(k)) extraKeys.push(k);
   }
@@ -197,7 +235,7 @@ export function resolveChain(
   const needed = new Set<string>([...prereqClosure, ...extraKeys]);
 
   // 2. topological greedy ordering — front-load gateway quests (extras spliced after)
-  const withTarget = new Set([...prereqClosure, targetKey]);
+  const withTarget = new Set([...prereqClosure, ...targetKeysClean]);
   const unlockMap = buildUnlockMap(withTarget);
   const remaining = new Set(prereqClosure);
   const placed = new Set<string>();
@@ -264,18 +302,23 @@ export function resolveChain(
     ordered.splice(pos, 0, k);
   }
 
-  // 3. walk the chain, accruing quest-given xp and computing per-step requirements
+  // 3. walk the chain, accruing quest-given xp and computing per-step requirements.
+  // preBonus/postBonus snapshots per step power the XP-cascade computation.
   const bonusXp: Record<string, number> = {};
+  const preBonus: Record<string, number>[] = [];
+  const postBonus: Record<string, number>[] = [];
   const steps: ChainStep[] = [];
 
   for (const key of ordered) {
     const q = QUEST_BY_KEY[key];
+    preBonus.push({ ...bonusXp });
     const requirements = computeReqGaps(q, player, bonusXp, opts);
     const gaps = requirements.filter((g) => g.status !== "met");
 
     for (const [s, x] of Object.entries(q.xp)) {
       bonusXp[s] = (bonusXp[s] ?? 0) + x;
     }
+    postBonus.push({ ...bonusXp });
 
     const isExtra = extraSet.has(key);
     const missingPrereqs = isExtra
@@ -294,14 +337,71 @@ export function resolveChain(
     });
   }
 
-  // the target's own requirements, evaluated after the whole chain's XP accrues
-  const targetRequirements = computeReqGaps(target, player, bonusXp, opts);
-  const targetGaps = targetRequirements.filter((g) => g.status !== "met");
+  // every target's own requirements, evaluated after the whole chain's XP accrues
+  for (let i = 0; i < targets.length; i++) {
+    const reqs = computeReqGaps(targets[i].quest, player, bonusXp, opts);
+    targets[i] = {
+      quest: targets[i].quest,
+      requirements: reqs,
+      gaps: reqs.filter((g) => g.status !== "met"),
+    };
+  }
+
+  // 3.5 quest-XP cascades — for each XP grant, the first downstream node in the
+  // same skill that the resulting level-up reaches ("player has at least the
+  // level to complete the granting quest" is folded into the starting level)
+  const cascades: XpCascade[] = [];
+  const trainGates = new Set<string>(); // `${skill}:${level}` pairs gated by real training
+  for (const s of steps) {
+    for (const g of s.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
+  }
+  for (const t of targets) {
+    for (const g of t.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
+  }
+  for (let i = 0; i < steps.length; i++) {
+    const q = steps[i].quest;
+    for (const [skill, gain] of Object.entries(q.xp)) {
+      if (!gain || skill === "Combat") continue; // virtual combat level isn't XP-derivable
+      const baseXp = player.xp[skill] ?? 0;
+      const baseLevel = player.levels[skill] ?? 1;
+      const ownReq = q.skills[skill]?.level ?? 0;
+      // assumed starting level: at least enough to complete this quest
+      const L0 = Math.max(ownReq, baseLevel, levelForXp(baseXp + (preBonus[i][skill] ?? 0)));
+      const L1 = Math.max(L0, levelForXp(baseXp + (postBonus[i][skill] ?? 0)));
+      if (L1 <= L0) continue;
+      const attach = (toQuest: string, reqLevel: number): XpCascade => ({
+        from: q.key,
+        skill,
+        levelFrom: L0,
+        levelTo: L1,
+        toQuest,
+        // enough to complete → point at the quest itself; otherwise the gate
+        toGateLevel:
+          L1 >= reqLevel ? null : trainGates.has(`${skill}:${reqLevel}`) ? reqLevel : null,
+      });
+      // first downstream node in this skill whose requirement the level-up reaches
+      let found: XpCascade | null = null;
+      for (let j = i + 1; j < steps.length && !found; j++) {
+        const req = steps[j].quest.skills[skill];
+        if (!req || req.level <= L0 || baseLevel >= req.level) continue;
+        found = attach(steps[j].quest.key, req.level);
+      }
+      for (const t of targets) {
+        if (found) break;
+        if (t.quest.key === q.key) continue;
+        const req = t.quest.skills[skill];
+        if (!req || req.level <= L0 || baseLevel >= req.level) continue;
+        found = attach(t.quest.key, req.level);
+      }
+      if (found) cascades.push(found);
+    }
+    if (cascades.length > 80) break;
+  }
 
   // 4. aggregated REAL training needs per skill (worst gap by xpNeeded);
   //    boost-ok / quest-xp-covered gaps are informational, not grind targets
   const totalsMap = new Map<string, SkillGap>();
-  for (const g of [...steps.flatMap((s) => s.gaps), ...targetGaps]) {
+  for (const g of [...steps.flatMap((s) => s.gaps), ...targets.flatMap((t) => t.gaps)]) {
     if (g.status !== "train") continue;
     const prev = totalsMap.get(g.skill);
     if (!prev || g.xpNeeded > prev.xpNeeded) totalsMap.set(g.skill, g);
@@ -310,16 +410,19 @@ export function resolveChain(
     (a, b) => b.xpNeeded - a.xpNeeded || b.deficit - a.deficit,
   );
 
-  // estimated quest points from quests the user marked complete
+  // estimated quest points from quests the user marked complete (1 per quest,
+  // 0 for miniquests/activities — see questPointsAwarded)
   let estQp = 0;
   for (const key of completed) {
     const q = QUEST_BY_KEY[key];
-    if (q?.qp) estQp += q.qp;
+    if (q) estQp += questPointsAwarded(q);
   }
-  const qpRequired = [...steps, { qpReq: target.qp }].reduce<number | null>(
+  const qpRequired = [...steps, ...targets.map((t) => ({ qpReq: t.quest.qp }))].reduce<
+    number | null
+  >(
     (acc, s) => (s.qpReq !== null ? Math.max(acc ?? 0, s.qpReq) : acc),
     null,
   );
 
-  return { target, steps, skillTotals, totalQuests: steps.length, qpRequired, estQp, targetRequirements, targetGaps };
+  return { targets, steps, skillTotals, totalQuests: steps.length, qpRequired, estQp, cascades };
 }
