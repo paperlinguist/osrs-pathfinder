@@ -90,7 +90,14 @@ Quest tracking v0.3.0: completions page, RuneLite import, multi-target XP cascad
   Docker build-args so GHCR images are identifiable
 
 ## Notes
-- Merge is gated by the branch ruleset: the `build-and-push` check must pass before merge
+- Merge is gated by the branch ruleset: the `build-and-push` check must pass before merge.
+  This PR also fixes that check: the workflow now triggers on `pull_request` (it previously
+  never ran on PRs), pins the Buildx builder explicitly, and uses registry inline cache —
+  the `type=gha` cache export started failing ("Cache export is not supported for the
+  docker driver") after a GitHub runner image update
+- Removes the redundant `ci.yml` PR workflow — its docker step still used `type=gha`
+  cache without a Buildx setup (that was the failing run), and `docker-publish.yml`
+  now provides the same PR validation plus the required `build-and-push` check
 - After merge: `bash setup.sh` on the server pulls the new image and recreates the
   container; the footer SHA should match the merge commit
 

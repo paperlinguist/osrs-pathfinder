@@ -111,6 +111,24 @@ export default function CompletionsPage() {
     localStorage.setItem("osrs-qp-completed", JSON.stringify([...completed]));
   }, [completed]);
 
+  // another tab (planner) changed the shared key — re-hydrate so load/close
+  // character actions are reflected here even when this page stays open
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== "osrs-qp-completed" && e.key !== null) return;
+      try {
+        const c = localStorage.getItem("osrs-qp-completed");
+        const arr = c ? JSON.parse(c) : [];
+        if (Array.isArray(arr))
+          setCompleted(new Set(arr.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k])));
+      } catch {
+        /* ignore */
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   const toggle = useCallback((key: string) => {
     setCompleted((prev) => {
       const next = new Set(prev);

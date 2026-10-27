@@ -51,6 +51,7 @@ import {
   List,
   ListChecks,
   Loader2,
+  LogOut,
   Network,
   RefreshCw,
   Sparkles,
@@ -364,6 +365,39 @@ export default function Home() {
     localStorage.setItem("osrs-qp-sugsort", sugSort);
   }, [allowBoosts, includeQuestXp, manualQp, addedQuests, viewMode, chars, sugSort]);
 
+  // ---- auto-sync quest progress into the active character slot, so Load /
+  // Export always see live completions without a manual "Save current" first
+  const activeCharName = useMemo(
+    () => (username.trim() || player?.username || "").trim().toLowerCase(),
+    [username, player],
+  );
+  useEffect(() => {
+    if (!hydrated.current || !activeCharName) return;
+    setChars((prev) => {
+      const i = prev.findIndex((c) => c.name.toLowerCase() === activeCharName);
+      if (i < 0) return prev; // slots are created explicitly (Save current / import)
+      const cur = prev[i];
+      const completedArr = [...completed];
+      const addedArr = [...addedQuests];
+      const targetsArr = [...targetKeys];
+      if (
+        JSON.stringify([cur.completed, cur.added, cur.targets]) ===
+        JSON.stringify([completedArr, addedArr, targetsArr])
+      )
+        return prev;
+      const next = [...prev];
+      next[i] = {
+        ...cur,
+        completed: completedArr,
+        questPoints: totalQuestPoints(completed),
+        added: addedArr,
+        targets: targetsArr,
+        savedAt: new Date().toISOString(),
+      };
+      return next;
+    });
+  }, [activeCharName, completed, addedQuests, targetKeys]);
+
   // ---- resolve chain (recomputes on every mutation — 215 quests, trivial cost)
   const addTargetKey = useCallback((key: string) => {
     setTargetKeys((prev) =>
@@ -616,6 +650,9 @@ export default function Home() {
       localStorage.setItem("osrs-qp-username", c.name);
       if (c.targets?.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(c.targets));
       else localStorage.removeItem("osrs-qp-targets");
+      // flush the shared keys immediately so /completions hydrates THIS character's state
+      localStorage.setItem("osrs-qp-completed", JSON.stringify(c.completed ?? []));
+      localStorage.setItem("osrs-qp-added", JSON.stringify(c.added ?? []));
       toast({
         title: `Loaded ${c.name}`,
         description: "Restored skills, quest progress and plan instantly — no hiscores request needed.",
@@ -654,20 +691,64 @@ export default function Home() {
     [toast, upsertPlayerSkills, username, player],
   );
 
+  /** end the active session and flush every shared key (incl. the completions page) */
+  const closeCharacter = useCallback(
+    (opts?: { silent?: boolean }) => {
+      setUsername("");
+      setPlayer(null);
+      setCompleted(new Set());
+      setAddedQuests(new Set());
+      setTargetKeys([]);
+      localStorage.removeItem("osrs-qp-username");
+      localStorage.removeItem("osrs-qp-player");
+      localStorage.setItem("osrs-qp-completed", "[]");
+      localStorage.setItem("osrs-qp-added", "[]");
+      localStorage.removeItem("osrs-qp-targets");
+      if (!opts?.silent)
+        toast({
+          title: "Character closed",
+          description: "Session flushed — the completions page starts clean. Saved slots are untouched.",
+        });
+    },
+    [toast],
+  );
+
   const deleteChar = useCallback(
     (name: string) => {
       setChars((prev) => prev.filter((c) => c.name !== name));
-      toast({ title: `Removed ${name}`, description: "The saved slot is gone — your current session is untouched." });
+      const activeName = (username.trim() || player?.username || "").trim().toLowerCase();
+      if (activeName && activeName === name.toLowerCase()) {
+        closeCharacter({ silent: true });
+        toast({ title: `Removed ${name}`, description: "Slot deleted and its session flushed — the completions page starts clean." });
+      } else {
+        toast({ title: `Removed ${name}`, description: "The saved slot is gone — your current session is untouched." });
+      }
     },
-    [toast],
+    [toast, username, player, closeCharacter],
   );
 
   // ---- character restore files: slots live in localStorage, which a cleared
   // cookie jar takes with it — per-character .json exports are the off-ramp.
   const exportChar = useCallback(
     (c: CharSlot) => {
+      // exporting the ACTIVE character snapshots live quest progress into the file
+      // (and the stored slot) — the slot alone may be from the last manual save
+      const activeName = (username.trim() || player?.username || "").trim().toLowerCase();
+      const isActive = !!activeName && activeName === c.name.toLowerCase();
+      const snapshot: CharSlot = isActive
+        ? {
+            ...c,
+            player: player ?? c.player,
+            completed: [...completed],
+            questPoints: totalQuestPoints(completed),
+            added: [...addedQuests],
+            targets: [...targetKeys],
+            savedAt: new Date().toISOString(),
+          }
+        : c;
+      if (isActive) upsertChar(snapshot);
       const json = JSON.stringify(
-        { app: "quest-pathfinder", kind: "character", version: 2, exportedAt: new Date().toISOString(), data: c },
+        { app: "quest-pathfinder", kind: "character", version: 2, exportedAt: new Date().toISOString(), data: snapshot },
         null,
         2,
       );
@@ -681,11 +762,13 @@ export default function Home() {
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
       toast({
-        title: `Exported ${c.name}`,
-        description: "A restore file for this character — re-import it after clearing cookies or on another device.",
+        title: `Exported ${snapshot.name}`,
+        description: isActive
+          ? "Snapshotted your live quest progress — re-import it after clearing cookies or on another device."
+          : "A restore file for this character — re-import it after clearing cookies or on another device.",
       });
     },
-    [toast],
+    [toast, username, player, completed, addedQuests, targetKeys, upsertChar],
   );
 
   const charFileRef = useRef<HTMLInputElement>(null);
@@ -1128,6 +1211,17 @@ export default function Home() {
                       >
                         <UserPlus className="h-3 w-3" aria-hidden />
                         Save current
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => closeCharacter()}
+                        disabled={!username.trim() && !player}
+                        className="h-6 px-2 text-[10px] text-stone-400 hover:text-stone-200 hover:bg-stone-800 disabled:opacity-40"
+                        title="End this character's session: clears the plan board and flushes the completions page (saved slots are kept)"
+                      >
+                        <LogOut className="h-3 w-3" aria-hidden />
+                        Close
                       </Button>
                     </div>
                   </div>
