@@ -8,3 +8,5 @@ server.log
 .env*.local
 .DS_Store
 .env
+tsconfig.tsbuildinfo
+next-env.d.ts

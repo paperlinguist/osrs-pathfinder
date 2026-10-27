@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,7 @@ import {
   FileUp,
   HardDriveDownload,
   List,
+  ListChecks,
   Loader2,
   Network,
   RefreshCw,
@@ -76,9 +78,11 @@ import {
   formatXp,
   isValidTargetKey,
   questMinutes,
+  totalQuestPoints,
   trainHours,
 } from "@/lib/quest-data";
-import { ResolveResult, SkillGap, missingPrereqClosure, questSkillGaps, resolveChain } from "@/lib/resolver";
+import { ResolveResult, SkillGap, TargetResult, missingPrereqClosure, questSkillGaps, resolveChain } from "@/lib/resolver";
+import { APP_BUILD, APP_VERSION } from "@/lib/version";
 
 /* ------------------------------------------------------------------ utils */
 
@@ -110,8 +114,11 @@ type CharSlot = {
   name: string;
   player: PlayerSkills | null;
   completed: string[];
+  /** total quest points for `completed` at save time (1 per quest, miniquests 0) */
+  questPoints: number;
   added: string[];
-  target: string | null;
+  /** tracked target quests (multi-track) */
+  targets: string[];
   savedAt: string;
 };
 
@@ -119,8 +126,10 @@ type CharSlot = {
 
 type BackupData = {
   completed: string[];
+  /** total quest points for `completed` (1 per quest, miniquests/activities 0) */
+  questPoints: number | null;
   added: string[];
-  target: string | null;
+  targets: string[];
   allowBoosts: boolean;
   includeQuestXp: boolean;
   manualQp: number | "";
@@ -144,6 +153,11 @@ function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false;
     Array.isArray(v)
       ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k]))]
       : [];
+  const rawTargets = Array.isArray(d.targets)
+    ? d.targets
+    : d.target != null
+      ? [d.target] // v1 backups stored a single target
+      : [];
   const rawPlayer = d.player as (PlayerSkills & Record<string, unknown>) | undefined;
   const player: PlayerSkills | null =
     rawPlayer && typeof rawPlayer === "object" && typeof rawPlayer.levels === "object" && rawPlayer.levels !== null
@@ -159,8 +173,18 @@ function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false;
     ok: true,
     data: {
       completed: cleanKeys(d.completed),
+      questPoints:
+        typeof d.questPoints === "number" && Number.isFinite(d.questPoints) && d.questPoints >= 0
+          ? Math.floor(d.questPoints)
+          : null,
       added: cleanKeys(d.added),
-      target: typeof d.target === "string" && isValidTargetKey(d.target) ? d.target : null,
+      targets: [
+        ...new Set(
+          rawTargets.filter(
+            (k): k is string => typeof k === "string" && isValidTargetKey(k),
+          ),
+        ),
+      ],
       allowBoosts: typeof d.allowBoosts === "boolean" ? d.allowBoosts : true,
       includeQuestXp: typeof d.includeQuestXp === "boolean" ? d.includeQuestXp : true,
       manualQp:
@@ -221,7 +245,7 @@ function useCountUp(target: number, duration = 650): number {
 }
 
 export default function Home() {
-  const [targetKey, setTargetKey] = useState<string | null>(null);
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [player, setPlayer] = useState<PlayerSkills | null>(null);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [allowBoosts, setAllowBoosts] = useState(true);
@@ -264,8 +288,20 @@ export default function Home() {
       if (u) setUsername(u);
       const p = localStorage.getItem("osrs-qp-player");
       if (p) setPlayer(JSON.parse(p));
-      const t = localStorage.getItem("osrs-qp-target");
-      if (t && isValidTargetKey(t)) setTargetKey(t);
+      const ts = localStorage.getItem("osrs-qp-targets");
+      if (ts) {
+        const arr = JSON.parse(ts);
+        if (Array.isArray(arr)) {
+          const valid = arr.filter(
+            (k: unknown): k is string => typeof k === "string" && isValidTargetKey(k),
+          );
+          if (valid.length) setTargetKeys([...new Set(valid)]);
+        }
+      } else {
+        // migrate pre-multi-track saves (single osrs-qp-target string)
+        const t = localStorage.getItem("osrs-qp-target");
+        if (t && isValidTargetKey(t)) setTargetKeys([t]);
+      }
       const ab = localStorage.getItem("osrs-qp-boosts");
       if (ab !== null) setAllowBoosts(ab === "1");
       const v = localStorage.getItem("osrs-qp-view");
@@ -280,7 +316,25 @@ export default function Home() {
       if (ch) {
         const parsed = JSON.parse(ch);
         if (Array.isArray(parsed)) {
-          setChars(parsed.filter((c) => c && typeof c.name === "string"));
+          // coerce pre-multi-track slots (no targets/questPoints fields)
+          setChars(
+            parsed
+              .filter((c) => c && typeof c.name === "string")
+              .map((c) => ({
+                ...c,
+                completed: Array.isArray(c.completed) ? c.completed : [],
+                added: Array.isArray(c.added) ? c.added : [],
+                targets: Array.isArray(c.targets)
+                  ? c.targets
+                  : c.target
+                    ? [c.target]
+                    : [],
+                questPoints:
+                  typeof c.questPoints === "number"
+                    ? c.questPoints
+                    : totalQuestPoints(Array.isArray(c.completed) ? c.completed : []),
+              })),
+          );
         }
       }
       const ss = localStorage.getItem("osrs-qp-sugsort");
@@ -295,8 +349,10 @@ export default function Home() {
   }, [completed]);
   useEffect(() => {
     if (!hydrated.current) return;
-    if (targetKey) localStorage.setItem("osrs-qp-target", targetKey);
-  }, [targetKey]);
+    if (targetKeys.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(targetKeys));
+    else localStorage.removeItem("osrs-qp-targets");
+    localStorage.removeItem("osrs-qp-target"); // pre-multi-track key
+  }, [targetKeys]);
   useEffect(() => {
     if (!hydrated.current) return;
     localStorage.setItem("osrs-qp-boosts", allowBoosts ? "1" : "0");
@@ -309,15 +365,30 @@ export default function Home() {
   }, [allowBoosts, includeQuestXp, manualQp, addedQuests, viewMode, chars, sugSort]);
 
   // ---- resolve chain (recomputes on every mutation — 215 quests, trivial cost)
+  const addTargetKey = useCallback((key: string) => {
+    setTargetKeys((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
+  }, []);
+
+  const removeTargetKey = useCallback((key: string) => {
+    setTargetKeys((prev) => prev.filter((k) => k !== key));
+  }, []);
+
   const result: ResolveResult | null = useMemo(() => {
-    if (!targetKey) return null;
-    // estimate quest points: manual override wins; otherwise assume 1 QP per completed quest
-    const r = resolveChain(targetKey, player ?? DEFAULT_PLAYER, completed, { allowBoosts, includeQuestXp }, [...addedQuests]);
+    if (targetKeys.length === 0) return null;
+    const r = resolveChain(
+      targetKeys,
+      player ?? DEFAULT_PLAYER,
+      completed,
+      { allowBoosts, includeQuestXp },
+      [...addedQuests],
+    );
     if (!r) return null;
+    // manual quest-point override wins; otherwise the resolver's model estimate
     if (typeof manualQp === "number") r.estQp = manualQp;
-    else if (r.estQp === 0 && completed.size > 0) r.estQp = completed.size;
     return r;
-  }, [targetKey, player, completed, allowBoosts, includeQuestXp, manualQp, addedQuests]);
+  }, [targetKeys, player, completed, allowBoosts, includeQuestXp, manualQp, addedQuests]);
 
   const totalXpNeeded = useMemo(
     () => result?.skillTotals.reduce((a, g) => a + g.xpNeeded, 0) ?? 0,
@@ -329,36 +400,44 @@ export default function Home() {
     if (!result) return 0;
     let m = 0;
     for (const s of result.steps) m += questMinutes(s.quest) ?? 0;
-    m += questMinutes(result.target) ?? 0;
+    for (const t of result.targets) m += questMinutes(t.quest) ?? 0;
     return m;
   }, [result]);
-  const isCape = targetKey === QUEST_CAPE_KEY;
+  const isCape = targetKeys.includes(QUEST_CAPE_KEY);
   const stepsNeedingTraining = useMemo(
     () => result?.steps.filter((s) => s.needsTraining).length ?? 0,
     [result],
   );
+  // the target's OWN unmet requirements count too (e.g. Lunar Diplomacy's 65
+  // Magic lives on the target itself, not on any prerequisite step)
+  const targetsNeedingTraining = useMemo(
+    () => result?.targets.filter((t) => t.gaps.some((g) => g.status === "train")).length ?? 0,
+    [result],
+  );
 
-  // plan completion progress (steps + target ticked off)
-  const planDone = useMemo(() => {
-    if (!result) return 0;
-    return (
-      result.steps.filter((s) => completed.has(s.quest.key)).length +
-      (completed.has(result.target.key) ? 1 : 0)
-    );
-  }, [result, completed]);
-  const planTotalPct = result && result.steps.length >= 0
-    ? Math.round((planDone / (result.steps.length + 1)) * 100)
-    : 0;
-
-  // every quest currently in the plan (steps + target)
-  const inPlan = useMemo(() => {
+  // unique quests in the plan (steps + targets — a tracked target can double
+  // as another target's prerequisite; display/stats dedupe it)
+  const planQuests = useMemo(() => {
     const s = new Set<string>();
     if (result) {
       for (const st of result.steps) s.add(st.quest.key);
-      s.add(result.target.key);
+      for (const t of result.targets) s.add(t.quest.key);
     }
     return s;
   }, [result]);
+
+  // plan completion progress (unique plan quests ticked off)
+  const planDone = useMemo(() => {
+    let n = 0;
+    for (const key of planQuests) if (completed.has(key)) n++;
+    return n;
+  }, [planQuests, completed]);
+  const planTotalPct = result
+    ? Math.round((planDone / Math.max(1, planQuests.size)) * 100)
+    : 0;
+
+  // every quest currently in the plan — alias of planQuests (steps + targets)
+  const inPlan = planQuests;
 
   // every unmet skill requirement across the chain (incl. the target),
   // deduped by skill+level+status, in order of first appearance in the path
@@ -379,7 +458,9 @@ export default function Home() {
       if (e.quests.length < 6 && !e.quests.includes(questName)) e.quests.push(questName);
     };
     for (const st of result.steps) for (const g of st.gaps) push(g, st.quest.name);
-    for (const g of result.targetGaps) push(g, result.target.name);
+    for (const t of result.targets) {
+      for (const g of t.gaps) push(g, t.quest.name);
+    }
     return [...map.values()];
   }, [result]);
 
@@ -497,7 +578,7 @@ export default function Home() {
         }
         return [
           ...prev,
-          { name, player: data, completed: [], added: [], target: null, savedAt: new Date().toISOString() },
+          { name, player: data, completed: [], questPoints: 0, added: [], targets: [], savedAt: new Date().toISOString() },
         ];
       });
     },
@@ -511,29 +592,30 @@ export default function Home() {
       name,
       player,
       completed: [...completed],
+      questPoints: totalQuestPoints(completed),
       added: [...addedQuests],
-      target: targetKey,
+      targets: [...targetKeys],
       savedAt: new Date().toISOString(),
     });
     toast({
       title: `Saved ${name}`,
       description: "Skills, quest progress and plan stored locally — load it anytime without re-importing.",
     });
-  }, [username, player, completed, addedQuests, targetKey, upsertChar, toast]);
+  }, [username, player, completed, addedQuests, targetKeys, upsertChar, toast]);
 
   const loadChar = useCallback(
     (c: CharSlot) => {
       setPlayer(c.player);
       setCompleted(new Set(c.completed));
       setAddedQuests(new Set(c.added));
-      setTargetKey(c.target);
+      setTargetKeys(c.targets ?? []);
       setUsername(c.name);
-      // mirror the backup-restore persistence (player/username/target bypass effects)
+      // mirror the backup-restore persistence (player/username/targets bypass effects)
       if (c.player) localStorage.setItem("osrs-qp-player", JSON.stringify(c.player));
       else localStorage.removeItem("osrs-qp-player");
       localStorage.setItem("osrs-qp-username", c.name);
-      if (c.target) localStorage.setItem("osrs-qp-target", c.target);
-      else localStorage.removeItem("osrs-qp-target");
+      if (c.targets?.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(c.targets));
+      else localStorage.removeItem("osrs-qp-targets");
       toast({
         title: `Loaded ${c.name}`,
         description: "Restored skills, quest progress and plan instantly — no hiscores request needed.",
@@ -585,7 +667,7 @@ export default function Home() {
   const exportChar = useCallback(
     (c: CharSlot) => {
       const json = JSON.stringify(
-        { app: "quest-pathfinder", kind: "character", version: 1, exportedAt: new Date().toISOString(), data: c },
+        { app: "quest-pathfinder", kind: "character", version: 2, exportedAt: new Date().toISOString(), data: c },
         null,
         2,
       );
@@ -617,7 +699,8 @@ export default function Home() {
         const parsed = JSON.parse(await f.text()) as {
           app?: string;
           kind?: string;
-          data?: Partial<CharSlot> & { player?: unknown };
+          // `target`/absent `targets`+`questPoints` = v1 character files
+          data?: Partial<CharSlot> & { target?: string; questPoints?: number; player?: unknown };
         };
         const d = parsed?.data;
         if (
@@ -649,12 +732,28 @@ export default function Home() {
           Array.isArray(v)
             ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k]))]
             : [];
+        const rawTargets = Array.isArray(d.targets)
+          ? d.targets
+          : d.target != null
+            ? [d.target] // v1 character files stored a single target
+            : [];
+        const completedKeys = cleanKeys(d.completed);
         const slot: CharSlot = {
           name: d.name.trim(),
           player,
-          completed: cleanKeys(d.completed),
+          completed: completedKeys,
+          questPoints:
+            typeof d.questPoints === "number" && d.questPoints >= 0
+              ? Math.floor(d.questPoints)
+              : totalQuestPoints(completedKeys),
           added: cleanKeys(d.added),
-          target: typeof d.target === "string" && isValidTargetKey(d.target) ? d.target : null,
+          targets: [
+            ...new Set(
+              rawTargets.filter(
+                (k): k is string => typeof k === "string" && isValidTargetKey(k),
+              ),
+            ),
+          ],
           savedAt: typeof d.savedAt === "string" ? d.savedAt : new Date().toISOString(),
         };
         upsertChar(slot);
@@ -740,12 +839,13 @@ export default function Home() {
       JSON.stringify(
         {
           app: "quest-pathfinder",
-          version: 1,
+          version: 2,
           exportedAt: new Date().toISOString(),
           data: {
             completed: [...completed],
+            questPoints: totalQuestPoints(completed),
             added: [...addedQuests],
-            target: targetKey,
+            targets: [...targetKeys],
             allowBoosts,
             includeQuestXp,
             manualQp: typeof manualQp === "number" ? manualQp : null,
@@ -756,7 +856,7 @@ export default function Home() {
         null,
         2,
       ),
-    [completed, addedQuests, targetKey, allowBoosts, includeQuestXp, manualQp, username, player],
+    [completed, addedQuests, targetKeys, allowBoosts, includeQuestXp, manualQp, username, player],
   );
 
   const downloadBackup = useCallback(() => {
@@ -810,7 +910,7 @@ export default function Home() {
     const d = parsed.data;
     setCompleted(new Set(d.completed));
     setAddedQuests(new Set(d.added));
-    setTargetKey(d.target);
+    setTargetKeys(d.targets);
     setAllowBoosts(d.allowBoosts);
     setIncludeQuestXp(d.includeQuestXp);
     setManualQp(d.manualQp);
@@ -820,8 +920,8 @@ export default function Home() {
     if (d.player) localStorage.setItem("osrs-qp-player", JSON.stringify(d.player));
     if (d.username) localStorage.setItem("osrs-qp-username", d.username);
     else localStorage.removeItem("osrs-qp-username");
-    if (d.target) localStorage.setItem("osrs-qp-target", d.target);
-    else localStorage.removeItem("osrs-qp-target");
+    if (d.targets.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(d.targets));
+    else localStorage.removeItem("osrs-qp-targets");
     setBackupOpen(false);
     setImportRaw("");
     setImportFileName(null);
@@ -837,7 +937,7 @@ export default function Home() {
     setCompleted((prev) => {
       const next = new Set(prev);
       for (const s of result.steps) next.add(s.quest.key);
-      next.add(result.target.key);
+      for (const t of result.targets) next.add(t.quest.key);
       return next;
     });
   }, [result]);
@@ -846,9 +946,9 @@ export default function Home() {
     if (!result) return;
     const total =
       result.steps.reduce((a, s) => a + (questMinutes(s.quest) ?? 0), 0) +
-      (questMinutes(result.target) ?? 0);
+      result.targets.reduce((a, t) => a + (questMinutes(t.quest) ?? 0), 0);
     const lines = [
-      `Quest path to ${result.target.name} (${result.steps.length} quests, ≈${formatMinutes(total)})`,
+      `Quest path to ${result.targets.map((t) => t.quest.name).join(" + ")} (${result.steps.length} quests, ≈${formatMinutes(total)})`,
       ...result.steps.map((s, i) => {
         const train = s.gaps.filter((g) => g.status === "train");
         const min = questMinutes(s.quest);
@@ -858,7 +958,9 @@ export default function Home() {
           : "";
         return `${i + 1}. ${s.quest.name}${s.isExtra ? " (added for XP)" : ""}${time}${suffix}`;
       }),
-      `${result.steps.length + 1}. ${result.target.name}  <-- TARGET`,
+      ...result.targets.map(
+        (t, i) => `${result.steps.length + i + 1}. ${t.quest.name}  <-- TARGET`,
+      ),
     ];
     navigator.clipboard.writeText(lines.join("\n"));
   }, [result]);
@@ -872,11 +974,17 @@ export default function Home() {
     return DIFF_ORDER.filter((d) => byDiff.has(d)).map((d) => [d, byDiff.get(d)!] as const);
   }, []);
 
-  const target = result?.target;
+  // single-target view of the picker trigger
+  const firstTarget =
+    targetKeys.length === 1
+      ? targetKeys[0] === QUEST_CAPE_KEY
+        ? QUEST_CAPE_QUEST
+        : QUEST_BY_KEY[targetKeys[0]] ?? null
+      : null;
 
   // animated stat numbers
-  const cTotal = useCountUp(result?.totalQuests ?? 0);
-  const cGated = useCountUp(result ? stepsNeedingTraining : 0);
+  const cTotal = useCountUp(planQuests.size);
+  const cGated = useCountUp(stepsNeedingTraining + targetsNeedingTraining);
   const cXp = useCountUp(result ? totalXpNeeded : 0, 800);
   const cTime = useCountUp(planMinutes, 700);
   const cQp = useCountUp(result?.estQp ?? 0);
@@ -904,6 +1012,14 @@ export default function Home() {
                 {player.username} · cb {player.combatLevel}
               </Badge>
             )}
+            <Link
+              href="/completions"
+              aria-label="Set up your quest completions"
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-stone-700 px-3 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
+            >
+              <ListChecks className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Completions</span>
+            </Link>
             <Button
               variant="outline"
               size="sm"
@@ -1036,7 +1152,7 @@ export default function Home() {
                           >
                             <button
                               onClick={() => loadChar(c)}
-                              title={`Load ${c.name} · ${c.player ? `cb ${c.player.combatLevel}` : "no skills yet"} · ${c.completed.length} quest${c.completed.length === 1 ? "" : "s"} done · saved ${new Date(c.savedAt).toLocaleDateString()}`}
+                              title={`Load ${c.name} · ${c.player ? `cb ${c.player.combatLevel}` : "no skills yet"} · ${c.completed.length} quest${c.completed.length === 1 ? "" : "s"} done · ≈${c.questPoints} QP · saved ${new Date(c.savedAt).toLocaleDateString()}`}
                               className="inline-flex items-center gap-1 font-medium hover:text-amber-200"
                             >
                               {active && <Check className="h-3 w-3 text-emerald-400" aria-hidden />}
@@ -1083,9 +1199,9 @@ export default function Home() {
             {/* target quest picker */}
             <Card className="border-amber-900/40 bg-stone-900/60">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base text-stone-200">2 · Choose your target quest</CardTitle>
+                <CardTitle className="text-base text-stone-200">2 · Track target quests</CardTitle>
                 <CardDescription className="text-xs">
-                  The full prerequisite tree is resolved and ordered for you.
+                  Add one or more — the merged prerequisite tree is resolved and ordered for you.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -1097,13 +1213,26 @@ export default function Home() {
                       aria-expanded={pickerOpen}
                       className="w-full justify-between bg-stone-950 border-stone-700 hover:bg-stone-800 h-auto py-2.5 text-left"
                     >
-                      {target ? (
+                      {targetKeys.length === 0 ? (
+                        <span className="text-stone-500">Search {QUESTS.length} quests…</span>
+                      ) : targetKeys.length === 1 && firstTarget ? (
                         <span className="flex items-center gap-2 min-w-0">
-                          <span className="truncate font-medium text-stone-100">{target.name}</span>
-                          <Badge className={`text-[10px] border ${DIFF_COLORS[target.difficulty]}`}>{target.difficulty}</Badge>
+                          <span className="truncate font-medium text-stone-100">{firstTarget.name}</span>
+                          <Badge className={`text-[10px] border ${DIFF_COLORS[firstTarget.difficulty]}`}>{firstTarget.difficulty}</Badge>
                         </span>
                       ) : (
-                        <span className="text-stone-500">Search 215 quests…</span>
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="shrink-0 font-medium text-stone-100">{targetKeys.length} quests tracked</span>
+                          <span className="truncate text-[11px] text-stone-500">
+                            {targetKeys
+                              .slice(0, 2)
+                              .map((k) =>
+                                k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST.name : QUEST_BY_KEY[k]?.name,
+                              )
+                              .filter(Boolean)
+                              .join(", ")}…
+                          </span>
+                        </span>
                       )}
                     </Button>
                   </PopoverTrigger>
@@ -1116,12 +1245,12 @@ export default function Home() {
                           <CommandItem
                             key={QUEST_CAPE_KEY}
                             value="Quest Cape all quests miniquest plan everything"
-                            onSelect={() => {
-                              setTargetKey(QUEST_CAPE_KEY);
-                              setPickerOpen(false);
-                            }}
+                            onSelect={() => addTargetKey(QUEST_CAPE_KEY)}
                             className="text-amber-200 aria-selected:bg-amber-900/40"
                           >
+                            {targetKeys.includes(QUEST_CAPE_KEY) && (
+                              <Check className="mr-1.5 h-3.5 w-3.5 shrink-0 text-emerald-400" aria-hidden />
+                            )}
                             <span className="truncate flex-1">
                               Quest Cape — every quest &amp; miniquest
                             </span>
@@ -1133,12 +1262,12 @@ export default function Home() {
                               <CommandItem
                                 key={q.key}
                                 value={`${q.name} ${q.difficulty}`}
-                                onSelect={() => {
-                                  setTargetKey(q.key);
-                                  setPickerOpen(false);
-                                }}
+                                onSelect={() => addTargetKey(q.key)}
                                 className="text-stone-200 aria-selected:bg-amber-900/40"
                               >
+                                {targetKeys.includes(q.key) && (
+                                  <Check className="mr-1.5 h-3.5 w-3.5 shrink-0 text-emerald-400" aria-hidden />
+                                )}
                                 <span className="truncate flex-1">{q.name}</span>
                                 {q.f2p && <Badge variant="secondary" className="text-[9px] bg-stone-800">F2P</Badge>}
                               </CommandItem>
@@ -1150,6 +1279,43 @@ export default function Home() {
                   </PopoverContent>
                 </Popover>
 
+                {/* tracked targets — remove individually or clear all */}
+                {targetKeys.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="Tracked target quests">
+                    {targetKeys.map((k) => {
+                      const q = k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[k];
+                      if (!q) return null;
+                      const done = completed.has(k);
+                      return (
+                        <span
+                          key={k}
+                          className="inline-flex items-center gap-1 rounded-full border border-amber-700/70 bg-amber-500/10 py-0.5 pl-2 pr-1 text-[11px] text-amber-200"
+                        >
+                          {done && <Check className="h-3 w-3 text-emerald-400" aria-hidden />}
+                          <span className="max-w-[170px] truncate">{q.name}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeTargetKey(k)}
+                            aria-label={`Stop tracking ${q.name}`}
+                            className="grid h-4 w-4 place-items-center rounded-full text-amber-300/70 hover:bg-amber-900/60 hover:text-amber-100"
+                          >
+                            <X className="h-2.5 w-2.5" aria-hidden />
+                          </button>
+                        </span>
+                      );
+                    })}
+                    {targetKeys.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setTargetKeys([])}
+                        className="self-center text-[10px] text-stone-500 underline underline-offset-2 hover:text-red-300"
+                      >
+                        clear all
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 {/* one-click popular goals */}
                 <div className="mt-3">
                   <div className="flex items-center gap-1.5 mb-2">
@@ -1160,23 +1326,23 @@ export default function Home() {
                   </div>
                   <div
                     role="group"
-                    aria-label="Popular goal presets — one click sets your target"
+                    aria-label="Popular goal presets — one click adds it to your tracked targets"
                     className="flex flex-wrap gap-1.5"
                   >
                     {GOAL_PRESETS.map((p) => {
                       const q = p.key === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[p.key];
                       if (!q) return null;
-                      const active = targetKey === p.key;
+                      const active = targetKeys.includes(p.key);
                       const done = completed.has(p.key);
                       return (
                         <button
                           key={p.key}
                           type="button"
-                          onClick={() => setTargetKey(p.key)}
+                          onClick={() => addTargetKey(p.key)}
                           aria-pressed={active}
                           title={
                             p.key === QUEST_CAPE_KEY
-                              ? `Every quest & miniquest (${QUESTS.length} entries) — one click sets the target`
+                              ? `Every quest & miniquest (${QUESTS.length} entries) — one click adds it to your tracked targets`
                               : `${q.name} · ${q.difficulty}${q.qp ? ` · ${q.qp} QP required` : ""}${done ? " · already completed" : ""}`
                           }
                           className={`shrink-0 inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap transition-all active:scale-[0.97] ${
@@ -1215,20 +1381,20 @@ export default function Home() {
           </div>
 
           {/* results */}
-          {!target && (
+          {targetKeys.length === 0 && (
             <Card className="border-dashed border-stone-700 bg-stone-900/30">
               <CardContent className="py-14 text-center space-y-2">
-                <p className="text-stone-300 font-medium">No target selected yet</p>
+                <p className="text-stone-300 font-medium">No targets tracked yet</p>
                 <p className="text-xs text-stone-500 max-w-md mx-auto">
-                  Pick a quest above — e.g. <button className="underline hover:text-amber-300" onClick={() => setTargetKey("monkey madness ii")}>Monkey Madness II</button> or{" "}
-                  <button className="underline hover:text-amber-300" onClick={() => setTargetKey("recipe for disaster")}>Recipe for Disaster</button> — and you&apos;ll get the full ordered prerequisite chain.
+                  Add one or more quests above — e.g. <button className="underline hover:text-amber-300" onClick={() => addTargetKey("monkey madness ii")}>Monkey Madness II</button> or{" "}
+                  <button className="underline hover:text-amber-300" onClick={() => addTargetKey("recipe for disaster")}>Recipe for Disaster</button> — and you&apos;ll get the full ordered prerequisite chain.
                 </p>
               </CardContent>
             </Card>
           )}
 
-          {result && target && (
-            <motion.div key={targetKey ?? ""} className="space-y-6">
+          {result && (
+            <motion.div key={targetKeys.join("|")} className="space-y-6">
               {/* summary strip */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                 {[
@@ -1334,7 +1500,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {/* plan progress */}
-                  <div className="flex items-center gap-3" aria-label={`Plan progress: ${planDone} of ${result.steps.length + 1} complete`}>
+                  <div className="flex items-center gap-3" aria-label={`Plan progress: ${planDone} of ${planQuests.size} complete`}>
                     <div className="h-1.5 flex-1 rounded-full bg-stone-800 overflow-hidden">
                       <motion.div
                         className="h-full rounded-full bg-gradient-to-r from-amber-500 to-emerald-500"
@@ -1344,15 +1510,15 @@ export default function Home() {
                       />
                     </div>
                     <span className="text-[10px] text-stone-500 shrink-0 tabular-nums">
-                      {planDone}/{result.steps.length + 1} done
+                      {planDone}/{planQuests.size} done
                     </span>
                   </div>
                   <UnmetRequirementsPanel entries={unmetEntries} totalTrainXp={totalXpNeeded} />
                   {viewMode === "graph" ? (
                     <QuestGraph
                       steps={result.steps}
-                      target={result.target}
-                      targetGaps={result.targetGaps}
+                      targets={result.targets}
+                      cascades={result.cascades}
                       completed={completed}
                       onToggleCompleted={toggleCompleted}
                     />
@@ -1360,7 +1526,9 @@ export default function Home() {
                   <div className="qp-scroll max-h-[34rem] overflow-y-auto pr-3">
                     <ol className="space-y-1.5">
                       <AnimatePresence initial={false}>
-                      {result.steps.map((step, i) => {
+                      {result.steps
+                        .filter((step) => !result.targets.some((t) => t.quest.key === step.quest.key))
+                        .map((step, i) => {
                         const q = step.quest;
                         const done = completed.has(q.key);
                         const trainGaps = step.gaps.filter((g) => g.status === "train");
@@ -1490,43 +1658,48 @@ export default function Home() {
                         );
                       })}
                       </AnimatePresence>
-                      {/* target row */}
-                      <motion.li
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.35, ease: "easeOut" }}
-                        className="list-none"
-                      >
-                      <div className="flex items-start gap-2 rounded-md border border-amber-700/60 bg-amber-950/30 px-3 py-2.5 qa-target-pulse">
-                        <span className="text-xs font-mono text-amber-500 w-6 pt-0.5 text-right shrink-0">🎯</span>
-                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
-                          <Checkbox
-                            checked={completed.has(target.key)}
-                            onCheckedChange={() => toggleCompleted(target.key)}
-                            aria-label={`Mark ${target.name} complete`}
-                            className="border-amber-600 data-[state=checked]:bg-amber-600"
-                          />
-                          <a href={wikiUrl(target.name)} target="_blank" rel="noreferrer" className="text-sm font-bold text-amber-200 hover:underline">
-                            {target.name}
-                          </a>
-                          <Badge className={`text-[9px] px-1.5 border ${DIFF_COLORS[target.difficulty]}`}>{target.difficulty}</Badge>
-                          {questMinutes(target) !== null && (
-                            <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-500/80">
-                              <Clock className="h-2.5 w-2.5" aria-hidden />
-                              ≈{formatMinutes(questMinutes(target)!)}
+                      {/* target rows — one per tracked quest */}
+                      {result.targets.map((t, ti) => (
+                        <motion.li
+                          key={t.quest.key}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5, duration: 0.35, ease: "easeOut" }}
+                          className="list-none"
+                        >
+                        <div className="flex items-start gap-2 rounded-md border border-amber-700/60 bg-amber-950/30 px-3 py-2.5 qa-target-pulse">
+                          <span className="text-xs font-mono text-amber-500 w-6 pt-0.5 text-right shrink-0">🎯</span>
+                          <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
+                            <Checkbox
+                              checked={completed.has(t.quest.key)}
+                              onCheckedChange={() => toggleCompleted(t.quest.key)}
+                              aria-label={`Mark ${t.quest.name} complete`}
+                              className="border-amber-600 data-[state=checked]:bg-amber-600"
+                            />
+                            <a href={wikiUrl(t.quest.name)} target="_blank" rel="noreferrer" className="text-sm font-bold text-amber-200 hover:underline">
+                              {t.quest.name}
+                            </a>
+                            <Badge className={`text-[9px] px-1.5 border ${DIFF_COLORS[t.quest.difficulty]}`}>{t.quest.difficulty}</Badge>
+                            {questMinutes(t.quest) !== null && (
+                              <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-500/80">
+                                <Clock className="h-2.5 w-2.5" aria-hidden />
+                                ≈{formatMinutes(questMinutes(t.quest)!)}
+                              </span>
+                            )}
+                            <span className="text-[10px] text-amber-500/80">
+                              — target{result.targets.length > 1 ? ` ${ti + 1} of ${result.targets.length}` : ""}, everything above feeds into this
                             </span>
-                          )}
-                          <span className="text-[10px] text-amber-500/80">— your target, everything above feeds into this</span>
-                          {result.targetRequirements.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-1 w-full">
-                              {result.targetRequirements.map((g) => (
-                                <ReqChip key={g.skill} gap={g} />
-                              ))}
-                            </div>
-                          )}
+                            {t.requirements.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1 w-full">
+                                {t.requirements.map((g) => (
+                                  <ReqChip key={g.skill} gap={g} />
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      </motion.li>
+                        </motion.li>
+                      ))}
                     </ol>
                   </div>
                   )}
@@ -1552,19 +1725,13 @@ export default function Home() {
               )}
 
               {/* footer actions */}
-              <div className="flex flex-wrap gap-2 justify-between">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setCompleted(new Set())}
-                  className="text-stone-500 hover:text-red-300 hover:bg-stone-900"
-                >
-                  Reset all completion tracking ({completed.size} saved)
-                </Button>
-                <p className="text-[10px] text-stone-600 self-center">
-                  Requirements data: OSRS Wiki (boostability &amp; start-flags) · quest registry: wvanderp/osrs-db · completion stored locally in your browser
-                </p>
-              </div>
+              <p className="text-[10px] text-stone-600">
+                Requirements data: OSRS Wiki (boostability &amp; start-flags) · quest registry: wvanderp/osrs-db · completion stored locally in your browser — set it up in bulk on the{" "}
+                <Link href="/completions" className="underline underline-offset-2 hover:text-stone-400">
+                  Completions
+                </Link>{" "}
+                page
+              </p>
             </motion.div>
           )}
         </main>
@@ -1573,6 +1740,9 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-4 py-3 text-[10px] text-stone-600 flex flex-wrap justify-between gap-2">
             <span>Unofficial tool. RuneScape and OSRS are trademarks of Jagex Ltd.</span>
             <span>{completed.size} quests marked complete · saved locally — use Backup to export</span>
+            <span className="tabular-nums" title="Deployed build — matches the GHCR image tag">
+              {APP_VERSION} · build {APP_BUILD}
+            </span>
           </div>
         </footer>
       </div>

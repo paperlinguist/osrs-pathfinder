@@ -20,6 +20,10 @@ COPY next.config.ts tailwind.config.ts postcss.config.mjs tsconfig.json componen
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# build identity for the page footer (short SHA — set by docker-publish.yml)
+ARG NEXT_PUBLIC_APP_VERSION=dev
+ENV NEXT_PUBLIC_APP_VERSION=$NEXT_PUBLIC_APP_VERSION
+
 # package.json "build" = next build + copy static/public into standalone/
 RUN bun run build
 

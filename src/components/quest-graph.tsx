@@ -7,6 +7,7 @@ import {
   BackgroundVariant,
   BaseEdge,
   Controls,
+  EdgeText,
   Handle,
   MarkerType,
   MiniMap,
@@ -31,7 +32,7 @@ import { TOOLTIP_ARROW, TOOLTIP_BOX, skillSuggestAnchorId } from "@/components/s
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { QUEST_BY_KEY, Quest } from "@/lib/quest-data";
-import type { ChainStep, SkillGap } from "@/lib/resolver";
+import type { ChainStep, SkillGap, TargetResult, XpCascade } from "@/lib/resolver";
 
 /* -------------------------------------------------------------- constants */
 
@@ -58,6 +59,7 @@ const gateRowY = (layer: number) => 2 * layer * ROW_H;
 const PREREQ_STROKE = "#57534e";
 const TARGET_STROKE = "#d97706";
 const GATE_STROKE = "#dc2626";
+const CASCADE_STROKE = "#f87171";
 
 const DIFF_DOT: Record<string, string> = {
   Novice: "bg-emerald-500",
@@ -259,6 +261,21 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
         </a>
       </TooltipContent>
       <Handle
+        type="target"
+        position={Position.Top}
+        className="!opacity-0"
+        style={{
+          // cascade edges attach ON the diamond's top vertex (top-anchored,
+          // explicit size, y-shift killed — mirrors the source handle below)
+          top: GATE_H / 2 - GATE_DIAMOND,
+          left: "50%",
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "translate(-50%, 0)",
+        }}
+      />
+      <Handle
         type="source"
         position={Position.Bottom}
         className="!opacity-0"
@@ -287,6 +304,7 @@ type SpreadEdgeData = {
   sourceOffsetY?: number; // px vertical shift (gates: attach ON the diamond)
   targetOffsetY?: number;
   turn?: number; // smoothstep turn distance
+  label?: string; // small edge label (XP cascades)
 };
 
 /**
@@ -308,7 +326,7 @@ function SpreadEdge({
   data,
 }: EdgeProps) {
   const d = (data ?? {}) as SpreadEdgeData;
-  const [edgePath] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX: sourceX + (d.sourceOffset ?? 0),
     sourceY: sourceY + (d.sourceOffsetY ?? 0),
     sourcePosition,
@@ -318,10 +336,31 @@ function SpreadEdge({
     borderRadius: 12,
     offset: d.turn ?? 24,
   });
-  return <BaseEdge id={id} path={edgePath} style={style} markerEnd={markerEnd} />;
+  return (
+    <>
+      <BaseEdge id={id} path={edgePath} style={style} markerEnd={markerEnd} />
+      {d.label && <EdgeLabel x={labelX} y={labelY} text={d.label} />}
+    </>
+  );
 }
 
 const EDGE_TYPES = { spread: SpreadEdge, routed: RoutedEdge };
+
+/** Small pill label pinned to an edge midpoint (used by XP-cascade edges). */
+function EdgeLabel({ x, y, text }: { x: number; y: number; text: string }) {
+  return (
+    <EdgeText
+      x={x}
+      y={y}
+      label={text}
+      labelShowBg
+      labelBgPadding={[4, 2]}
+      labelBgBorderRadius={4}
+      labelBgStyle={{ fill: "#0c0a09", stroke: "#7f1d1d", strokeWidth: 0.5 }}
+      style={{ fill: "#fca5a5", fontSize: 9, fontWeight: 600 }}
+    />
+  );
+}
 
 /* ---------------------------------------------------------------- edges */
 
@@ -331,6 +370,7 @@ type RoutedEdgeData = {
   sourceOffsetY?: number;
   targetOffsetY?: number;
   via?: number; // corridor x the long vertical run is displaced to
+  label?: string;
 };
 
 /** SVG path through waypoints with rounded corners; zero-length runs are dropped. */
@@ -390,7 +430,12 @@ function RoutedEdge({
     ],
     12,
   );
-  return <BaseEdge id={id} path={path} style={style} markerEnd={markerEnd} />;
+  return (
+    <>
+      <BaseEdge id={id} path={path} style={style} markerEnd={markerEnd} />
+      {d.label && <EdgeLabel x={via} y={(sy + ty) / 2} text={d.label} />}
+    </>
+  );
 }
 
 /* ---------------------------------------------------------------- layout */
@@ -424,14 +469,17 @@ interface GateInfo {
 
 function computeLayout(
   steps: ChainStep[],
-  target: Quest,
-  targetGaps: SkillGap[],
+  targets: TargetResult[],
+  cascades: XpCascade[],
 ): { nodes: FlowNode[]; edges: Edge[] } {
   const order = new Map<string, number>(
     steps.map((s, i) => [s.quest.key, i] as const),
   );
-  order.set(target.key, steps.length);
+  targets.forEach((t, i) => {
+    if (!order.has(t.quest.key)) order.set(t.quest.key, steps.length + i);
+  });
   const inPlan = new Set(order.keys());
+  const targetKeySet = new Set(targets.map((t) => t.quest.key));
 
   // prerequisite edges confined to the plan (both endpoints present, deduped)
   const parentsOf = new Map<string, string[]>();
@@ -479,7 +527,7 @@ function computeLayout(
     }
   };
   for (const s of steps) for (const gap of s.gaps) feed(gap, s.quest.key);
-  for (const gap of targetGaps) feed(gap, target.key);
+  for (const t of targets) for (const gap of t.gaps) feed(gap, t.quest.key);
 
   // ---- positions
   const pos = new Map<string, { x: number; y: number }>();
@@ -578,10 +626,10 @@ function computeLayout(
       type: "quest",
       position: pos.get(key)!,
       data: {
-        quest: QUEST_BY_KEY[key] ?? target, // cape target is a synthetic quest
+        quest: step?.quest ?? QUEST_BY_KEY[key], // cape target is a synthetic quest
         done: false, // overwritten below via completed set
         isExtra: step?.isExtra ?? false,
-        isTarget: key === target.key,
+        isTarget: targetKeySet.has(key),
         onToggle: () => {}, // replaced below
       },
     });
@@ -619,7 +667,7 @@ function computeLayout(
   }
   for (const key of inPlan) {
     for (const p of parentsOf.get(key) ?? []) {
-      const toTarget = key === target.key;
+      const toTarget = targetKeySet.has(key);
       edges.push({
         id: `${p}->${key}`,
         source: p,
@@ -636,6 +684,28 @@ function computeLayout(
         },
       });
     }
+  }
+
+  // ---- XP-cascade edges: dotted red lines from an XP grant down to the next
+  // node in the same skill (the quest itself when the level-up completes it,
+  // otherwise its training gate diamond)
+  for (const c of cascades) {
+    const toId = c.toGateLevel !== null ? `gate:${c.skill}:${c.toGateLevel}` : c.toQuest;
+    if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
+    edges.push({
+      id: `xp:${c.from}->${toId}:${c.skill}`,
+      source: c.from,
+      target: toId,
+      type: "routed",
+      style: { stroke: CASCADE_STROKE, strokeWidth: 1.2, strokeDasharray: "2 4" },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 10,
+        height: 10,
+        color: CASCADE_STROKE,
+      },
+      data: { label: `${c.skill} ${c.levelFrom}→${c.levelTo}` },
+    });
   }
 
   // ---- long-edge corridor routing: an edge whose vertical run would cross
@@ -740,6 +810,22 @@ function computeLayout(
     arr.sort(
       (a, b) => posOf(a.source).x - posOf(b.source).x || posOf(a.source).y - posOf(b.source).y,
     );
+    if (tid.startsWith("gate:")) {
+      // Diamond targets (XP cascades): the quest-card spread below would leave
+      // the endpoints floating in thin air beside the diamond's sloped upper
+      // edges. Attach ON the upper boundary instead — leftmost source connects
+      // on the upper-left edge, rightmost on the upper-right, a single cascade
+      // lands exactly on the top vertex (mirrors the gate source branch).
+      const k = arr.length;
+      arr.forEach((e, i) => {
+        const t = k === 1 ? 0.5 : i / (k - 1); // 0 (left) → 1 (right)
+        const dx = -GATE_ATTACH_SPREAD + 2 * GATE_ATTACH_SPREAD * t;
+        // handle sits on the top vertex; walking |dx| along the 45° upper
+        // edges DROPS the attach point onto the diamond boundary (y grows)
+        e.data = { ...e.data, targetOffset: dx, targetOffsetY: Math.abs(dx) };
+      });
+      continue;
+    }
     const offs = spread(arr.length, 0.36 * NODE_W); // targets are always quest cards
     arr.forEach((e, i) => {
       e.data = { ...e.data, targetOffset: offs[i] };
@@ -783,20 +869,20 @@ function computeLayout(
 
 function QuestGraphInner({
   steps,
-  target,
-  targetGaps,
+  targets,
+  cascades,
   completed,
   onToggleCompleted,
 }: {
   steps: ChainStep[];
-  target: Quest;
-  targetGaps: SkillGap[];
+  targets: TargetResult[];
+  cascades: XpCascade[];
   completed: Set<string>;
   onToggleCompleted: (key: string) => void;
 }) {
   const { nodes: layoutNodes, edges } = useMemo(
-    () => computeLayout(steps, target, targetGaps),
-    [steps, target, targetGaps],
+    () => computeLayout(steps, targets, cascades),
+    [steps, targets, cascades],
   );
   const layoutKey = useMemo(() => layoutNodes.map((n) => n.id).join("|"), [layoutNodes]);
 
@@ -840,44 +926,54 @@ function QuestGraphInner({
   const { toast } = useToast();
   const [exporting, setExporting] = useState(false);
 
-  // export the current graph state as a PNG (minimap / controls excluded)
+  // export the ENTIRE graph as a PNG — not just what happens to be on screen.
+  // Captures the .react-flow__viewport element and overrides its transform
+  // with one that frames the full node bounds (the official React Flow
+  // download-image recipe). Graphs bigger than the browser's canvas limits
+  // (16384px per side, ~64MP total area) are scaled down just enough to fit —
+  // the whole graph always makes it into the image.
   const exportPng = useCallback(async () => {
-    const el = paneRef.current?.querySelector<HTMLElement>(".react-flow");
+    const el = paneRef.current?.querySelector<HTMLElement>(".react-flow__viewport");
     if (!el || nodes.length === 0) return;
     setExporting(true);
     try {
       const bounds = graphBounds(nodes.filter((n) => !n.hidden));
       const pad = 80;
-      const w = Math.min(Math.ceil(bounds.width) + pad * 2, 4000);
-      const h = Math.min(Math.ceil(bounds.height) + pad * 2, 3000);
-      const vp = getViewportForBounds(bounds, w, h, 0.2, 2, 0);
+      const MAX_DIM = 16384;
+      const MAX_AREA = 64 * 1024 * 1024; // ≈ 8192 × 8192 — safe on desktop browsers
+      const fullW = Math.ceil(bounds.width) + pad * 2;
+      const fullH = Math.ceil(bounds.height) + pad * 2;
+      const scale = Math.min(
+        1,
+        MAX_DIM / fullW,
+        MAX_DIM / fullH,
+        Math.sqrt(MAX_AREA / (fullW * fullH)),
+      );
+      const w = Math.max(1, Math.floor(fullW * scale));
+      const h = Math.max(1, Math.floor(fullH * scale));
+      const vp = getViewportForBounds(bounds, w, h, 0.05, 2, 0);
       const dataUrl = await toPng(el, {
         backgroundColor: "#0c0a09",
         width: w,
         height: h,
+        pixelRatio: 1, // default (devicePixelRatio) would double the canvas past the limits
         style: {
           width: `${w}px`,
           height: `${h}px`,
           transform: `translate(${vp.x}px, ${vp.y}px) scale(${vp.zoom})`,
         },
-        filter: (n) => {
-          const cls = (n as HTMLElement).classList;
-          return !(
-            cls?.contains("react-flow__minimap") ||
-            cls?.contains("react-flow__controls") ||
-            cls?.contains("react-flow__panel")
-          );
-        },
       });
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `quest-path-${(target?.name ?? "graph")
+      a.download = `quest-path-${(targets[0]?.quest.name ?? "graph")
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")}.png`;
       a.click();
       toast({
         title: "Graph exported",
-        description: "PNG downloaded — minimap and controls are excluded.",
+        description: `Entire graph downloaded (${w.toLocaleString()} × ${h.toLocaleString()} px${
+          scale < 1 ? " — scaled to fit canvas limits" : ""
+        }).`,
       });
     } catch {
       toast({
@@ -888,7 +984,7 @@ function QuestGraphInner({
     } finally {
       setExporting(false);
     }
-  }, [nodes, target, toast]);
+  }, [nodes, targets, toast]);
 
   // (re)seed node positions when the plan structure changes — any quest/gate
   // added or removed (done-toggles drop nodes, so they count as structural).
@@ -1119,6 +1215,7 @@ function QuestGraphInner({
         <span><span className="mr-1 inline-block h-1.5 w-1.5 rounded-full align-middle bg-sky-600" />added for XP</span>
         <span><span className="mr-1 inline-block h-2 w-2 rotate-45 border border-red-600 bg-red-950 align-middle" />training gate</span>
         <span className="hidden sm:inline"><span className="mr-1 inline-block h-px w-4 border-t border-dashed border-red-500 align-middle" />train before this quest</span>
+        <span className="hidden sm:inline"><span className="mr-1 inline-block h-px w-4 border-t-2 border-dotted border-red-400 align-middle" />quest XP raises this skill</span>
         <span className="hidden sm:inline">· drag to rearrange · scroll to zoom · ✓ marks quests done</span>
       </div>
     </div>
