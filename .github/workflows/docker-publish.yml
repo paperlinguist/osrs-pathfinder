@@ -3,7 +3,9 @@ name: Publish Docker image
 on:
   push:
     branches: [main]
-    tags: ["v*"]
+  pull_request:
+    branches: [main]   # so the required `build-and-push` ruleset check actually runs on PRs
+  tags: ["v*"]
   workflow_dispatch:
 
 env:
@@ -22,6 +24,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        id: buildx
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -48,12 +51,18 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          builder: ${{ steps.buildx.outputs.name }}   # explicit: never fall back to the default docker driver
           context: .
-          push: true
+          # PR runs (ruleset check) build only; actual pushes happen on main/tags
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           # footer build identity: short SHA, matches the sha-xxxxxxx image tag
           build-args: |
             NEXT_PUBLIC_APP_VERSION=${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # inline cache rides inside the pushed image — the only export backend
+          # supported by EVERY buildx driver. type=gha broke when the runner
+          # fell back to the plain docker driver ("Cache export is not
+          # supported for the docker driver"); inline can't hit that.
+          cache-from: type=inline
+          cache-to: type=inline
