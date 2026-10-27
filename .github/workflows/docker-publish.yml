@@ -3,9 +3,9 @@ name: Publish Docker image
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   pull_request:
     branches: [main]   # so the required `build-and-push` ruleset check actually runs on PRs
-  tags: ["v*"]
   workflow_dispatch:
 
 env:
