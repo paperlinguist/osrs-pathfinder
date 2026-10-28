@@ -29,6 +29,7 @@ import {
   type LayoutNode,
 } from "../src/lib/graph-layout";
 import {
+  QUEST_BY_KEY,
   SKILL_NAMES,
   levelForXp,
   xpForLevel,
@@ -80,40 +81,51 @@ function assertInvariants(nodes: LayoutNode[], edges: LayoutEdge[], label: strin
     check(ids.has(e.source) && ids.has(e.target), `${label}: edge endpoints exist`, e.id);
   }
 
-  // 2. attach points are distinct per node side (lines never stack at a node)
-  const sideAttach = (pick: (e: LayoutEdge) => [string, number]) => {
-    const byNode = new Map<string, number[]>();
+  // 2. attach points are distinct per node side AND handle (a gate's
+  //    bottom-vertex fan and its tier-chain exits are separate attach sites)
+  const sideAttach = (pick: (e: LayoutEdge) => [string, string, number]) => {
+    const bySite = new Map<string, number[]>();
     for (const e of edges) {
-      const [id, x] = pick(e);
-      const arr = byNode.get(id);
+      const [id, handle, x] = pick(e);
+      const key = `${id}|${handle}`;
+      const arr = bySite.get(key);
       if (arr) arr.push(x);
-      else byNode.set(id, [x]);
+      else bySite.set(key, [x]);
     }
-    for (const [id, xs] of byNode) {
+    for (const [key, xs] of bySite) {
       const sorted = [...xs].sort((a, b) => a - b);
       let minGap = Infinity;
       for (let i = 1; i < sorted.length; i++) minGap = Math.min(minGap, sorted[i] - sorted[i - 1]);
       check(
         minGap > 0.5,
-        `${label}: distinct source/target attach points on ${id}`,
+        `${label}: distinct attach points on ${key}`,
         `${xs.length} edges, min gap ${minGap === Infinity ? "n/a" : minGap.toFixed(1)}px`,
       );
     }
   };
-  sideAttach((e) => [e.source, (pos.get(e.source)?.x ?? 0) + (e.sourceOffset ?? 0)]);
-  sideAttach((e) => [e.target, (pos.get(e.target)?.x ?? 0) + (e.targetOffset ?? 0)]);
+  sideAttach((e) => [e.source, e.sourceHandle ?? "b", (pos.get(e.source)?.x ?? 0) + (e.sourceOffset ?? 0)]);
+  sideAttach((e) => [e.target, e.targetHandle ?? "t", (pos.get(e.target)?.x ?? 0) + (e.targetOffset ?? 0)]);
 
   // 3. gate attach points ride ON the diamond's 45° boundary (y-shift mirrors
   //    the x-shift) and quest attach points sit exactly on the horizontal
-  //    borders — vertical entry/exit everywhere
+  //    borders — vertical entry/exit everywhere. Side-vertex tier chains
+  //    anchor exactly at their handle (no spread offsets).
   for (const e of edges) {
     const s = pos.get(e.source);
     const t = pos.get(e.target);
     if (!s || !t) continue;
-    if (s.kind === "gate") {
+    const sideSource = e.sourceHandle === "s-right" || e.sourceHandle === "s-left";
+    const sideTarget = e.targetHandle === "t-left" || e.targetHandle === "t-right";
+    if (sideSource) {
       check(
-        e.sourceOffsetY === -Math.abs(e.sourceOffset ?? 0),
-        `${label}: gate source on lower slope (${e.id})`,
+        e.sourceOffset === undefined && e.sourceOffsetY === undefined,
+        `${label}: side-source anchors at the handle (${e.id})`,
+      );
+    } else if (s.kind === "gate") {
+      const want = e.sourceHandle === "t-up" ? Math.abs(e.sourceOffset ?? 0) : -Math.abs(e.sourceOffset ?? 0);
+      check(
+        e.sourceOffsetY === want,
+        `${label}: gate source on slope (${e.id})`,
         `offset=${e.sourceOffset} offsetY=${e.sourceOffsetY}`,
       );
     } else {
@@ -123,7 +135,12 @@ function assertInvariants(nodes: LayoutNode[], edges: LayoutEdge[], label: strin
         `offsetY=${e.sourceOffsetY}`,
       );
     }
-    if (t.kind === "gate") {
+    if (sideTarget) {
+      check(
+        e.targetOffset === undefined && e.targetOffsetY === undefined,
+        `${label}: side-target anchors at the handle (${e.id})`,
+      );
+    } else if (t.kind === "gate") {
       check(
         e.targetOffsetY === Math.abs(e.targetOffset ?? 0),
         `${label}: gate target on upper slope (${e.id})`,
@@ -135,6 +152,30 @@ function assertInvariants(nodes: LayoutNode[], edges: LayoutEdge[], label: strin
         `${label}: quest target on top border (${e.id})`,
         `offsetY=${e.targetOffsetY}`,
       );
+    }
+  }
+
+  // 3b. gates only ever touch quests they DIRECTLY gate: gate→quest edges must
+  //     match the quest's own requirement at that level, and quest→gate edges
+  //     may only be XP cascades (tier chains are strictly gate→gate)
+  for (const e of edges) {
+    if (e.source.startsWith("gate:") && !e.target.startsWith("gate:")) {
+      const m = e.source.match(/^gate:([^:]+):(\d+)$/);
+      const q = m ? QUEST_BY_KEY[e.target] : undefined;
+      check(
+        e.kind === "gate" && q?.skills[m![1]]?.level === Number(m![2]),
+        `${label}: gate→quest edge is a direct requirement (${e.id})`,
+      );
+    }
+    if (!e.source.startsWith("gate:") && e.target.startsWith("gate:")) {
+      check(e.kind === "cascade", `${label}: quest→gate edge is a cascade (${e.id})`);
+    }
+    if (e.kind === "tier") {
+      check(
+        e.source.startsWith("gate:") && e.target.startsWith("gate:"),
+        `${label}: tier chain is gate→gate (${e.id})`,
+      );
+      check(e.via === undefined || e.sourceHandle !== "s-right", `${label}: side tier not routed (${e.id})`);
     }
   }
 
@@ -189,10 +230,24 @@ console.log("Scenario A — Lunar Diplomacy + The Hand in the Sand added manuall
     "49 tier grind is its own (deficit 9)",
     gate49?.kind === "gate" ? `deficit=${gate49.deficit} xp=${gate49.xp}` : "",
   );
-  check(
-    edges.some((e) => e.id === "tier:hand in sand->gate:Crafting:61"),
-    "tier-chain edge Hand in the Sand → Crafting 61 diamond",
-  );
+  const tierEdge = edges.find((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61");
+  check(!!tierEdge, "tier-chain edge Crafting 49 diamond → Crafting 61 diamond");
+  if (tierEdge) {
+    const g49 = nodes.find((n) => n.id === "gate:Crafting:49");
+    const g61 = nodes.find((n) => n.id === "gate:Crafting:61");
+    const sameRow = Math.abs((g49?.y ?? 0) - (g61?.y ?? 1)) < 1;
+    const sideHandles =
+      tierEdge.sourceHandle === "s-right" || tierEdge.sourceHandle === "s-left";
+    check(
+      sameRow === sideHandles,
+      "tier edge shape matches geometry (side-to-side on same row, vertical across rows)",
+      `sameRow=${sameRow} handles=${tierEdge.sourceHandle}->${tierEdge.targetHandle}`,
+    );
+    check(
+      !sameRow || (tierEdge.sourceOffset === undefined && tierEdge.targetOffset === undefined),
+      "side-to-side tier anchors at the vertices (no offsets)",
+    );
+  }
   check(
     edges.some((e) => e.id === "gate:Crafting:49->hand in sand" && e.kind === "gate"),
     "gate edge Crafting 49 → Hand in the Sand",
@@ -283,8 +338,13 @@ console.log("Scenario C — Quest Cape full-board stress");
   check(cooking.length >= 2, "Cooking tiers split into separate diamonds", cooking.join(","));
   for (let i = 0; i + 1 < cooking.length; i++) {
     check(
-      edges.some((e) => e.kind === "tier" && e.target === `gate:Cooking:${cooking[i + 1]}`),
-      `Cooking ${cooking[i]} chains toward ${cooking[i + 1]}`,
+      edges.some(
+        (e) =>
+          e.kind === "tier" &&
+          e.source === `gate:Cooking:${cooking[i]}` &&
+          e.target === `gate:Cooking:${cooking[i + 1]}`,
+      ),
+      `Cooking ${cooking[i]} diamond chains to ${cooking[i + 1]} diamond`,
     );
   }
 }

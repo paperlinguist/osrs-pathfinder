@@ -97,6 +97,9 @@ export interface LayoutEdge {
   /** px vertical attach shift (gates: attach ON the diamond's boundary) */
   sourceOffsetY?: number;
   targetOffsetY?: number;
+  /** explicit React Flow handle ids (gate side/top-vertex exits; undefined = default handle) */
+  sourceHandle?: string;
+  targetHandle?: string;
   /** corridor x the long vertical run is displaced to (routed edges) */
   via?: number;
   /** small edge label (XP cascades) */
@@ -342,9 +345,11 @@ export function computeLayout(
   }
 
   // tier-chain edges: a skill training through several levels in one plan
-  // (49 before one quest, 61 before another) reads as a ladder — every quest
-  // fed by a lower tier's diamond chains up to the next tier's diamond, so
-  // "do these quests, then train on to the next level" is one connected path
+  // (49 before one quest, 61 before another) reads as a LADDER of diamonds —
+  // each tier's gate connects to the next tier's gate, never to a quest it
+  // doesn't directly require. Gates share a row connect side-to-side at the
+  // side vertices; gates in different rows connect through the vertical
+  // vertices (bottom exit downward, top exit upward).
   const tiersBySkill = new Map<string, GateLayout[]>();
   for (const g of gates.values()) {
     const arr = tiersBySkill.get(g.skill);
@@ -354,10 +359,31 @@ export function computeLayout(
   for (const arr of tiersBySkill.values()) {
     arr.sort((a, b) => a.level - b.level);
     for (let i = 0; i + 1 < arr.length; i++) {
-      const upper = arr[i + 1];
-      for (const q of arr[i].fed) {
-        edges.push({ id: `tier:${q}->${upper.id}`, source: q, target: upper.id, kind: "tier" });
+      const lower = arr[i];
+      const next = arr[i + 1];
+      const lp = pos.get(lower.id) ?? { x: 0, y: 0 };
+      const np = pos.get(next.id) ?? { x: 0, y: 0 };
+      const e: LayoutEdge = {
+        id: `tier:${lower.id}->${next.id}`,
+        source: lower.id,
+        target: next.id,
+        kind: "tier",
+      };
+      if (Math.abs(lp.y - np.y) < 1) {
+        // same gate row: straight side-to-side line between the diamonds
+        if (np.x >= lp.x) {
+          e.sourceHandle = "s-right";
+          e.targetHandle = "t-left";
+        } else {
+          e.sourceHandle = "s-left";
+          e.targetHandle = "t-right";
+        }
+      } else if (np.y < lp.y) {
+        // next tier's gate sits higher on the board: leave via the top vertex
+        e.sourceHandle = "t-up";
       }
+      // else: next tier sits lower — default handles (bottom → top vertex)
+      edges.push(e);
     }
   }
 
@@ -403,8 +429,13 @@ export function computeLayout(
     if (s) s.push(e);
     else bySource.set(e.source, [e]);
   }
+  // side-vertex edges (same-row tier chains) anchor exactly at their handle —
+  // they must not be pulled into the vertex spreads below
+  const isSideTarget = (e: LayoutEdge) => e.targetHandle === "t-left" || e.targetHandle === "t-right";
+  const isSideSource = (e: LayoutEdge) => e.sourceHandle === "s-right" || e.sourceHandle === "s-left";
   for (const [tid, arr] of byTarget) {
-    arr.sort(
+    const vEdges = arr.filter((e) => !isSideTarget(e));
+    vEdges.sort(
       (a, b) => posOf(a.source).x - posOf(b.source).x || posOf(a.source).y - posOf(b.source).y,
     );
     if (tid.startsWith("gate:")) {
@@ -413,8 +444,8 @@ export function computeLayout(
       // edges. Attach ON the upper boundary instead — leftmost source connects
       // on the upper-left edge, rightmost on the upper-right, a single edge
       // lands exactly on the top vertex (mirrors the gate source branch).
-      const offs = vertexAttachOffsets(arr.length); // ascending — matches the source-x sort
-      arr.forEach((e, i) => {
+      const offs = vertexAttachOffsets(vEdges.length); // ascending — matches the source-x sort
+      vEdges.forEach((e, i) => {
         const dx = offs[i];
         // handle sits on the top vertex; walking |dx| along the 45° upper
         // edges DROPS the attach point onto the diamond boundary (y grows)
@@ -423,34 +454,46 @@ export function computeLayout(
       });
       continue;
     }
-    const offs = spread(arr.length, 0.36 * NODE_W); // targets are always quest cards
-    arr.forEach((e, i) => {
+    const offs = spread(vEdges.length, 0.36 * NODE_W); // targets are always quest cards
+    vEdges.forEach((e, i) => {
       e.targetOffset = offs[i];
     });
   }
   for (const [sid, arr] of bySource) {
-    arr.sort(
+    const vEdges = arr.filter((e) => !isSideSource(e));
+    vEdges.sort(
       (a, b) => posOf(a.target).x - posOf(b.target).x || posOf(a.target).y - posOf(b.target).y,
     );
     if (sid.startsWith("gate:")) {
       // Diamonds: a square-style horizontal spread at the container bottom
       // leaves the line endpoints floating in thin air beside the sloped
-      // edges. Attach every edge ON the diamond's lower boundary instead —
-      // leftmost target connects on the lower-left edge, rightmost on the
-      // lower-right, single edges at the bottom vertex.
-      const offs = vertexAttachOffsets(arr.length); // ascending — matches the target-x sort
-      arr.forEach((e, i) => {
-        const dx = offs[i];
+      // edges. Attach every edge ON the diamond's boundary instead — downward
+      // edges (default handle) ride the lower slopes from the bottom vertex;
+      // upward tier chains ("t-up" handle) ride the upper slopes from the
+      // top vertex.
+      const downEdges = vEdges.filter((e) => e.sourceHandle !== "t-up");
+      const upEdges = vEdges.filter((e) => e.sourceHandle === "t-up");
+      const dOffs = vertexAttachOffsets(downEdges.length); // ascending — matches the sort
+      downEdges.forEach((e, i) => {
+        const dx = dOffs[i];
         // handle sits exactly on the diamond's bottom vertex; walking |dx| along
         // the 45° lower edges rises the attach point by the same amount
         e.sourceOffset = dx;
         e.sourceOffsetY = -Math.abs(dx);
       });
+      const uOffs = vertexAttachOffsets(upEdges.length);
+      upEdges.forEach((e, i) => {
+        const dx = uOffs[i];
+        // mirror image: from the top vertex, walking |dx| along the upper
+        // edges DROPS the attach point onto the boundary
+        e.sourceOffset = dx;
+        e.sourceOffsetY = Math.abs(dx);
+      });
       continue;
     }
     const span = 0.36 * NODE_W; // quest cards: spread across the bottom edge
-    const offs = spread(arr.length, span);
-    arr.forEach((e, i) => {
+    const offs = spread(vEdges.length, span);
+    vEdges.forEach((e, i) => {
       e.sourceOffset = offs[i];
     });
   }
@@ -526,6 +569,7 @@ export function computeLayout(
   };
 
   for (const e of edges) {
+    if (isSideSource(e)) continue; // horizontal side-vertex lines need no corridor
     const sp = posOf(e.source);
     const tp = posOf(e.target);
     const sBottom = sp.y + boxH(e.source);

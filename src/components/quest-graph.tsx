@@ -272,6 +272,10 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
           {skill === "Combat" ? "Combat guide" : `${skill} training guide`}
         </a>
       </TooltipContent>
+      {/* default vertical-vertex handles (no id — edges without an explicit
+          handle reference these): target on the top vertex, source on the
+          bottom vertex. Explicit ids below cover the side vertices and the
+          upward top-vertex exit used by same-row / upward tier chains. */}
       <Handle
         type="target"
         position={Position.Top}
@@ -301,6 +305,81 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
           width: 6,
           height: 6,
           transform: "translate(-50%, 0)", // kill RF's default 50% y-shift
+        }}
+      />
+      <Handle
+        id="t-up"
+        type="source"
+        position={Position.Top}
+        className="!opacity-0"
+        style={{
+          // upward tier chains leave through the top vertex (same anchor
+          // point as the target handle above, opposite direction)
+          top: GATE_TOP_Y,
+          left: "50%",
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "translate(-50%, 0)",
+        }}
+      />
+      {/* side vertices — RF anchors Left/Right handles at (x, y+½h) /
+          (x+w, y+½h), so these pin to the diamond's side tips at row-center
+          height; same-row tier chains draw a straight line between them */}
+      <Handle
+        id="s-right"
+        type="source"
+        position={Position.Right}
+        className="!opacity-0"
+        style={{
+          left: GATE_W / 2 + GATE_DIAMOND - 6,
+          top: GATE_H / 2 - 3,
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "none",
+        }}
+      />
+      <Handle
+        id="s-left"
+        type="source"
+        position={Position.Left}
+        className="!opacity-0"
+        style={{
+          left: GATE_W / 2 - GATE_DIAMOND,
+          top: GATE_H / 2 - 3,
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "none",
+        }}
+      />
+      <Handle
+        id="t-right"
+        type="target"
+        position={Position.Right}
+        className="!opacity-0"
+        style={{
+          left: GATE_W / 2 + GATE_DIAMOND - 6,
+          top: GATE_H / 2 - 3,
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "none",
+        }}
+      />
+      <Handle
+        id="t-left"
+        type="target"
+        position={Position.Left}
+        className="!opacity-0"
+        style={{
+          left: GATE_W / 2 - GATE_DIAMOND,
+          top: GATE_H / 2 - 3,
+          bottom: "auto",
+          width: 6,
+          height: 6,
+          transform: "none",
         }}
       />
     </Tooltip>
@@ -437,6 +516,8 @@ function toFlowEdge(e: LayoutEdge): Edge {
     id: e.id,
     source: e.source,
     target: e.target,
+    ...(e.sourceHandle !== undefined ? { sourceHandle: e.sourceHandle } : {}),
+    ...(e.targetHandle !== undefined ? { targetHandle: e.targetHandle } : {}),
     type: "spread",
     style: {
       stroke: visual.stroke,
