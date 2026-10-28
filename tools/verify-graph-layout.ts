@@ -306,6 +306,39 @@ console.log("Scenario B — cascade attaches to the tier diamond it feeds");
   assertInvariants(nodes, edges, "B");
 }
 
+/* -------- Scenario D: XP-donor quest cascades out of its own bottom ------- */
+
+console.log("Scenario D — added-for-XP quest cascades into the tier diamond");
+{
+  // low Crafting: FT's and Shilo's XP grants already cascade into the 61
+  // diamond. Hand in the Sand (9k Crafting XP, must TRAIN to raw 49 to start)
+  // must cascade too — its reward stacks on the trained-to-49 xp pool.
+  const { nodes, edges } = layoutFor(
+    ["lunar diplomacy"],
+    ["hand in sand"],
+    mkPlayer({ Crafting: 25 }),
+  );
+
+  const handCascade = edges.find((e) => e.kind === "cascade" && e.source === "hand in sand");
+  check(
+    handCascade?.target === "gate:Crafting:61",
+    "Hand in the Sand XP cascades from its bottom INTO the Crafting 61 diamond",
+    handCascade ? `→ ${handCascade.target} (${handCascade.label})` : "no cascade edge found",
+  );
+  check(
+    handCascade?.label === "Crafting +9,000",
+    "masked grant labelled with raw xp (no fake level jump)",
+    handCascade?.label ?? "",
+  );
+  const ftCascade = edges.find((e) => e.kind === "cascade" && e.source === "fremennik trials");
+  check(
+    ftCascade !== undefined && ftCascade.target.startsWith("gate:"),
+    "Fremennik Trials cascade still present (from its bottom)",
+    ftCascade ? `→ ${ftCascade.target}` : "missing",
+  );
+  assertInvariants(nodes, edges, "D");
+}
+
 /* -------- Scenario C: Quest Cape pseudo-target (crash regression) --------- */
 
 console.log("Scenario C — Quest Cape full-board stress");

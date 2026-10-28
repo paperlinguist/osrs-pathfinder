@@ -60,7 +60,8 @@ export interface XpCascade {
   from: string;
   skill: string;
   levelFrom: number;
-  levelTo: number;
+  levelTo: number; // === levelFrom when no boundary is crossed (raw-xp progress)
+  xpGain: number; // the grant that flows into the skill
   toQuest: string;
   toLevel: number; // the downstream requirement level being approached
   toGate: boolean;
@@ -367,14 +368,28 @@ export function resolveChain(
       const baseLevel = player.levels?.[skill] ?? 1;
       const ownReq = q.skills[skill]?.level ?? 0;
       // assumed starting level: at least enough to complete this quest
-      const L0 = Math.max(ownReq, baseLevel, levelForXp(baseXp + (preBonus[i][skill] ?? 0)));
-      const L1 = Math.max(L0, levelForXp(baseXp + (postBonus[i][skill] ?? 0)));
-      if (L1 <= L0) continue;
+      const preXp = baseXp + (preBonus[i][skill] ?? 0);
+      const natural = Math.max(baseLevel, levelForXp(preXp));
+      const L0 = Math.max(ownReq, natural);
+      // when the assumed start comes from this quest's own train-to-complete
+      // gate, the xp pool must reflect that training — the quest's reward XP
+      // stacks on top of the levels you trained to reach it, not on the
+      // pre-training pool (otherwise the grant can never register a gain)
+      const startXp = Math.max(preXp, xpForLevel(L0));
+      const L1 = Math.max(L0, levelForXp(startXp + gain));
+      // show the cascade when a boundary is crossed, or when the own-gate
+      // floor masks the grant (raw-xp progress toward the next tier, e.g.
+      // Hand in the Sand's 9k Crafting XP on top of trained-to-49 — smaller
+      // than the 49→50 gap, so no crossing, but still real progress)
+      const crossed = L1 > L0;
+      const trainFloored = ownReq > natural;
+      if (!crossed && !trainFloored) continue;
       const attach = (toQuest: string, reqLevel: number): XpCascade => ({
         from: q.key,
         skill,
         levelFrom: L0,
         levelTo: L1,
+        xpGain: gain,
         toQuest,
         toLevel: reqLevel,
         // enough to complete → point at the quest itself; otherwise that

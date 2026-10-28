@@ -409,7 +409,12 @@ export function computeLayout(
       source: c.from,
       target: toId,
       kind: "cascade",
-      label: `${c.skill} ${c.levelFrom}→${c.levelTo}`,
+      // boundary-crossing grants show the level jump; own-gate-floored grants
+      // (no crossing possible) show the raw xp added
+      label:
+        c.levelFrom === c.levelTo
+          ? `${c.skill} +${c.xpGain.toLocaleString("en-US")}`
+          : `${c.skill} ${c.levelFrom}→${c.levelTo}`,
     });
   }
 
