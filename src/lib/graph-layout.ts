@@ -353,12 +353,50 @@ export function computeLayout(
     }
   }
 
+  // XP-cascade edges: dotted red lines from an XP grant to the next node in
+  // the same skill (the quest itself when the level-up completes it, otherwise
+  // that requirement's own tier diamond). Downward by default; when the
+  // recipient sits ABOVE the granting quest, the edge leaves through the
+  // quest's top ("q-up") — leaving upward from the bottom anchor would draw
+  // straight through the source card.
+  for (const c of cascades) {
+    const toId = c.toGate ? `gate:${c.skill}:${c.toLevel}` : c.toQuest;
+    if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
+    const goingUp = (pos.get(toId)?.y ?? 0) < (pos.get(c.from)?.y ?? 0);
+    edges.push({
+      id: `xp:${c.from}->${toId}:${c.skill}`,
+      source: c.from,
+      target: toId,
+      kind: "cascade",
+      ...(goingUp ? { sourceHandle: "q-up" } : {}),
+      // boundary-crossing grants show the level jump; own-gate-floored grants
+      // (no crossing possible) show the raw xp added
+      label:
+        c.levelFrom === c.levelTo
+          ? `${c.skill} +${c.xpGain.toLocaleString("en-US")}`
+          : `${c.skill} ${c.levelFrom}→${c.levelTo}`,
+    });
+  }
+
   // tier-chain edges: a skill training through several levels in one plan
   // (49 before one quest, 61 before another) reads as a LADDER of diamonds —
   // each tier's gate connects to the next tier's gate, never to a quest it
   // doesn't directly require. Gates share a row connect side-to-side at the
   // side vertices; gates in different rows connect through the vertical
-  // vertices (bottom exit downward, top exit upward).
+  // vertices (bottom exit downward, top exit upward). A rung is SKIPPED when
+  // the progression is already drawn: a lower-tier quest's XP cascade into
+  // the next diamond tells the same story ("train to 49, do the quest, its
+  // xp feeds 61") without a second line between the diamonds.
+  const cascadeSourceByGate = new Map<string, Set<string>>();
+  for (const e of edges) {
+    if (e.kind !== "cascade" || !e.target.startsWith("gate:")) continue;
+    let sources = cascadeSourceByGate.get(e.target);
+    if (!sources) {
+      sources = new Set();
+      cascadeSourceByGate.set(e.target, sources);
+    }
+    sources.add(e.source);
+  }
   const tiersBySkill = new Map<string, GateLayout[]>();
   for (const g of gates.values()) {
     const arr = tiersBySkill.get(g.skill);
@@ -370,6 +408,8 @@ export function computeLayout(
     for (let i = 0; i + 1 < arr.length; i++) {
       const lower = arr[i];
       const next = arr[i + 1];
+      const covered = lower.fed.some((q) => cascadeSourceByGate.get(next.id)?.has(q));
+      if (covered) continue; // the dotted cascade already links these tiers
       const lp = pos.get(lower.id) ?? { x: 0, y: 0 };
       const np = pos.get(next.id) ?? { x: 0, y: 0 };
       const e: LayoutEdge = {
@@ -405,31 +445,6 @@ export function computeLayout(
         kind: targetKeySet.has(key) ? "target" : "prereq",
       });
     }
-  }
-
-  // XP-cascade edges: dotted red lines from an XP grant to the next node in
-  // the same skill (the quest itself when the level-up completes it, otherwise
-  // that requirement's own tier diamond). Downward by default; when the
-  // recipient sits ABOVE the granting quest, the edge leaves through the
-  // quest's top ("q-up") — leaving upward from the bottom anchor would draw
-  // straight through the source card.
-  for (const c of cascades) {
-    const toId = c.toGate ? `gate:${c.skill}:${c.toLevel}` : c.toQuest;
-    if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
-    const goingUp = (pos.get(toId)?.y ?? 0) < (pos.get(c.from)?.y ?? 0);
-    edges.push({
-      id: `xp:${c.from}->${toId}:${c.skill}`,
-      source: c.from,
-      target: toId,
-      kind: "cascade",
-      ...(goingUp ? { sourceHandle: "q-up" } : {}),
-      // boundary-crossing grants show the level jump; own-gate-floored grants
-      // (no crossing possible) show the raw xp added
-      label:
-        c.levelFrom === c.levelTo
-          ? `${c.skill} +${c.xpGain.toLocaleString("en-US")}`
-          : `${c.skill} ${c.levelFrom}→${c.levelTo}`,
-    });
   }
 
   // ---- spread anchors: every edge end gets its own attach point so lines

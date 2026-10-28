@@ -291,24 +291,17 @@ console.log("Scenario A — Lunar Diplomacy + The Hand in the Sand added manuall
     "49 tier grind is its own (deficit 9)",
     gate49?.kind === "gate" ? `deficit=${gate49.deficit} xp=${gate49.xp}` : "",
   );
-  const tierEdge = edges.find((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61");
-  check(!!tierEdge, "tier-chain edge Crafting 49 diamond → Crafting 61 diamond");
-  if (tierEdge) {
-    const g49 = nodes.find((n) => n.id === "gate:Crafting:49");
-    const g61 = nodes.find((n) => n.id === "gate:Crafting:61");
-    const sameRow = Math.abs((g49?.y ?? 0) - (g61?.y ?? 1)) < 1;
-    const sideHandles =
-      tierEdge.sourceHandle === "s-right" || tierEdge.sourceHandle === "s-left";
-    check(
-      sameRow === sideHandles,
-      "tier edge shape matches geometry (side-to-side on same row, vertical across rows)",
-      `sameRow=${sameRow} handles=${tierEdge.sourceHandle}->${tierEdge.targetHandle}`,
-    );
-    check(
-      !sameRow || (tierEdge.sourceOffset === undefined && tierEdge.targetOffset === undefined),
-      "side-to-side tier anchors at the vertices (no offsets)",
-    );
-  }
+  // the 49→61 rung is NOT drawn as a tier edge here: Hand in the Sand's XP
+  // cascade into the 61 diamond already links the tiers through the quest —
+  // a direct gate-to-gate line would duplicate that story
+  check(
+    !edges.some((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61"),
+    "tier rung 49→61 suppressed when the quest's cascade covers it",
+  );
+  check(
+    edges.some((e) => e.kind === "cascade" && e.source === "hand in sand" && e.target === "gate:Crafting:61"),
+    "the covering cascade exists (Hand in the Sand → Crafting 61 diamond)",
+  );
   check(
     edges.some((e) => e.id === "gate:Crafting:49->hand in sand" && e.kind === "gate"),
     "gate edge Crafting 49 → Hand in the Sand",
@@ -410,6 +403,45 @@ console.log("Scenario D — added-for-XP quest cascades into the tier diamond");
   assertInvariants(nodes, edges, "D");
 }
 
+/* -------- Scenario E: tier rungs stay when nothing else links them -------- */
+
+console.log("Scenario E — uncovered tier rungs still ladder");
+{
+  // crafting 25: gates at 31 (Lost City), 49 (Hand in the Sand), 61 (Lunar).
+  // Lost City grants no XP, so the 31→49 rung has no covering cascade and
+  // must ladder gate-to-gate; the 49→61 rung stays suppressed (hand covers).
+  const { nodes, edges } = layoutFor(
+    ["rune mysteries"],
+    ["lunar diplomacy", "hand in sand", "lost city"],
+    mkPlayer({ Crafting: 25 }),
+  );
+
+  check(nodes.some((n) => n.id === "gate:Crafting:31"), "Crafting 31 diamond exists (Lost City)");
+  const tierEdge = edges.find((e) => e.id === "tier:gate:Crafting:31->gate:Crafting:49");
+  check(!!tierEdge, "uncovered rung 31→49 still drawn gate-to-gate");
+  if (tierEdge) {
+    const g31 = nodes.find((n) => n.id === "gate:Crafting:31");
+    const g49 = nodes.find((n) => n.id === "gate:Crafting:49");
+    const sameRow = Math.abs((g31?.y ?? 0) - (g49?.y ?? 1)) < 1;
+    const sideHandles =
+      tierEdge.sourceHandle === "s-right" || tierEdge.sourceHandle === "s-left";
+    check(
+      sameRow === sideHandles,
+      "tier edge shape matches geometry (side-to-side on same row, vertical across rows)",
+      `sameRow=${sameRow} handles=${tierEdge.sourceHandle}->${tierEdge.targetHandle}`,
+    );
+    check(
+      !sameRow || (tierEdge.sourceOffset === undefined && tierEdge.targetOffset === undefined),
+      "side-to-side tier anchors at the vertices (no offsets)",
+    );
+  }
+  check(
+    !edges.some((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61"),
+    "covered rung 49→61 still suppressed",
+  );
+  assertInvariants(nodes, edges, "E");
+}
+
 /* -------- Scenario C: Quest Cape pseudo-target (crash regression) --------- */
 
 console.log("Scenario C — Quest Cape full-board stress");
@@ -434,21 +466,20 @@ console.log("Scenario C — Quest Cape full-board stress");
   check(tierEdges > 20, "full board chains many skill tiers", `${tierEdges} tier edges`);
 
   // a known multi-tier skill: Cooking gates at many levels across the cape
-  // plan — every tier diamond must be chained toward the next
+  // plan — every rung must be expressed, either as a tier edge or covered by
+  // a quest cascade into the next diamond
   const cooking = nodes
     .filter((n) => n.kind === "gate" && n.skill === "Cooking")
     .map((n) => (n.kind === "gate" ? n.level : 0))
     .sort((a, b) => a - b);
   check(cooking.length >= 2, "Cooking tiers split into separate diamonds", cooking.join(","));
   for (let i = 0; i + 1 < cooking.length; i++) {
+    const upper = `gate:Cooking:${cooking[i + 1]}`;
+    const laddered = edges.some((e) => e.kind === "tier" && e.source === `gate:Cooking:${cooking[i]}` && e.target === upper);
+    const covered = edges.some((e) => e.kind === "cascade" && e.target === upper);
     check(
-      edges.some(
-        (e) =>
-          e.kind === "tier" &&
-          e.source === `gate:Cooking:${cooking[i]}` &&
-          e.target === `gate:Cooking:${cooking[i + 1]}`,
-      ),
-      `Cooking ${cooking[i]} diamond chains to ${cooking[i + 1]} diamond`,
+      laddered || covered,
+      `Cooking ${cooking[i]} → ${cooking[i + 1]} expressed (tier edge or covering cascade)`,
     );
   }
 }
