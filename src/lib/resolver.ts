@@ -53,8 +53,8 @@ export interface TargetResult {
  * Quest-XP cascade: completing `from` raises `skill` from `levelFrom` to
  * `levelTo`, reaching the first downstream node that requires the same skill.
  * When the new level still isn't enough to complete that node, the edge should
- * attach to the skill's shared training gate (`gate:${skill}` — one diamond per
- * skill across the whole board) instead of the quest node itself.
+ * attach to that requirement's own training gate (`gate:${skill}:${toLevel}` —
+ * one diamond per skill tier) instead of the quest node itself.
  */
 export interface XpCascade {
   from: string;
@@ -62,6 +62,7 @@ export interface XpCascade {
   levelFrom: number;
   levelTo: number;
   toQuest: string;
+  toLevel: number; // the downstream requirement level being approached
   toGate: boolean;
 }
 
@@ -351,12 +352,12 @@ export function resolveChain(
   // same skill that the resulting level-up reaches ("player has at least the
   // level to complete the granting quest" is folded into the starting level)
   const cascades: XpCascade[] = [];
-  const trainGates = new Set<string>(); // skills gated by real training somewhere in the plan
+  const trainGates = new Set<string>(); // `${skill}:${level}` tiers gated by real training
   for (const s of steps) {
-    for (const g of s.gaps) if (g.status === "train") trainGates.add(g.skill);
+    for (const g of s.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
   }
   for (const t of targets) {
-    for (const g of t.gaps) if (g.status === "train") trainGates.add(g.skill);
+    for (const g of t.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
   }
   for (let i = 0; i < steps.length; i++) {
     const q = steps[i].quest;
@@ -375,9 +376,10 @@ export function resolveChain(
         levelFrom: L0,
         levelTo: L1,
         toQuest,
-        // enough to complete → point at the quest itself; otherwise the
-        // skill's shared training diamond (if the skill has one at all)
-        toGate: L1 < reqLevel && trainGates.has(skill),
+        toLevel: reqLevel,
+        // enough to complete → point at the quest itself; otherwise that
+        // requirement's own tier diamond (if it needs real training at all)
+        toGate: L1 < reqLevel && trainGates.has(`${skill}:${reqLevel}`),
       });
       // first downstream node in this skill whose requirement the level-up reaches
       let found: XpCascade | null = null;

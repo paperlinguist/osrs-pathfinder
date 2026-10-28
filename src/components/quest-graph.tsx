@@ -15,7 +15,6 @@ import {
   Position,
   ReactFlow,
   ReactFlowProvider,
-  getSmoothStepPath,
   getViewportForBounds,
   useNodesState,
   useReactFlow,
@@ -32,74 +31,45 @@ import { Camera, Dumbbell, ExternalLink, Filter, Loader2, Plus } from "lucide-re
 import { TOOLTIP_ARROW, TOOLTIP_BOX, skillSuggestAnchorId } from "@/components/skill-panels";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { QUEST_BY_KEY, Quest } from "@/lib/quest-data";
-import type { ChainStep, SkillGap, TargetResult, XpCascade } from "@/lib/resolver";
+import {
+  CLEARANCE,
+  GATE_DIAMOND,
+  GATE_HANDLE_Y,
+  GATE_H,
+  GATE_TOP_Y,
+  GATE_W,
+  NODE_H,
+  NODE_W,
+  computeLayout,
+  type EdgeKind,
+  type LayoutEdge,
+  type LayoutNode,
+} from "@/lib/graph-layout";
+import { Quest } from "@/lib/quest-data";
+import type { ChainStep, TargetResult, XpCascade } from "@/lib/resolver";
 
 /* -------------------------------------------------------------- constants */
-
-const NODE_W = 208; // px — must match the quest node's fixed width
-const NODE_H = 104; // px — estimated average quest node height for layout math
-const GATE_W = 118; // px — diamond gate container width
-const GATE_H = 88; // px — diamond gate container height
-/* -----------------------------------------------------------------------
- * Spacing config — values picked against the layered-graph standards:
- *   ELK layered defaults  nodeNode 20 · nodeNodeBetweenLayers 20 · edgeNode 10
- *   dagre defaults        nodesep 50 · edgesep 10 · ranksep 50
- *   graphviz dot          nodesep 0.25in · ranksep 0.5in
- * This board is denser than the typical ELK input (208px cards), so the
- * gaps below sit between dagre's 50 and the card width; everything else
- * follows the same "spacing groups" idea — one knob per relationship.
- * ----------------------------------------------------------------------- */
-const X_GAP = 72; // column gap between quest cards
-const Y_GAP = 88; // row gap between quest rows
-const CORRIDOR_SEP = 34; // min separation between parallel routed corridors —
-// wide enough that 9px edge-label pills on adjacent corridors don't collide
-// (ELK edgeEdgeBetweenLayers 10 assumes unlabeled edges; labels need more)
-// the diamond body is a 56px square rotated 45° — half its diagonal is how far
-// its vertices reach from the container center
-const GATE_DIAMOND = 28 * Math.SQRT2; // ≈ 39.6px
-const GATE_ATTACH_SPREAD = 36; // max horizontal attach distance from the diamond's vertical axis
-// (kept ≤ GATE_DIAMOND so every attach point still rides ON the 45° slope)
-const GATE_ATTACH_MIN = 18; // closest a slope attach point may sit to the vertex —
-// interior points below this crowd the diamond tip and become unreadable
-
-/**
- * Attach-point offsets for edges meeting a diamond's vertex row, in ASCENDING
- * order (leftmost attach first). Evenly spaced along each 45° slope between
- * GATE_ATTACH_MIN and GATE_ATTACH_SPREAD; odd counts put the middle point
- * exactly on the vertex, where the tip is a clean unambiguous landing spot.
- *   k=1 → [0]                    k=4 → [-36, -18, 18, 36]
- *   k=2 → [-36, 36]              k=5 → [-36, -18, 0, 18, 36]
- *   k=3 → [-36, 0, 36]           k=6 → [-36, -27, -18, 18, 27, 36]
- */
-function vertexAttachOffsets(k: number): number[] {
-  if (k <= 1) return [0];
-  const perSide = Math.floor(k / 2);
-  const side = (n: number) =>
-    n === 1
-      ? [GATE_ATTACH_SPREAD]
-      : Array.from(
-          { length: n },
-          (_, i) => GATE_ATTACH_MIN + ((GATE_ATTACH_SPREAD - GATE_ATTACH_MIN) * i) / (n - 1),
-        );
-  const right = side(perSide);
-  const left = [...side(perSide)].reverse().map((v) => -v); // ascending negatives
-  return [...left, ...(k % 2 ? [0] : []), ...right];
-}
-// the gate's source handle is pinned to the diamond's bottom vertex (top-anchored,
-// explicit size) so edge attach math is constant-driven — immune to measured height
-const GATE_HANDLE_Y = GATE_H / 2 + GATE_DIAMOND; // vertex offset from node top ≈ 83.6
-const ROW_H = NODE_H + Y_GAP;
-
-// quests occupy odd rows (2L+1); training gates get the even rows (2L) so the
-// two node kinds never share a row and every gate sits above its fed quests
-const questRowY = (layer: number) => (2 * layer + 1) * ROW_H;
-const gateRowY = (layer: number) => 2 * layer * ROW_H;
 
 const PREREQ_STROKE = "#57534e";
 const TARGET_STROKE = "#d97706";
 const GATE_STROKE = "#dc2626";
 const CASCADE_STROKE = "#f87171";
+
+// presentation per edge kind (geometry lives in graph-layout.ts)
+const EDGE_STYLE: Record<EdgeKind, { stroke: string; strokeWidth: number; dash?: string }> = {
+  gate: { stroke: GATE_STROKE, strokeWidth: 1.3, dash: "5 3" },
+  tier: { stroke: PREREQ_STROKE, strokeWidth: 1.4 },
+  prereq: { stroke: PREREQ_STROKE, strokeWidth: 1.4 },
+  target: { stroke: TARGET_STROKE, strokeWidth: 1.8 },
+  cascade: { stroke: CASCADE_STROKE, strokeWidth: 1.2, dash: "2 4" },
+};
+const MARKER_SIZE: Record<EdgeKind, number> = {
+  gate: 12,
+  tier: 13,
+  prereq: 13,
+  target: 13,
+  cascade: 10,
+};
 
 const DIFF_DOT: Record<string, string> = {
   Novice: "bg-emerald-500",
@@ -134,19 +104,15 @@ export type QuestNodeData = {
   onToggle: (key: string) => void;
 };
 
-export type GateTierData = {
-  level: number;
-  quests: string[]; // quest names needing this level, in plan order
-  toStart: boolean; // earliest quest of the tier requires the level to START
-  deficit: number; // levels to train for this tier (worst gap among its quests)
-  xp: number; // raw xp for this tier's worst gap
-};
-
+/** One diamond = one (skill, level) requirement tier (see graph-layout.ts). */
 export type GateNodeData = {
   skill: string;
-  level: number; // final (highest) tier level — the diamond's big number
-  tiers: GateTierData[]; // ascending by level; one diamond serves the whole skill
-  fedCount: number; // total quests fed across all tiers
+  level: number; // the tier's requirement level — the diamond's big number
+  quest: string; // first quest (plan order) that needs this level
+  toStart: boolean; // that quest requires the level to START
+  deficit: number; // levels to train for this tier
+  xp: number; // raw xp for this tier
+  fedCount: number; // quests in the plan needing exactly this level
   onFindSkill?: (skill: string) => void; // hover "+" → jump to the skill's quest suggestions
 };
 
@@ -219,18 +185,14 @@ function QuestNode({ data, selected }: NodeProps<QuestFlowNode>) {
 }
 
 function GateNode({ data }: NodeProps<GateFlowNode>) {
-  const { skill, level, tiers, fedCount, onFindSkill } = data;
-  const multi = tiers.length > 1;
-  const first = tiers[0];
-  const totalXp = tiers.reduce((a, t) => a + t.xp, 0);
-  const totalDeficit = tiers.reduce((a, t) => a + t.deficit, 0);
+  const { skill, level, quest, toStart, deficit, xp, fedCount, onFindSkill } = data;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <div
           className="group relative grid h-[88px] w-[118px] cursor-default place-items-center"
           role="img"
-          aria-label={`Training gate: raise ${skill} to level ${level}`}
+          aria-label={`Training gate: raise ${skill} to level ${level} before ${quest}`}
         >
           {onFindSkill && (
             <button
@@ -252,14 +214,7 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
             <span className="max-w-[94px] truncate text-[10px] font-semibold tracking-wide text-red-200">
               {skill}
             </span>
-            {multi && (
-              <span className="mt-0.5 text-[8px] font-medium tabular-nums text-red-300/80">
-                {tiers.slice(0, -1).map((t) => t.level).join(" · ")} →
-              </span>
-            )}
-            <span className={`tabular-nums font-bold text-red-50 ${multi ? "mt-0" : "mt-0.5"} text-[12px]`}>
-              {level}
-            </span>
+            <span className="mt-0.5 tabular-nums text-[12px] font-bold text-red-50">{level}</span>
           </div>
         </div>
       </TooltipTrigger>
@@ -284,68 +239,27 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
           </span>
           <span className="text-[10px] font-semibold uppercase tracking-wide text-red-700">train</span>
         </div>
-        {multi ? (
-          <>
-            <p className="mt-1.5 text-xs text-stone-700">
-              {tiers.length} training tiers for {skill} in this plan — total grind{" "}
-              <b className="font-semibold text-stone-900">+{totalDeficit}</b> level
-              {totalDeficit === 1 ? "" : "s"} (≈{" "}
-              <b className="font-semibold text-stone-900">{totalXp.toLocaleString("en-US")}</b> XP).
-            </p>
-            <ul className="mt-1.5 space-y-1">
-              {tiers.map((t) => (
-                <li key={t.level} className="text-xs text-stone-700">
-                  <span className="font-semibold text-stone-900">{t.level}</span>
-                  {" "}— before {t.toStart ? "starting" : "completing"}{" "}
-                  <a
-                    href={wikiUrl(t.quests[0])}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
-                  >
-                    {t.quests[0]}
-                  </a>
-                  {t.quests.length > 1 && (
-                    <span className="text-stone-500"> +{t.quests.length - 1} more</span>
-                  )}
-                  <span className="text-stone-500">
-                    {" "}· +{t.deficit} lv (≈{t.xp.toLocaleString("en-US")} XP)
-                  </span>
-                </li>
-              ))}
-            </ul>
-            {fedCount > tiers.length && (
-              <p className="mt-1 text-[11px] text-stone-600">
-                {fedCount} quest{fedCount === 1 ? "" : "s"} in the plan depend on this skill.
-              </p>
-            )}
-          </>
-        ) : (
-          <>
-            <p className="mt-1.5 text-xs text-stone-700">
-              Raise <b className="font-semibold text-stone-900">{skill}</b> by{" "}
-              <b className="font-semibold text-stone-900">{first.deficit}</b> level
-              {first.deficit === 1 ? "" : "s"} (≈{" "}
-              <b className="font-semibold text-stone-900">{first.xp.toLocaleString("en-US")}</b> XP) before{" "}
-              {first.toStart ? "starting" : "completing"}{" "}
-              <a
-                href={wikiUrl(first.quests[0])}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
-              >
-                {first.quests[0]}
-              </a>
-              .
-            </p>
-            {fedCount > 1 && (
-              <p className="mt-1 text-[11px] text-stone-600">
-                This level also covers {fedCount - 1} other quest{fedCount === 2 ? "" : "s"} in the plan.
-              </p>
-            )}
-          </>
+        <p className="mt-1.5 text-xs text-stone-700">
+          Raise <b className="font-semibold text-stone-900">{skill}</b> by{" "}
+          <b className="font-semibold text-stone-900">{deficit}</b> level
+          {deficit === 1 ? "" : "s"} (≈{" "}
+          <b className="font-semibold text-stone-900">{xp.toLocaleString("en-US")}</b> XP) before{" "}
+          {toStart ? "starting" : "completing"}{" "}
+          <a
+            href={wikiUrl(quest)}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
+          >
+            {quest}
+          </a>
+          .
+        </p>
+        {fedCount > 1 && (
+          <p className="mt-1 text-[11px] text-stone-600">
+            This level also covers {fedCount - 1} other quest{fedCount === 2 ? "" : "s"} in the plan.
+          </p>
         )}
         <a
           href={skillGuideUrl(skill)}
@@ -363,9 +277,10 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
         position={Position.Top}
         className="!opacity-0"
         style={{
-          // cascade edges attach ON the diamond's top vertex (top-anchored,
-          // explicit size, y-shift killed — mirrors the source handle below)
-          top: GATE_H / 2 - GATE_DIAMOND,
+          // tier-chain + cascade edges attach ON the diamond's top vertex
+          // (top-anchored, explicit size, y-shift killed — mirrors the source
+          // handle below)
+          top: GATE_TOP_Y,
           left: "50%",
           bottom: "auto",
           width: 6,
@@ -396,91 +311,6 @@ const NODE_TYPES = { quest: QuestNode, gate: GateNode };
 
 /* ---------------------------------------------------------------- edges */
 
-type SpreadEdgeData = {
-  sourceOffset?: number; // px shift from bottom-center attach point
-  targetOffset?: number; // px shift from top-center attach point
-  sourceOffsetY?: number; // px vertical shift (gates: attach ON the diamond)
-  targetOffsetY?: number;
-  turn?: number; // smoothstep turn distance
-  label?: string; // small edge label (XP cascades)
-};
-
-/**
- * Smoothstep edge whose attach points are spread across the node borders.
- * Multiple edges sharing a node no longer overlap: the layout precomputes a
- * distinct horizontal offset for every edge end (`data.sourceOffset` /
- * `data.targetOffset`), so each line terminates at its own point.
- */
-function SpreadEdge({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  style,
-  markerEnd,
-  data,
-}: EdgeProps) {
-  const d = (data ?? {}) as SpreadEdgeData;
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
-    sourceX: sourceX + (d.sourceOffset ?? 0),
-    sourceY: sourceY + (d.sourceOffsetY ?? 0),
-    sourcePosition,
-    targetX: targetX + (d.targetOffset ?? 0),
-    targetY: targetY + (d.targetOffsetY ?? 0),
-    targetPosition,
-    borderRadius: 12,
-    offset: d.turn ?? 24,
-  });
-  return (
-    <>
-      <BaseEdge id={id} path={edgePath} style={style} markerEnd={markerEnd} />
-      {d.label && <EdgeLabel x={labelX} y={labelY} text={d.label} />}
-    </>
-  );
-}
-
-const EDGE_TYPES = { spread: SpreadEdge, routed: RoutedEdge };
-
-/**
- * Small pill label pinned to an edge midpoint (used by XP-cascade and
- * multi-tier gate edges).
- *
- * Semantic zoom (industry convention for dense graphs — e.g. ELK's
- * detail-fade / Graphviz behavior of dropping detail at low magnification):
- * labels are pure noise once the whole board fits out, so they render only
- * when the zoom level is high enough to actually read them.
- */
-function EdgeLabel({ x, y, text }: { x: number; y: number; text: string }) {
-  const zoom = useStore((s) => s.transform[2]);
-  if (zoom < 0.5) return null;
-  return (
-    <EdgeText
-      x={x}
-      y={y}
-      label={text}
-      labelShowBg
-      labelBgPadding={[4, 2]}
-      labelBgBorderRadius={4}
-      labelBgStyle={{ fill: "#0c0a09", stroke: "#7f1d1d", strokeWidth: 0.5 }}
-      style={{ fill: "#fca5a5", fontSize: 9, fontWeight: 600 }}
-    />
-  );
-}
-
-/* ---------------------------------------------------------------- edges */
-
-type RoutedEdgeData = {
-  sourceOffset?: number;
-  targetOffset?: number;
-  sourceOffsetY?: number;
-  targetOffsetY?: number;
-  via?: number; // corridor x the long vertical run is displaced to
-  label?: string;
-};
-
 /** SVG path through waypoints with rounded corners; zero-length runs are dropped. */
 function roundedPath(pts: [number, number][], r: number): string {
   const clean: [number, number][] = [];
@@ -506,12 +336,20 @@ function roundedPath(pts: [number, number][], r: number): string {
 }
 
 /**
- * Long-distance edge: a plain smoothstep's vertical run would cut straight
- * through whatever rows sit between source and target. This edge displaces
- * the run to a precomputed corridor x (`data.via`) chosen in the gaps between
- * node columns, so lines stop running behind quest cards.
+ * Orthogonal edge whose attach points are spread across the node borders.
+ * The first and last segments are ALWAYS vertical: every downward edge leaves
+ * its source through the bottom and enters its target through the top
+ * (upward edges mirror that), no matter how many rows separate the
+ * endpoints — a plain smoothstep would put its horizontal jog at the
+ * source-target midpoint, slicing through intermediate node rows.
+ *
+ * The horizontal jog happens on a fixed row (CLEARANCE below the source for
+ * downward edges / above the target for upward ones) inside the free band
+ * between node rows. Edges whose vertical run would cross other nodes are
+ * displaced to a precomputed corridor x (`data.via`) in the gaps between
+ * columns, so lines stop running behind quest cards and gates.
  */
-function RoutedEdge({
+function SpreadEdge({
   id,
   sourceX,
   sourceY,
@@ -521,29 +359,98 @@ function RoutedEdge({
   markerEnd,
   data,
 }: EdgeProps) {
-  const d = (data ?? {}) as RoutedEdgeData;
+  const d = (data ?? {}) as unknown as LayoutEdge;
   const sx = sourceX + (d.sourceOffset ?? 0);
-  const tx = targetX + (d.targetOffset ?? 0);
   const sy = sourceY + (d.sourceOffsetY ?? 0);
+  const tx = targetX + (d.targetOffset ?? 0);
   const ty = targetY + (d.targetOffsetY ?? 0);
-  const via = d.via ?? (sx + tx) / 2;
-  const path = roundedPath(
-    [
+  const up = ty < sy;
+  const jog = Math.min(CLEARANCE, Math.abs(ty - sy) / 3);
+  let pts: [number, number][];
+  let labelX: number;
+  let labelY: number;
+  if (d.via !== undefined) {
+    // routed: step away from the source, run the corridor, step into the
+    // target — the approach is always from above the target's top attach
+    const leaveY = up ? sy - 16 : sy + 16;
+    const enterY = ty - 16;
+    pts = [
       [sx, sy],
-      [sx, sy + 16],
-      [via, sy + 16],
-      [via, ty - 16],
-      [tx, ty - 16],
+      [sx, leaveY],
+      [d.via, leaveY],
+      [d.via, enterY],
+      [tx, enterY],
       [tx, ty],
-    ],
-    12,
-  );
+    ];
+    labelX = d.via;
+    labelY = leaveY;
+  } else {
+    const midY = up ? ty + jog : sy + jog;
+    pts = [
+      [sx, sy],
+      [sx, midY],
+      [tx, midY],
+      [tx, ty],
+    ];
+    labelX = (sx + tx) / 2;
+    labelY = midY;
+  }
   return (
     <>
-      <BaseEdge id={id} path={path} style={style} markerEnd={markerEnd} />
-      {d.label && <EdgeLabel x={via} y={(sy + ty) / 2} text={d.label} />}
+      <BaseEdge id={id} path={roundedPath(pts, 12)} style={style} markerEnd={markerEnd} />
+      {d.label && <EdgeLabel x={labelX} y={labelY} text={d.label} />}
     </>
   );
+}
+
+const EDGE_TYPES = { spread: SpreadEdge };
+
+/**
+ * Small pill label pinned alongside an edge (used by XP-cascade edges).
+ *
+ * Semantic zoom (industry convention for dense graphs — e.g. ELK's
+ * detail-fade / Graphviz behavior of dropping detail at low magnification):
+ * labels are pure noise once the whole board fits out, so they render only
+ * when the zoom level is high enough to actually read them.
+ */
+function EdgeLabel({ x, y, text }: { x: number; y: number; text: string }) {
+  const zoom = useStore((s) => s.transform[2]);
+  if (zoom < 0.5) return null;
+  return (
+    <EdgeText
+      x={x}
+      y={y}
+      label={text}
+      labelShowBg
+      labelBgPadding={[4, 2]}
+      labelBgBorderRadius={4}
+      labelBgStyle={{ fill: "#0c0a09", stroke: "#7f1d1d", strokeWidth: 0.5 }}
+      style={{ fill: "#fca5a5", fontSize: 9, fontWeight: 600 }}
+    />
+  );
+}
+
+/** Map a pure layout edge onto a React Flow edge (geometry in, style out). */
+function toFlowEdge(e: LayoutEdge): Edge {
+  const visual = EDGE_STYLE[e.kind];
+  return {
+    id: e.id,
+    source: e.source,
+    target: e.target,
+    type: "spread",
+    style: {
+      stroke: visual.stroke,
+      strokeWidth: visual.strokeWidth,
+      ...(visual.dash ? { strokeDasharray: visual.dash } : {}),
+    },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: MARKER_SIZE[e.kind],
+      height: MARKER_SIZE[e.kind],
+      color: visual.stroke,
+    },
+    data: e as unknown as Record<string, unknown>,
+  };
 }
 
 /* ---------------------------------------------------------------- layout */
@@ -566,431 +473,6 @@ function graphBounds(nodes: { position: { x: number; y: number }; measured?: { w
   return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
 }
 
-interface GateInfo {
-  id: string; // `gate:${skill}` — ONE diamond per skill across the whole board
-  skill: string;
-  level: number; // final (highest) train tier among fed quests
-  fed: { key: string; level: number }[]; // plan quests needing this skill, chain order
-  tierGaps: Map<number, SkillGap>; // per tier level: worst gap among its quests
-}
-
-function computeLayout(
-  steps: ChainStep[],
-  targets: TargetResult[],
-  cascades: XpCascade[],
-): { nodes: FlowNode[]; edges: Edge[] } {
-  const order = new Map<string, number>(
-    steps.map((s, i) => [s.quest.key, i] as const),
-  );
-  targets.forEach((t, i) => {
-    if (!order.has(t.quest.key)) order.set(t.quest.key, steps.length + i);
-  });
-  const inPlan = new Set(order.keys());
-  const targetKeySet = new Set(targets.map((t) => t.quest.key));
-
-  // prerequisite edges confined to the plan (both endpoints present, deduped)
-  const parentsOf = new Map<string, string[]>();
-  for (const key of inPlan) {
-    const q = QUEST_BY_KEY[key];
-    const ps = (q?.quests ?? []).filter((p) => inPlan.has(p) && p !== key);
-    parentsOf.set(key, [...new Set(ps)]);
-  }
-
-  // longest-path layering over the plan subgraph (memoized DFS; the graph is a DAG)
-  const layerOf = new Map<string, number>();
-  const visiting = new Set<string>();
-  const depth = (key: string): number => {
-    const memo = layerOf.get(key);
-    if (memo !== undefined) return memo;
-    if (visiting.has(key)) return 0; // cycle guard — data is acyclic
-    visiting.add(key);
-    let layer = 0;
-    for (const p of parentsOf.get(key) ?? []) layer = Math.max(layer, depth(p) + 1);
-    visiting.delete(key);
-    layerOf.set(key, layer);
-    return layer;
-  };
-  for (const key of inPlan) depth(key);
-
-  // ---- training gates: ONE diamond per skill that still needs real training
-  // somewhere in the plan (boost-ok / quest-xp-covered gaps are not gates).
-  // Every quest whose gap is `train` feeds the same diamond regardless of its
-  // level — the diamond shows the highest tier and its tooltip/edges break the
-  // requirement down per level ("49 before quest A · 61 before quest B").
-  const gates = new Map<string, GateInfo>();
-  const feed = (gap: SkillGap, questKey: string) => {
-    if (gap.status !== "train") return;
-    const id = `gate:${gap.skill}`;
-    let g = gates.get(id);
-    if (!g) {
-      g = { id, skill: gap.skill, level: gap.required, fed: [], tierGaps: new Map() };
-      gates.set(id, g);
-    }
-    // a tracked target that is also another target's prerequisite appears BOTH
-    // as a plan step and as a target — feed it once (the step entry is the
-    // authoritative one: its gaps reflect XP accrued up to that chain point)
-    if (g.fed.some((f) => f.key === questKey)) return;
-    g.fed.push({ key: questKey, level: gap.required });
-    const prev = g.tierGaps.get(gap.required);
-    if (!prev || gap.deficit > prev.deficit) g.tierGaps.set(gap.required, gap);
-    if (gap.required > g.level) g.level = gap.required;
-  };
-  const fedKeys = new Set<string>();
-  for (const s of steps) {
-    fedKeys.add(s.quest.key);
-    for (const gap of s.gaps) feed(gap, s.quest.key);
-  }
-  for (const t of targets) {
-    if (fedKeys.has(t.quest.key)) continue; // already fed via its step entry
-    for (const gap of t.gaps) feed(gap, t.quest.key);
-  }
-
-  // ---- positions
-  const pos = new Map<string, { x: number; y: number }>();
-
-  // quests: group by layer; initial order = optimal chain position, then a few
-  // barycenter sweeps (down/up over adjacent layers) to cut edge crossings
-  const layers = new Map<number, string[]>();
-  for (const key of [...inPlan].sort((a, b) => order.get(a)! - order.get(b)!)) {
-    const l = layerOf.get(key)!;
-    if (!layers.has(l)) layers.set(l, []);
-    layers.get(l)!.push(key);
-  }
-
-  // inverse of parentsOf (in-plan only)
-  const childrenOf = new Map<string, string[]>();
-  for (const [key, ps] of parentsOf) {
-    for (const p of ps) {
-      const arr = childrenOf.get(p);
-      if (arr) arr.push(key);
-      else childrenOf.set(p, [key]);
-    }
-  }
-
-  const orderIn = new Map<string, number>();
-  for (const [, keys] of layers) keys.forEach((k, i) => orderIn.set(k, i));
-  const layerNums = [...layers.keys()].sort((a, b) => a - b);
-  for (let sweep = 0; sweep < 4; sweep++) {
-    const down = sweep % 2 === 0;
-    const seq = down ? layerNums : [...layerNums].reverse();
-    for (const l of seq) {
-      const keys = layers.get(l)!;
-      const neighbor = down ? parentsOf : childrenOf;
-      const adjLayer = l + (down ? -1 : 1);
-      const scored = keys.map((k, i) => {
-        const nb = (neighbor.get(k) ?? []).filter((n) => layerOf.get(n) === adjLayer);
-        const bary = nb.length
-          ? nb.reduce((a, n) => a + (orderIn.get(n) ?? 0), 0) / nb.length
-          : i;
-        return { k, bary, tie: i };
-      });
-      scored.sort((a, b) => a.bary - b.bary || a.tie - b.tie);
-      scored.forEach((e, i) => {
-        keys[i] = e.k;
-        orderIn.set(e.k, i);
-      });
-    }
-  }
-
-  for (const [layer, keys] of layers) {
-    keys.forEach((key, i) => {
-      pos.set(key, {
-        x: (i - (keys.length - 1) / 2) * (NODE_W + X_GAP),
-        y: questRowY(layer),
-      });
-    });
-  }
-
-  // gates: own row above the earliest quest they feed, x tracks the mean of
-  // the fed quests' x; collisions inside a row resolved left->right, then the
-  // row is re-centered so it visually hugs the quests it feeds
-  const gateRows = new Map<number, GateInfo[]>();
-  for (const g of gates.values()) {
-    const minLayer = Math.min(...g.fed.map((f) => layerOf.get(f.key) ?? 0));
-    const row = 2 * minLayer;
-    const arr = gateRows.get(row);
-    if (arr) arr.push(g);
-    else gateRows.set(row, [g]);
-  }
-  const MIN_GATE_SPACING = GATE_W + 30;
-  for (const [row, rowGates] of gateRows) {
-    const desired = rowGates.map((g) => {
-      const xs = g.fed.map((f) => pos.get(f.key)?.x ?? 0);
-      return xs.reduce((a, b) => a + b, 0) / xs.length;
-    });
-    const idx = rowGates.map((_, i) => i).sort((a, b) => desired[a] - desired[b]);
-    const placedX: number[] = new Array(rowGates.length);
-    let prev = -Infinity;
-    for (const i of idx) {
-      placedX[i] = Math.max(desired[i], prev + MIN_GATE_SPACING);
-      prev = placedX[i];
-    }
-    const desiredMean = desired.reduce((a, b) => a + b, 0) / desired.length;
-    const placedMean = placedX.reduce((a, b) => a + b, 0) / placedX.length;
-    const shift = desiredMean - placedMean;
-    rowGates.forEach((g, i) => {
-      pos.set(g.id, { x: placedX[i] + shift, y: gateRowY(row / 2) });
-    });
-  }
-
-  // ---- nodes
-  const nodes: FlowNode[] = [];
-  for (const key of [...inPlan].sort((a, b) => order.get(a)! - order.get(b)!)) {
-    const step = steps.find((s) => s.quest.key === key);
-    nodes.push({
-      id: key,
-      type: "quest",
-      position: pos.get(key)!,
-      data: {
-        quest: step?.quest ?? QUEST_BY_KEY[key], // cape target is a synthetic quest
-        done: false, // overwritten below via completed set
-        isExtra: step?.isExtra ?? false,
-        isTarget: targetKeySet.has(key),
-        onToggle: () => {}, // replaced below
-      },
-    });
-  }
-  for (const g of gates.values()) {
-    const tiers = [...g.tierGaps.entries()]
-      .sort((a, b) => a[0] - b[0])
-      .map(([level, gap]) => ({
-        level,
-        quests: g.fed.filter((f) => f.level === level).map((f) => QUEST_BY_KEY[f.key]?.name ?? f.key),
-        toStart: gap.requiredToStart,
-        deficit: gap.deficit,
-        xp: gap.xpNeeded,
-      }));
-    nodes.push({
-      id: g.id,
-      type: "gate",
-      position: pos.get(g.id)!,
-      data: {
-        skill: g.skill,
-        level: g.level,
-        tiers,
-        fedCount: g.fed.length,
-      },
-    });
-  }
-
-  // ---- edges (gate edges first so they render beneath prereq edges)
-  const edges: Edge[] = [];
-  for (const g of gates.values()) {
-    // when the diamond serves multiple tiers, label each edge with the level
-    // that specific quest needs ("49" vs "61") so the shared block reads clearly
-    const multi = g.tierGaps.size > 1;
-    for (const f of g.fed) {
-      edges.push({
-        id: `${g.id}->${f.key}`,
-        source: g.id,
-        target: f.key,
-        type: "spread",
-        style: { stroke: GATE_STROKE, strokeWidth: 1.3, strokeDasharray: "5 3" },
-        markerEnd: { type: MarkerType.ArrowClosed, width: 12, height: 12, color: GATE_STROKE },
-        data: multi ? { label: String(f.level) } : undefined,
-      });
-    }
-  }
-  for (const key of inPlan) {
-    for (const p of parentsOf.get(key) ?? []) {
-      const toTarget = targetKeySet.has(key);
-      edges.push({
-        id: `${p}->${key}`,
-        source: p,
-        target: key,
-        type: "spread",
-        style: toTarget
-          ? { stroke: TARGET_STROKE, strokeWidth: 1.8 }
-          : { stroke: PREREQ_STROKE, strokeWidth: 1.4 },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 13,
-          height: 13,
-          color: toTarget ? TARGET_STROKE : PREREQ_STROKE,
-        },
-      });
-    }
-  }
-
-  // ---- XP-cascade edges: dotted red lines from an XP grant down to the next
-  // node in the same skill (the quest itself when the level-up completes it,
-  // otherwise its training gate diamond)
-  for (const c of cascades) {
-    const toId = c.toGate ? `gate:${c.skill}` : c.toQuest;
-    if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
-    edges.push({
-      id: `xp:${c.from}->${toId}:${c.skill}`,
-      source: c.from,
-      target: toId,
-      type: "routed",
-      style: { stroke: CASCADE_STROKE, strokeWidth: 1.2, strokeDasharray: "2 4" },
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        width: 10,
-        height: 10,
-        color: CASCADE_STROKE,
-      },
-      data: { label: `${c.skill} ${c.levelFrom}→${c.levelTo}` },
-    });
-  }
-
-  // ---- long-edge corridor routing: an edge whose vertical run would cross
-  // other node rectangles gets displaced to a free corridor x in the gaps
-  // between columns, so lines stop running behind quest cards and gates.
-  const halfW = (id: string) => (id.startsWith("gate:") ? GATE_W / 2 : NODE_W / 2);
-  const boxH = (id: string) => (id.startsWith("gate:") ? GATE_H : NODE_H);
-  const rects = new Map<string, { x0: number; x1: number; y0: number; y1: number }>();
-  for (const [id, p] of pos) {
-    const w = halfW(id);
-    rects.set(id, { x0: p.x - w, x1: p.x + w, y0: p.y, y1: p.y + boxH(id) });
-  }
-
-  const usedCorridors: { x: number; y0: number; y1: number }[] = [];
-  const routeEdge = (e: Edge, s: { x: number }, t: { x: number }, sBottom: number, tTop: number) => {
-    const blocked: [number, number][] = [];
-    for (const [id, r] of rects) {
-      if (id === e.source || id === e.target) continue;
-      if (r.y1 > sBottom + 4 && r.y0 < tTop - 4) blocked.push([r.x0 - 6, r.x1 + 6]);
-    }
-    if (blocked.length === 0) return; // clear vertical run — plain smoothstep is fine
-    blocked.sort((a, b) => a[0] - b[0]);
-    // free x-intervals around the blocked columns, with outer margins
-    const lo = Math.min(blocked[0][0], s.x, t.x) - 90;
-    const hi = Math.max(blocked[blocked.length - 1][1], s.x, t.x) + 90;
-    const free: [number, number][] = [];
-    let cur = lo;
-    for (const [b0, b1] of blocked) {
-      if (b0 - cur > 24) free.push([cur, b0]);
-      cur = Math.max(cur, b1);
-    }
-    if (hi - cur > 24) free.push([cur, hi]);
-    const desired = (s.x + t.x) / 2;
-    const scored = free
-      .map(([a, b]) => {
-        const x = Math.min(Math.max(desired, a + 10), b - 10);
-        // prefer intervals with fewer corridors that vertically overlap this edge
-        const occupancy = usedCorridors.filter(
-          (u) => u.x >= a && u.x <= b && u.y0 < tTop - 6 && u.y1 > sBottom + 6,
-        ).length;
-        return { a, b, x, key: Math.abs(x - desired) + occupancy * 46 };
-      })
-      .sort((p, q) => p.key - q.key);
-    for (const iv of scored) {
-      // walk outward in CORRIDOR_SEP px steps until the corridor does not
-      // clash with another routed edge sharing this vertical span
-      const maxStep = Math.ceil((iv.b - iv.a) / CORRIDOR_SEP);
-      const cands: number[] = [];
-      for (let step = 0; step <= maxStep; step++) {
-        for (const cand of step === 0 ? [iv.x] : [iv.x + step * CORRIDOR_SEP, iv.x - step * CORRIDOR_SEP]) {
-          if (cand >= iv.a + 10 && cand <= iv.b - 10) cands.push(cand);
-        }
-      }
-      for (const x of cands) {
-        const clash = usedCorridors.some(
-          (u) => Math.abs(u.x - x) < CORRIDOR_SEP && u.y0 < tTop - 6 && u.y1 > sBottom + 6,
-        );
-        if (!clash) {
-          usedCorridors.push({ x, y0: sBottom, y1: tTop });
-          e.type = "routed";
-          e.data = { ...e.data, via: x, turn: 16 };
-          return;
-        }
-      }
-    }
-    // nowhere clean — leave as smoothstep (rare)
-  };
-
-  // ---- spread anchors: every edge end gets its own attach point so lines
-  // never overlap where they meet a node
-  const posOf = (id: string) => pos.get(id) ?? { x: 0, y: 0 };
-  const spread = (n: number, span: number): number[] =>
-    n <= 1 ? [0] : Array.from({ length: n }, (_, i) => -span + (2 * span * i) / (n - 1));
-
-  for (const e of edges) {
-    const s = posOf(e.source);
-    const t = posOf(e.target);
-    const sBottom = s.y + boxH(e.source);
-    const tTop = t.y;
-    const gapY = tTop - sBottom;
-    if (gapY < 30) {
-      e.data = { ...e.data, turn: Math.min(46, Math.max(18, gapY * 0.24)) };
-      continue;
-    }
-    routeEdge(e, s, t, sBottom, tTop);
-    if (e.type !== "routed") {
-      e.data = { ...e.data, turn: Math.min(46, Math.max(18, gapY * 0.24)) };
-    }
-  }
-
-  const byTarget = new Map<string, Edge[]>();
-  const bySource = new Map<string, Edge[]>();
-  for (const e of edges) {
-    const t = byTarget.get(e.target);
-    if (t) t.push(e);
-    else byTarget.set(e.target, [e]);
-    const s = bySource.get(e.source);
-    if (s) s.push(e);
-    else bySource.set(e.source, [e]);
-  }
-  for (const [tid, arr] of byTarget) {
-    arr.sort(
-      (a, b) => posOf(a.source).x - posOf(b.source).x || posOf(a.source).y - posOf(b.source).y,
-    );
-    if (tid.startsWith("gate:")) {
-      // Diamond targets (XP cascades): the quest-card spread below would leave
-      // the endpoints floating in thin air beside the diamond's sloped upper
-      // edges. Attach ON the upper boundary instead — leftmost source connects
-      // on the upper-left edge, rightmost on the upper-right, a single cascade
-      // lands exactly on the top vertex (mirrors the gate source branch).
-      const k = arr.length;
-      const offs = vertexAttachOffsets(k); // ascending — matches the source-x sort
-      arr.forEach((e, i) => {
-        const dx = offs[i];
-        // handle sits on the top vertex; walking |dx| along the 45° upper
-        // edges DROPS the attach point onto the diamond boundary (y grows)
-        e.data = { ...e.data, targetOffset: dx, targetOffsetY: Math.abs(dx) };
-      });
-      continue;
-    }
-    const offs = spread(arr.length, 0.36 * NODE_W); // targets are always quest cards
-    arr.forEach((e, i) => {
-      e.data = { ...e.data, targetOffset: offs[i] };
-    });
-  }
-  for (const [sid, arr] of bySource) {
-    arr.sort(
-      (a, b) => posOf(a.target).x - posOf(b.target).x || posOf(a.target).y - posOf(b.target).y,
-    );
-    if (sid.startsWith("gate:")) {
-      // Diamonds: a square-style horizontal spread at the container bottom
-      // leaves the line endpoints floating in thin air beside the sloped
-      // edges. Attach every edge ON the diamond's lower boundary instead —
-      // leftmost target connects on the lower-left edge, rightmost on the
-      // lower-right, single edges at the bottom vertex.
-      const k = arr.length;
-      const offs = vertexAttachOffsets(k); // ascending — matches the target-x sort
-      arr.forEach((e, i) => {
-        const dx = offs[i];
-        // handle sits exactly on the diamond's bottom vertex; walking |dx| along
-        // the 45° lower edges rises the attach point by the same amount
-        e.data = {
-          ...e.data,
-          sourceOffset: dx,
-          sourceOffsetY: -Math.abs(dx),
-        };
-      });
-      continue;
-    }
-    const span = 0.36 * NODE_W; // quest cards: spread across the bottom edge
-    const offs = spread(arr.length, span);
-    arr.forEach((e, i) => {
-      e.data = { ...e.data, sourceOffset: offs[i] };
-    });
-  }
-
-  return { nodes, edges };
-}
-
 /* ------------------------------------------------------------- component */
 
 function QuestGraphInner({
@@ -1006,7 +488,7 @@ function QuestGraphInner({
   completed: Set<string>;
   onToggleCompleted: (key: string) => void;
 }) {
-  const { nodes: layoutNodes, edges } = useMemo(
+  const { nodes: layoutNodes, edges: layoutEdges } = useMemo(
     () => computeLayout(steps, targets, cascades),
     [steps, targets, cascades],
   );
@@ -1033,13 +515,14 @@ function QuestGraphInner({
   }, [gatesOnly]);
 
   const gatedQuestIds = useMemo(
-    () => new Set(edges.filter((e) => e.source.startsWith("gate:")).map((e) => e.target)),
-    [edges],
+    () => new Set(layoutEdges.filter((e) => e.kind === "gate").map((e) => e.target)),
+    [layoutEdges],
   );
   const focusOn = gatesOnly && gatedQuestIds.size > 0;
   const shownEdges = useMemo(
-    () => (focusOn ? edges.filter((e) => e.source.startsWith("gate:")) : edges),
-    [edges, focusOn],
+    () =>
+      (focusOn ? layoutEdges.filter((e) => e.kind === "gate") : layoutEdges).map(toFlowEdge),
+    [layoutEdges, focusOn],
   );
 
   // controlled nodes: RF applies dimension/selection/position changes through
@@ -1184,22 +667,42 @@ function QuestGraphInner({
     prevKeyRef.current = layoutKey;
     setNodes((prev) => {
       const prevById = new Map(prev.map((n) => [n.id, n] as const));
-      const next: FlowNode[] = layoutNodes.map((n) => {
+      const next: FlowNode[] = layoutNodes.map((n: LayoutNode) => {
         const old = prevById.get(n.id);
-        const position = !structuralChange && old ? old.position : n.position;
-        if (n.type === "gate") {
-          return { ...n, position, hidden: false, data: { ...n.data, onFindSkill: jumpToSkill } };
+        const position = !structuralChange && old ? old.position : { x: n.x, y: n.y };
+        if (n.kind === "gate") {
+          const gate: GateFlowNode = {
+            id: n.id,
+            type: "gate",
+            position,
+            hidden: false,
+            data: {
+              skill: n.skill,
+              level: n.level,
+              quest: n.quest,
+              toStart: n.toStart,
+              deficit: n.deficit,
+              xp: n.xp,
+              fedCount: n.fedCount,
+              onFindSkill: jumpToSkill,
+            },
+          };
+          return gate;
         }
-        return {
-          ...n,
+        const quest: QuestFlowNode = {
+          id: n.id,
+          type: "quest",
           position,
           hidden: focusOn && !gatedQuestIds.has(n.id),
           data: {
-            ...n.data,
+            quest: n.quest,
             done: completed.has(n.id),
+            isExtra: n.isExtra,
+            isTarget: n.isTarget,
             onToggle: onToggleCompleted,
           },
         };
+        return quest;
       });
       return next;
     });
