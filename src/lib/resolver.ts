@@ -53,8 +53,8 @@ export interface TargetResult {
  * Quest-XP cascade: completing `from` raises `skill` from `levelFrom` to
  * `levelTo`, reaching the first downstream node that requires the same skill.
  * When the new level still isn't enough to complete that node, the edge should
- * attach to its training gate (`gate:${skill}:${toGateLevel}`) instead of the
- * quest node itself.
+ * attach to the skill's shared training gate (`gate:${skill}` — one diamond per
+ * skill across the whole board) instead of the quest node itself.
  */
 export interface XpCascade {
   from: string;
@@ -62,7 +62,7 @@ export interface XpCascade {
   levelFrom: number;
   levelTo: number;
   toQuest: string;
-  toGateLevel: number | null;
+  toGate: boolean;
 }
 
 export interface ResolveResult {
@@ -106,7 +106,7 @@ function computeReqGaps(
   for (const [skill, req] of Object.entries(q.skills) as [string, SkillReq][]) {
     const base = skill === "Combat"
       ? (player.combatLevel ?? 0)
-      : (player.levels[skill] ?? 1);
+      : (player.levels?.[skill] ?? 1);
     const eff = opts.includeQuestXp
       ? effectiveLevel(player, skill, bonusXp[skill] ?? 0)
       : base;
@@ -126,7 +126,7 @@ function computeReqGaps(
       status = "train";
     }
 
-    const curXp = (player.xp[skill] ?? 0) + (bonusXp[skill] ?? 0);
+    const curXp = (player.xp?.[skill] ?? 0) + (bonusXp[skill] ?? 0);
     const xpNeeded = status === "train"
       ? Math.max(0, xpForLevel(Math.min(99, req.level + 1)) - curXp)
       : 0;
@@ -351,19 +351,19 @@ export function resolveChain(
   // same skill that the resulting level-up reaches ("player has at least the
   // level to complete the granting quest" is folded into the starting level)
   const cascades: XpCascade[] = [];
-  const trainGates = new Set<string>(); // `${skill}:${level}` pairs gated by real training
+  const trainGates = new Set<string>(); // skills gated by real training somewhere in the plan
   for (const s of steps) {
-    for (const g of s.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
+    for (const g of s.gaps) if (g.status === "train") trainGates.add(g.skill);
   }
   for (const t of targets) {
-    for (const g of t.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
+    for (const g of t.gaps) if (g.status === "train") trainGates.add(g.skill);
   }
   for (let i = 0; i < steps.length; i++) {
     const q = steps[i].quest;
     for (const [skill, gain] of Object.entries(q.xp)) {
       if (!gain || skill === "Combat") continue; // virtual combat level isn't XP-derivable
-      const baseXp = player.xp[skill] ?? 0;
-      const baseLevel = player.levels[skill] ?? 1;
+      const baseXp = player.xp?.[skill] ?? 0;
+      const baseLevel = player.levels?.[skill] ?? 1;
       const ownReq = q.skills[skill]?.level ?? 0;
       // assumed starting level: at least enough to complete this quest
       const L0 = Math.max(ownReq, baseLevel, levelForXp(baseXp + (preBonus[i][skill] ?? 0)));
@@ -375,9 +375,9 @@ export function resolveChain(
         levelFrom: L0,
         levelTo: L1,
         toQuest,
-        // enough to complete → point at the quest itself; otherwise the gate
-        toGateLevel:
-          L1 >= reqLevel ? null : trainGates.has(`${skill}:${reqLevel}`) ? reqLevel : null,
+        // enough to complete → point at the quest itself; otherwise the
+        // skill's shared training diamond (if the skill has one at all)
+        toGate: L1 < reqLevel && trainGates.has(skill),
       });
       // first downstream node in this skill whose requirement the level-up reaches
       let found: XpCascade | null = null;
@@ -398,17 +398,34 @@ export function resolveChain(
     if (cascades.length > 80) break;
   }
 
-  // 4. aggregated REAL training needs per skill (worst gap by xpNeeded);
-  //    boost-ok / quest-xp-covered gaps are informational, not grind targets
-  const totalsMap = new Map<string, SkillGap>();
+  // 4. aggregated REAL training needs per skill, merged across all tiers.
+  // A skill can be gated at several levels along the plan (49 for one quest,
+  // 61 for another) — each tier gap's xpNeeded is the grind measured at its own
+  // chain position (quest XP already netted out), so the true total grind is
+  // the SUM of the per-tier grinds. The merged entry keeps the final tier's
+  // base/effective/flags (its requirement level is the ultimate target) and
+  // sums deficit + xpNeeded across tiers. Boost-ok / quest-xp-covered gaps are
+  // informational, not grind targets.
+  const tierGaps = new Map<string, SkillGap[]>();
   for (const g of [...steps.flatMap((s) => s.gaps), ...targets.flatMap((t) => t.gaps)]) {
     if (g.status !== "train") continue;
-    const prev = totalsMap.get(g.skill);
-    if (!prev || g.xpNeeded > prev.xpNeeded) totalsMap.set(g.skill, g);
+    const arr = tierGaps.get(g.skill);
+    if (arr) arr.push(g);
+    else tierGaps.set(g.skill, [g]);
   }
-  const skillTotals = [...totalsMap.values()].sort(
-    (a, b) => b.xpNeeded - a.xpNeeded || b.deficit - a.deficit,
-  );
+  const skillTotals: SkillGap[] = [];
+  for (const [skill, arr] of tierGaps) {
+    arr.sort((a, b) => a.required - b.required || a.xpNeeded - b.xpNeeded);
+    const final = arr[arr.length - 1];
+    skillTotals.push({
+      ...final,
+      deficit: arr.reduce((a, g) => a + g.deficit, 0),
+      xpNeeded: arr.reduce((a, g) => a + g.xpNeeded, 0),
+      // any tier gating on start means raw (unboosted) levels matter for the skill
+      requiredToStart: arr.some((g) => g.requiredToStart),
+    });
+  }
+  skillTotals.sort((a, b) => b.xpNeeded - a.xpNeeded || b.deficit - a.deficit);
 
   // estimated quest points from quests the user marked complete (1 per quest,
   // 0 for miniquests/activities — see questPointsAwarded)

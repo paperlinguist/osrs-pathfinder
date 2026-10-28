@@ -78,6 +78,7 @@ import {
   formatMinutes,
   formatXp,
   isValidTargetKey,
+  normalizePlayer,
   questMinutes,
   totalQuestPoints,
   trainHours,
@@ -288,7 +289,15 @@ export default function Home() {
       const u = localStorage.getItem("osrs-qp-username");
       if (u) setUsername(u);
       const p = localStorage.getItem("osrs-qp-player");
-      if (p) setPlayer(JSON.parse(p));
+      if (p) {
+        try {
+          const parsed = JSON.parse(p);
+          // normalize legacy/corrupt saves (bare strings, pre-xp players) — a
+          // player without an xp object crashed every downstream render
+          const np = normalizePlayer(parsed);
+          if (np) setPlayer(np);
+        } catch { /* ignore unparseable saves */ }
+      }
       const ts = localStorage.getItem("osrs-qp-targets");
       if (ts) {
         const arr = JSON.parse(ts);
@@ -639,13 +648,14 @@ export default function Home() {
 
   const loadChar = useCallback(
     (c: CharSlot) => {
-      setPlayer(c.player);
+      const np = normalizePlayer(c.player);
+      setPlayer(np);
       setCompleted(new Set(c.completed));
       setAddedQuests(new Set(c.added));
       setTargetKeys(c.targets ?? []);
       setUsername(c.name);
       // mirror the backup-restore persistence (player/username/targets bypass effects)
-      if (c.player) localStorage.setItem("osrs-qp-player", JSON.stringify(c.player));
+      if (np) localStorage.setItem("osrs-qp-player", JSON.stringify(np));
       else localStorage.removeItem("osrs-qp-player");
       localStorage.setItem("osrs-qp-username", c.name);
       if (c.targets?.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(c.targets));
@@ -998,9 +1008,11 @@ export default function Home() {
     setIncludeQuestXp(d.includeQuestXp);
     setManualQp(d.manualQp);
     setUsername(d.username);
-    setPlayer(d.player);
+    const np = normalizePlayer(d.player);
+    setPlayer(np);
     // player/username are written outside the effect-based persistence — mirror importPlayer
-    if (d.player) localStorage.setItem("osrs-qp-player", JSON.stringify(d.player));
+    if (np) localStorage.setItem("osrs-qp-player", JSON.stringify(np));
+    else localStorage.removeItem("osrs-qp-player");
     if (d.username) localStorage.setItem("osrs-qp-username", d.username);
     else localStorage.removeItem("osrs-qp-username");
     if (d.targets.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(d.targets));

@@ -93,6 +93,46 @@ export function computeCombat(player: PlayerSkills): number {
   return combatLevel(player.levels);
 }
 
+const asNumber = (v: unknown): number | undefined => {
+  const n = typeof v === "number" ? v : typeof v === "string" && v.trim() !== "" ? Number(v) : NaN;
+  return Number.isFinite(n) ? n : undefined;
+};
+
+/**
+ * Accept untrusted player JSON (localStorage saves, char slots, backup files)
+ * and return a safe PlayerSkills, or null when unusable. Guarantees levels/xp
+ * are real objects with numeric values — legacy saves from before the xp field
+ * existed (or hand-edited saves) would otherwise crash every downstream render
+ * on `player.xp[skill]` with xp undefined.
+ */
+export function normalizePlayer(raw: unknown): PlayerSkills | null {
+  if (!raw || typeof raw !== "object") return null;
+  const p = raw as Record<string, unknown>;
+  if (!p.levels || typeof p.levels !== "object") return null;
+  const levels: Record<string, number> = {};
+  for (const [k, v] of Object.entries(p.levels as Record<string, unknown>)) {
+    const n = asNumber(v);
+    if (n !== undefined) levels[k] = n;
+  }
+  const xp: Record<string, number> = {};
+  if (p.xp && typeof p.xp === "object") {
+    for (const [k, v] of Object.entries(p.xp as Record<string, unknown>)) {
+      const n = asNumber(v);
+      if (n !== undefined) xp[k] = n;
+    }
+  }
+  return {
+    levels,
+    xp,
+    username: typeof p.username === "string" && p.username ? p.username : undefined,
+    combatLevel: asNumber(p.combatLevel),
+    source:
+      p.source === "wiseoldman" || p.source === "hiscores" || p.source === "manual"
+        ? p.source
+        : "manual",
+  };
+}
+
 /** which skills a quest's requirement needs, including virtual "Combat" */
 export function skillReqEntries(q: Quest): [string, SkillReq][] {
   return Object.entries(q.skills);
@@ -104,8 +144,8 @@ export function effectiveLevel(
   bonusXp: number,
 ): number {
   if (skill === "Combat") return computeCombat(player);
-  const base = player.levels[skill] ?? 1;
-  const qxp = player.xp[skill] ?? 0;
+  const base = player.levels?.[skill] ?? 1;
+  const qxp = player.xp?.[skill] ?? 0;
   // effective level from current xp + quest-given xp, but never lower than base level
   const fromXp = levelForXp(qxp + bonusXp);
   return Math.max(base, fromXp);

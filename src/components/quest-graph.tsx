@@ -19,6 +19,7 @@ import {
   getViewportForBounds,
   useNodesState,
   useReactFlow,
+  useStore,
   type Edge,
   type EdgeProps,
   type Node,
@@ -40,15 +41,54 @@ const NODE_W = 208; // px — must match the quest node's fixed width
 const NODE_H = 104; // px — estimated average quest node height for layout math
 const GATE_W = 118; // px — diamond gate container width
 const GATE_H = 88; // px — diamond gate container height
+/* -----------------------------------------------------------------------
+ * Spacing config — values picked against the layered-graph standards:
+ *   ELK layered defaults  nodeNode 20 · nodeNodeBetweenLayers 20 · edgeNode 10
+ *   dagre defaults        nodesep 50 · edgesep 10 · ranksep 50
+ *   graphviz dot          nodesep 0.25in · ranksep 0.5in
+ * This board is denser than the typical ELK input (208px cards), so the
+ * gaps below sit between dagre's 50 and the card width; everything else
+ * follows the same "spacing groups" idea — one knob per relationship.
+ * ----------------------------------------------------------------------- */
+const X_GAP = 72; // column gap between quest cards
+const Y_GAP = 88; // row gap between quest rows
+const CORRIDOR_SEP = 34; // min separation between parallel routed corridors —
+// wide enough that 9px edge-label pills on adjacent corridors don't collide
+// (ELK edgeEdgeBetweenLayers 10 assumes unlabeled edges; labels need more)
 // the diamond body is a 56px square rotated 45° — half its diagonal is how far
 // its vertices reach from the container center
 const GATE_DIAMOND = 28 * Math.SQRT2; // ≈ 39.6px
-const GATE_ATTACH_SPREAD = 24; // max horizontal attach distance from the diamond's vertical axis
+const GATE_ATTACH_SPREAD = 36; // max horizontal attach distance from the diamond's vertical axis
+// (kept ≤ GATE_DIAMOND so every attach point still rides ON the 45° slope)
+const GATE_ATTACH_MIN = 18; // closest a slope attach point may sit to the vertex —
+// interior points below this crowd the diamond tip and become unreadable
+
+/**
+ * Attach-point offsets for edges meeting a diamond's vertex row, in ASCENDING
+ * order (leftmost attach first). Evenly spaced along each 45° slope between
+ * GATE_ATTACH_MIN and GATE_ATTACH_SPREAD; odd counts put the middle point
+ * exactly on the vertex, where the tip is a clean unambiguous landing spot.
+ *   k=1 → [0]                    k=4 → [-36, -18, 18, 36]
+ *   k=2 → [-36, 36]              k=5 → [-36, -18, 0, 18, 36]
+ *   k=3 → [-36, 0, 36]           k=6 → [-36, -27, -18, 18, 27, 36]
+ */
+function vertexAttachOffsets(k: number): number[] {
+  if (k <= 1) return [0];
+  const perSide = Math.floor(k / 2);
+  const side = (n: number) =>
+    n === 1
+      ? [GATE_ATTACH_SPREAD]
+      : Array.from(
+          { length: n },
+          (_, i) => GATE_ATTACH_MIN + ((GATE_ATTACH_SPREAD - GATE_ATTACH_MIN) * i) / (n - 1),
+        );
+  const right = side(perSide);
+  const left = [...side(perSide)].reverse().map((v) => -v); // ascending negatives
+  return [...left, ...(k % 2 ? [0] : []), ...right];
+}
 // the gate's source handle is pinned to the diamond's bottom vertex (top-anchored,
 // explicit size) so edge attach math is constant-driven — immune to measured height
 const GATE_HANDLE_Y = GATE_H / 2 + GATE_DIAMOND; // vertex offset from node top ≈ 83.6
-const X_GAP = 72;
-const Y_GAP = 88;
 const ROW_H = NODE_H + Y_GAP;
 
 // quests occupy odd rows (2L+1); training gates get the even rows (2L) so the
@@ -94,14 +134,19 @@ export type QuestNodeData = {
   onToggle: (key: string) => void;
 };
 
+export type GateTierData = {
+  level: number;
+  quests: string[]; // quest names needing this level, in plan order
+  toStart: boolean; // earliest quest of the tier requires the level to START
+  deficit: number; // levels to train for this tier (worst gap among its quests)
+  xp: number; // raw xp for this tier's worst gap
+};
+
 export type GateNodeData = {
   skill: string;
-  level: number;
-  deficit: number; // levels to raise (worst gap among fed quests)
-  xpNeeded: number; // raw xp for the worst gap
-  fedCount: number; // how many in-plan quests need this exact level
-  firstName: string; // earliest plan quest that needs it
-  firstToStart: boolean; // earliest fed quest requires the level to START (vs to complete)
+  level: number; // final (highest) tier level — the diamond's big number
+  tiers: GateTierData[]; // ascending by level; one diamond serves the whole skill
+  fedCount: number; // total quests fed across all tiers
   onFindSkill?: (skill: string) => void; // hover "+" → jump to the skill's quest suggestions
 };
 
@@ -174,7 +219,11 @@ function QuestNode({ data, selected }: NodeProps<QuestFlowNode>) {
 }
 
 function GateNode({ data }: NodeProps<GateFlowNode>) {
-  const { skill, level, deficit, xpNeeded, fedCount, firstName, firstToStart, onFindSkill } = data;
+  const { skill, level, tiers, fedCount, onFindSkill } = data;
+  const multi = tiers.length > 1;
+  const first = tiers[0];
+  const totalXp = tiers.reduce((a, t) => a + t.xp, 0);
+  const totalDeficit = tiers.reduce((a, t) => a + t.deficit, 0);
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -203,7 +252,14 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
             <span className="max-w-[94px] truncate text-[10px] font-semibold tracking-wide text-red-200">
               {skill}
             </span>
-            <span className="mt-0.5 text-[12px] font-bold tabular-nums text-red-50">{level}</span>
+            {multi && (
+              <span className="mt-0.5 text-[8px] font-medium tabular-nums text-red-300/80">
+                {tiers.slice(0, -1).map((t) => t.level).join(" · ")} →
+              </span>
+            )}
+            <span className={`tabular-nums font-bold text-red-50 ${multi ? "mt-0" : "mt-0.5"} text-[12px]`}>
+              {level}
+            </span>
           </div>
         </div>
       </TooltipTrigger>
@@ -211,7 +267,7 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
         side="top"
         sideOffset={10}
         arrowClassName={TOOLTIP_ARROW}
-        className={`max-w-[260px] px-3 py-2.5 leading-relaxed ${TOOLTIP_BOX}`}
+        className={`max-w-[300px] px-3 py-2.5 leading-relaxed ${TOOLTIP_BOX}`}
       >
         <div className="flex items-center justify-between gap-3 border-b border-stone-300 pb-1.5">
           <span className="text-xs font-semibold text-stone-900">
@@ -228,26 +284,68 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
           </span>
           <span className="text-[10px] font-semibold uppercase tracking-wide text-red-700">train</span>
         </div>
-        <p className="mt-1.5 text-xs text-stone-700">
-          Raise <b className="font-semibold text-stone-900">{skill}</b> by{" "}
-          <b className="font-semibold text-stone-900">{deficit}</b> level{deficit === 1 ? "" : "s"} (≈{" "}
-          <b className="font-semibold text-stone-900">{xpNeeded.toLocaleString("en-US")}</b> XP) before{" "}
-          {firstToStart ? "starting" : "completing"}{" "}
-          <a
-            href={wikiUrl(firstName)}
-            target="_blank"
-            rel="noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
-          >
-            {firstName}
-          </a>
-          .
-        </p>
-        {fedCount > 1 && (
-          <p className="mt-1 text-[11px] text-stone-600">
-            This level also covers {fedCount - 1} other quest{fedCount === 2 ? "" : "s"} in the plan.
-          </p>
+        {multi ? (
+          <>
+            <p className="mt-1.5 text-xs text-stone-700">
+              {tiers.length} training tiers for {skill} in this plan — total grind{" "}
+              <b className="font-semibold text-stone-900">+{totalDeficit}</b> level
+              {totalDeficit === 1 ? "" : "s"} (≈{" "}
+              <b className="font-semibold text-stone-900">{totalXp.toLocaleString("en-US")}</b> XP).
+            </p>
+            <ul className="mt-1.5 space-y-1">
+              {tiers.map((t) => (
+                <li key={t.level} className="text-xs text-stone-700">
+                  <span className="font-semibold text-stone-900">{t.level}</span>
+                  {" "}— before {t.toStart ? "starting" : "completing"}{" "}
+                  <a
+                    href={wikiUrl(t.quests[0])}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
+                  >
+                    {t.quests[0]}
+                  </a>
+                  {t.quests.length > 1 && (
+                    <span className="text-stone-500"> +{t.quests.length - 1} more</span>
+                  )}
+                  <span className="text-stone-500">
+                    {" "}· +{t.deficit} lv (≈{t.xp.toLocaleString("en-US")} XP)
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {fedCount > tiers.length && (
+              <p className="mt-1 text-[11px] text-stone-600">
+                {fedCount} quest{fedCount === 1 ? "" : "s"} in the plan depend on this skill.
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="mt-1.5 text-xs text-stone-700">
+              Raise <b className="font-semibold text-stone-900">{skill}</b> by{" "}
+              <b className="font-semibold text-stone-900">{first.deficit}</b> level
+              {first.deficit === 1 ? "" : "s"} (≈{" "}
+              <b className="font-semibold text-stone-900">{first.xp.toLocaleString("en-US")}</b> XP) before{" "}
+              {first.toStart ? "starting" : "completing"}{" "}
+              <a
+                href={wikiUrl(first.quests[0])}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="font-semibold text-stone-900 underline decoration-stone-400 underline-offset-2 hover:decoration-red-700 hover:text-red-800"
+              >
+                {first.quests[0]}
+              </a>
+              .
+            </p>
+            {fedCount > 1 && (
+              <p className="mt-1 text-[11px] text-stone-600">
+                This level also covers {fedCount - 1} other quest{fedCount === 2 ? "" : "s"} in the plan.
+              </p>
+            )}
+          </>
         )}
         <a
           href={skillGuideUrl(skill)}
@@ -346,8 +444,18 @@ function SpreadEdge({
 
 const EDGE_TYPES = { spread: SpreadEdge, routed: RoutedEdge };
 
-/** Small pill label pinned to an edge midpoint (used by XP-cascade edges). */
+/**
+ * Small pill label pinned to an edge midpoint (used by XP-cascade and
+ * multi-tier gate edges).
+ *
+ * Semantic zoom (industry convention for dense graphs — e.g. ELK's
+ * detail-fade / Graphviz behavior of dropping detail at low magnification):
+ * labels are pure noise once the whole board fits out, so they render only
+ * when the zoom level is high enough to actually read them.
+ */
 function EdgeLabel({ x, y, text }: { x: number; y: number; text: string }) {
+  const zoom = useStore((s) => s.transform[2]);
+  if (zoom < 0.5) return null;
   return (
     <EdgeText
       x={x}
@@ -459,12 +567,11 @@ function graphBounds(nodes: { position: { x: number; y: number }; measured?: { w
 }
 
 interface GateInfo {
-  id: string; // `gate:${skill}:${level}`
+  id: string; // `gate:${skill}` — ONE diamond per skill across the whole board
   skill: string;
-  level: number;
-  gap: SkillGap; // worst (largest deficit) gap among fed quests
-  fed: string[]; // plan quest keys needing this exact level, in chain order
-  firstToStart: boolean; // earliest fed quest gates on START vs COMPLETE
+  level: number; // final (highest) train tier among fed quests
+  fed: { key: string; level: number }[]; // plan quests needing this skill, chain order
+  tierGaps: Map<number, SkillGap>; // per tier level: worst gap among its quests
 }
 
 function computeLayout(
@@ -505,29 +612,38 @@ function computeLayout(
   };
   for (const key of inPlan) depth(key);
 
-  // ---- training gates: one diamond per (skill, level) that still needs real
-  // training somewhere in the plan (boost-ok / quest-xp-covered gaps are not gates)
+  // ---- training gates: ONE diamond per skill that still needs real training
+  // somewhere in the plan (boost-ok / quest-xp-covered gaps are not gates).
+  // Every quest whose gap is `train` feeds the same diamond regardless of its
+  // level — the diamond shows the highest tier and its tooltip/edges break the
+  // requirement down per level ("49 before quest A · 61 before quest B").
   const gates = new Map<string, GateInfo>();
   const feed = (gap: SkillGap, questKey: string) => {
     if (gap.status !== "train") return;
-    const id = `gate:${gap.skill}:${gap.required}`;
-    const g = gates.get(id);
-    if (g) {
-      g.fed.push(questKey);
-      if (gap.deficit > g.gap.deficit) g.gap = gap;
-    } else {
-      gates.set(id, {
-        id,
-        skill: gap.skill,
-        level: gap.required,
-        gap,
-        fed: [questKey],
-        firstToStart: gap.requiredToStart,
-      });
+    const id = `gate:${gap.skill}`;
+    let g = gates.get(id);
+    if (!g) {
+      g = { id, skill: gap.skill, level: gap.required, fed: [], tierGaps: new Map() };
+      gates.set(id, g);
     }
+    // a tracked target that is also another target's prerequisite appears BOTH
+    // as a plan step and as a target — feed it once (the step entry is the
+    // authoritative one: its gaps reflect XP accrued up to that chain point)
+    if (g.fed.some((f) => f.key === questKey)) return;
+    g.fed.push({ key: questKey, level: gap.required });
+    const prev = g.tierGaps.get(gap.required);
+    if (!prev || gap.deficit > prev.deficit) g.tierGaps.set(gap.required, gap);
+    if (gap.required > g.level) g.level = gap.required;
   };
-  for (const s of steps) for (const gap of s.gaps) feed(gap, s.quest.key);
-  for (const t of targets) for (const gap of t.gaps) feed(gap, t.quest.key);
+  const fedKeys = new Set<string>();
+  for (const s of steps) {
+    fedKeys.add(s.quest.key);
+    for (const gap of s.gaps) feed(gap, s.quest.key);
+  }
+  for (const t of targets) {
+    if (fedKeys.has(t.quest.key)) continue; // already fed via its step entry
+    for (const gap of t.gaps) feed(gap, t.quest.key);
+  }
 
   // ---- positions
   const pos = new Map<string, { x: number; y: number }>();
@@ -590,7 +706,7 @@ function computeLayout(
   // row is re-centered so it visually hugs the quests it feeds
   const gateRows = new Map<number, GateInfo[]>();
   for (const g of gates.values()) {
-    const minLayer = Math.min(...g.fed.map((k) => layerOf.get(k) ?? 0));
+    const minLayer = Math.min(...g.fed.map((f) => layerOf.get(f.key) ?? 0));
     const row = 2 * minLayer;
     const arr = gateRows.get(row);
     if (arr) arr.push(g);
@@ -599,7 +715,7 @@ function computeLayout(
   const MIN_GATE_SPACING = GATE_W + 30;
   for (const [row, rowGates] of gateRows) {
     const desired = rowGates.map((g) => {
-      const xs = g.fed.map((k) => pos.get(k)?.x ?? 0);
+      const xs = g.fed.map((f) => pos.get(f.key)?.x ?? 0);
       return xs.reduce((a, b) => a + b, 0) / xs.length;
     });
     const idx = rowGates.map((_, i) => i).sort((a, b) => desired[a] - desired[b]);
@@ -635,6 +751,15 @@ function computeLayout(
     });
   }
   for (const g of gates.values()) {
+    const tiers = [...g.tierGaps.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([level, gap]) => ({
+        level,
+        quests: g.fed.filter((f) => f.level === level).map((f) => QUEST_BY_KEY[f.key]?.name ?? f.key),
+        toStart: gap.requiredToStart,
+        deficit: gap.deficit,
+        xp: gap.xpNeeded,
+      }));
     nodes.push({
       id: g.id,
       type: "gate",
@@ -642,11 +767,8 @@ function computeLayout(
       data: {
         skill: g.skill,
         level: g.level,
-        deficit: g.gap.deficit,
-        xpNeeded: g.gap.xpNeeded,
+        tiers,
         fedCount: g.fed.length,
-        firstName: QUEST_BY_KEY[g.fed[0]]?.name ?? g.fed[0],
-        firstToStart: g.firstToStart,
       },
     });
   }
@@ -654,14 +776,18 @@ function computeLayout(
   // ---- edges (gate edges first so they render beneath prereq edges)
   const edges: Edge[] = [];
   for (const g of gates.values()) {
-    for (const k of g.fed) {
+    // when the diamond serves multiple tiers, label each edge with the level
+    // that specific quest needs ("49" vs "61") so the shared block reads clearly
+    const multi = g.tierGaps.size > 1;
+    for (const f of g.fed) {
       edges.push({
-        id: `${g.id}->${k}`,
+        id: `${g.id}->${f.key}`,
         source: g.id,
-        target: k,
+        target: f.key,
         type: "spread",
         style: { stroke: GATE_STROKE, strokeWidth: 1.3, strokeDasharray: "5 3" },
         markerEnd: { type: MarkerType.ArrowClosed, width: 12, height: 12, color: GATE_STROKE },
+        data: multi ? { label: String(f.level) } : undefined,
       });
     }
   }
@@ -690,7 +816,7 @@ function computeLayout(
   // node in the same skill (the quest itself when the level-up completes it,
   // otherwise its training gate diamond)
   for (const c of cascades) {
-    const toId = c.toGateLevel !== null ? `gate:${c.skill}:${c.toGateLevel}` : c.toQuest;
+    const toId = c.toGate ? `gate:${c.skill}` : c.toQuest;
     if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
     edges.push({
       id: `xp:${c.from}->${toId}:${c.skill}`,
@@ -750,18 +876,18 @@ function computeLayout(
       })
       .sort((p, q) => p.key - q.key);
     for (const iv of scored) {
-      // walk outward in 26px steps until the corridor does not clash with
-      // another routed edge sharing this vertical span
-      const maxStep = Math.ceil((iv.b - iv.a) / 26);
+      // walk outward in CORRIDOR_SEP px steps until the corridor does not
+      // clash with another routed edge sharing this vertical span
+      const maxStep = Math.ceil((iv.b - iv.a) / CORRIDOR_SEP);
       const cands: number[] = [];
       for (let step = 0; step <= maxStep; step++) {
-        for (const cand of step === 0 ? [iv.x] : [iv.x + step * 26, iv.x - step * 26]) {
+        for (const cand of step === 0 ? [iv.x] : [iv.x + step * CORRIDOR_SEP, iv.x - step * CORRIDOR_SEP]) {
           if (cand >= iv.a + 10 && cand <= iv.b - 10) cands.push(cand);
         }
       }
       for (const x of cands) {
         const clash = usedCorridors.some(
-          (u) => Math.abs(u.x - x) < 26 && u.y0 < tTop - 6 && u.y1 > sBottom + 6,
+          (u) => Math.abs(u.x - x) < CORRIDOR_SEP && u.y0 < tTop - 6 && u.y1 > sBottom + 6,
         );
         if (!clash) {
           usedCorridors.push({ x, y0: sBottom, y1: tTop });
@@ -817,9 +943,9 @@ function computeLayout(
       // on the upper-left edge, rightmost on the upper-right, a single cascade
       // lands exactly on the top vertex (mirrors the gate source branch).
       const k = arr.length;
+      const offs = vertexAttachOffsets(k); // ascending — matches the source-x sort
       arr.forEach((e, i) => {
-        const t = k === 1 ? 0.5 : i / (k - 1); // 0 (left) → 1 (right)
-        const dx = -GATE_ATTACH_SPREAD + 2 * GATE_ATTACH_SPREAD * t;
+        const dx = offs[i];
         // handle sits on the top vertex; walking |dx| along the 45° upper
         // edges DROPS the attach point onto the diamond boundary (y grows)
         e.data = { ...e.data, targetOffset: dx, targetOffsetY: Math.abs(dx) };
@@ -842,9 +968,9 @@ function computeLayout(
       // leftmost target connects on the lower-left edge, rightmost on the
       // lower-right, single edges at the bottom vertex.
       const k = arr.length;
+      const offs = vertexAttachOffsets(k); // ascending — matches the target-x sort
       arr.forEach((e, i) => {
-        const t = k === 1 ? 0.5 : i / (k - 1); // 0 (left) → 1 (right)
-        const dx = -GATE_ATTACH_SPREAD + 2 * GATE_ATTACH_SPREAD * t;
+        const dx = offs[i];
         // handle sits exactly on the diamond's bottom vertex; walking |dx| along
         // the 45° lower edges rises the attach point by the same amount
         e.data = {

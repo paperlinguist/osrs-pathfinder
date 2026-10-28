@@ -8,5 +8,5 @@
  * the 7-char slice matches the `sha-xxxxxxx` GHCR image tags. Local builds
  * without the env var report "dev".
  */
-export const APP_VERSION = "v0.3.0";
+export const APP_VERSION = "v0.4.0";
 export const APP_BUILD = (process.env.NEXT_PUBLIC_APP_VERSION ?? "dev").slice(0, 7);
