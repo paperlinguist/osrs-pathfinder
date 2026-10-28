@@ -251,7 +251,7 @@ export default function CompletionsPage() {
             <span className="hidden sm:inline">Planner</span>
           </Link>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold tracking-tight text-amber-200">Quest completions</h1>
+            <h1 className="text-lg font-bold tracking-tight text-amber-200">Manage quests</h1>
             <p className="text-xs text-stone-400">
               Set everything you&apos;ve already finished — the planner uses it to trim your paths.
             </p>

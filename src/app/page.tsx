@@ -270,6 +270,16 @@ export default function Home() {
   const [backupMsg, setBackupMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [chars, setChars] = useState<CharSlot[]>([]);
   const [refreshingChar, setRefreshingChar] = useState<string | null>(null);
+  // new-user onboarding banner — dismissed state persisted; read in the
+  // hydration effect (not lazily: this page prerenders, a lazy read would
+  // mismatch server HTML)
+  const [onboardHidden, setOnboardHidden] = useState(false);
+  const hideOnboarding = useCallback(() => {
+    setOnboardHidden(true);
+    try {
+      localStorage.setItem("osrs-qp-onboard-hide", "1");
+    } catch { /* ignore */ }
+  }, []);
   const [sugSort, setSugSort] = useState<SugSort>(() => {
     if (typeof window === "undefined") return "xp";
     try {
@@ -322,6 +332,7 @@ export default function Home() {
       if (mq !== null && mq !== "") setManualQp(parseInt(mq, 10) || "");
       const aq = localStorage.getItem("osrs-qp-added");
       if (aq) setAddedQuests(new Set(JSON.parse(aq)));
+      if (localStorage.getItem("osrs-qp-onboard-hide") === "1") setOnboardHidden(true);
       const ch = localStorage.getItem("osrs-qp-chars");
       if (ch) {
         const parsed = JSON.parse(ch);
@@ -701,7 +712,7 @@ export default function Home() {
     [toast, upsertPlayerSkills, username, player],
   );
 
-  /** end the active session and flush every shared key (incl. the completions page) */
+  /** end the active session and flush every shared key (incl. the Manage Quests page) */
   const closeCharacter = useCallback(
     (opts?: { silent?: boolean }) => {
       setUsername("");
@@ -717,7 +728,7 @@ export default function Home() {
       if (!opts?.silent)
         toast({
           title: "Character closed",
-          description: "Session flushed — the completions page starts clean. Saved slots are untouched.",
+          description: "Session flushed — the Manage Quests page starts clean. Saved slots are untouched.",
         });
     },
     [toast],
@@ -1107,14 +1118,6 @@ export default function Home() {
                 {player.username} · cb {player.combatLevel}
               </Badge>
             )}
-            <Link
-              href="/completions"
-              aria-label="Set up your quest completions"
-              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-stone-700 px-3 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
-            >
-              <ListChecks className="h-3.5 w-3.5" aria-hidden />
-              <span className="hidden sm:inline">Completions</span>
-            </Link>
             <Button
               variant="outline"
               size="sm"
@@ -1132,6 +1135,51 @@ export default function Home() {
         </header>
 
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6 space-y-6">
+          {/* new-user onboarding — the quest-completion import especially is
+              easy to miss on a first visit */}
+          {!onboardHidden && (
+            <div
+              role="note"
+              aria-label="Getting started"
+              className="relative rounded-lg border border-amber-900/40 bg-gradient-to-br from-amber-950/30 to-stone-900/60 px-4 py-3"
+            >
+              <button
+                onClick={hideOnboarding}
+                aria-label="Dismiss getting started guide"
+                className="absolute right-2 top-2 grid h-5 w-5 place-items-center rounded-full text-stone-500 hover:bg-stone-800 hover:text-stone-200"
+              >
+                <X className="h-3 w-3" aria-hidden />
+              </button>
+              <p className="text-sm font-semibold text-amber-200">New here? Three steps to your first plan:</p>
+              <ol className="mt-1.5 grid gap-1.5 text-xs text-stone-300 sm:grid-cols-3">
+                <li className="flex gap-1.5">
+                  <span className="font-bold text-amber-400">1 ·</span>
+                  <span>
+                    <b className="text-stone-100">Import your character</b> below — skills come straight
+                    from Wise Old Man / the hiscores.
+                  </span>
+                </li>
+                <li className="flex gap-1.5">
+                  <span className="font-bold text-amber-400">2 ·</span>
+                  <span>
+                    <b className="text-stone-100">Mark quests you&apos;ve finished</b> with{" "}
+                    <Link href="/completions" className="font-semibold text-amber-300 underline underline-offset-2 hover:text-amber-200">
+                      Manage Quests
+                    </Link>{" "}
+                    — tick them in bulk, or import your whole RuneLite quest list in one file.
+                  </span>
+                </li>
+                <li className="flex gap-1.5">
+                  <span className="font-bold text-amber-400">3 ·</span>
+                  <span>
+                    <b className="text-stone-100">Track target quests</b> — the planner orders every
+                    prerequisite, skill gate and XP boost for you.
+                  </span>
+                </li>
+              </ol>
+            </div>
+          )}
+
           {/* import + target row */}
           <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
             {/* character import */}
@@ -1139,7 +1187,8 @@ export default function Home() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base text-stone-200">1 · Import your character</CardTitle>
                 <CardDescription className="text-xs">
-                  Skills load from Wise Old Man / official hiscores. Quest completion is tracked locally below.
+                  Skills load from Wise Old Man / official hiscores — then tell us which quests
+                  you&apos;ve already finished via Manage Quests.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -1159,6 +1208,29 @@ export default function Home() {
                 {importMsg && (
                   <p className={`text-xs ${importMsg.ok ? "text-emerald-400" : "text-red-400"}`}>{importMsg.text}</p>
                 )}
+                <Link
+                  href="/completions"
+                  aria-label="Manage quest completions: bulk-tick finished quests or import them from RuneLite"
+                  className="group flex items-center gap-3 rounded-md border border-stone-700 bg-stone-950/60 px-3 py-2.5 transition-colors hover:border-amber-700/60 hover:bg-stone-900"
+                >
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-amber-800/50 bg-amber-950/40 text-amber-300">
+                    <ListChecks className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1.5 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
+                      Manage Quests
+                      <span className="text-[10px] font-medium text-stone-500">
+                        {completed.size > 0
+                          ? `${completed.size} marked complete`
+                          : "first time? import your list"}
+                      </span>
+                    </span>
+                    <span className="block truncate text-xs text-stone-400">
+                      Tick finished quests in bulk — or import them all from RuneLite&apos;s Quest
+                      State Exporter file.
+                    </span>
+                  </span>
+                </Link>
                 {player && (
                   <div className="flex flex-wrap gap-1 pt-1">
                     {Object.entries(player.levels)
@@ -1230,7 +1302,7 @@ export default function Home() {
                         onClick={() => closeCharacter()}
                         disabled={!username.trim() && !player}
                         className="h-6 px-2 text-[10px] text-stone-400 hover:text-stone-200 hover:bg-stone-800 disabled:opacity-40"
-                        title="End this character's session: clears the plan board and flushes the completions page (saved slots are kept)"
+                        title="End this character's session: clears the plan board and flushes the Manage Quests page (saved slots are kept)"
                       >
                         <LogOut className="h-3 w-3" aria-hidden />
                         Close
@@ -1834,7 +1906,7 @@ export default function Home() {
               <p className="text-[10px] text-stone-600">
                 Requirements data: OSRS Wiki (boostability &amp; start-flags) · quest registry: wvanderp/osrs-db · completion stored locally in your browser — set it up in bulk on the{" "}
                 <Link href="/completions" className="underline underline-offset-2 hover:text-stone-400">
-                  Completions
+                  Manage Quests
                 </Link>{" "}
                 page
               </p>
