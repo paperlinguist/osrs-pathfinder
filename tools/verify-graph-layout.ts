@@ -21,10 +21,12 @@
  */
 
 import {
+  CLEARANCE,
   CORRIDOR_SEP,
   GATE_H,
   NODE_H,
   computeLayout,
+  edgePoints,
   type LayoutEdge,
   type LayoutNode,
 } from "../src/lib/graph-layout";
@@ -69,6 +71,36 @@ function layoutFor(targetKeys: string[], extras: string[], player: PlayerSkills)
   const r = resolveChain(targetKeys, player, new Set(), OPTS, extras);
   if (!r) throw new Error("resolveChain returned null");
   return { r, ...computeLayout(r.steps, r.targets, r.cascades) };
+}
+
+/* -------- edgePoints unit geometry (shared by renderer + preview) --------- */
+
+console.log("edgePoints — vertical entry/exit in every direction");
+{
+  const down = edgePoints(0, 0, 50, 100); // downward, direct
+  check(down.pts[1][1] === CLEARANCE, "down: jog CLEARANCE below source", String(down.pts[1][1]));
+  const up = edgePoints(0, 100, 50, 0); // upward, direct
+  check(
+    up.pts[1][1] === -CLEARANCE,
+    "up: jog CLEARANCE ABOVE the target (never inside it)",
+    String(up.pts[1][1]),
+  );
+  check(up.pts[2][1] === up.pts[1][1] && up.pts[3][0] === 50, "up: horizontal then vertical drop into top");
+  const rDown = edgePoints(0, 0, 200, 100, 80); // routed downward
+  check(rDown.pts[1][1] === 16 && rDown.pts[4][1] === 84, "routed down: leave +16, enter target from above");
+  const rUp = edgePoints(0, 100, 200, 0, 80); // routed upward
+  check(
+    rUp.pts[1][1] === 84 && rUp.pts[4][1] === -16,
+    "routed up: leave ABOVE the source, enter from above the target",
+    `${rUp.pts[1][1]}/${rUp.pts[4][1]}`,
+  );
+  const detour = edgePoints(0, 50, 200, 50, undefined, 120); // same-row swing
+  check(
+    detour.pts[1][1] === 120 && detour.pts[2][1] === 120,
+    "side detour: horizontal run entirely below the row",
+  );
+  const flat = edgePoints(0, 50, 200, 50); // same-row direct
+  check(flat.pts[1][1] === 50 && flat.pts[2][1] === 50, "same-row direct: straight horizontal");
 }
 
 /** Global invariants that must hold on ANY board. */
@@ -153,6 +185,35 @@ function assertInvariants(nodes: LayoutNode[], edges: LayoutEdge[], label: strin
         `offsetY=${e.targetOffsetY}`,
       );
     }
+  }
+
+  // 3c. upward edges must leave through a TOP anchor ("q-up" on quests,
+  //     "t-up" on gates) — leaving upward from a bottom anchor draws through
+  //     the source card
+  for (const e of edges) {
+    const s = pos.get(e.source);
+    const t = pos.get(e.target);
+    if (!s || !t || t.y >= s.y) continue;
+    if (s.kind === "gate") {
+      check(e.sourceHandle === "t-up", `${label}: upward gate edge exits the top vertex (${e.id})`, e.sourceHandle);
+    } else {
+      check(e.sourceHandle === "q-up", `${label}: upward quest edge exits the top border (${e.id})`, e.sourceHandle);
+    }
+  }
+
+  // 3d. same-row tier detours swing BELOW the diamond row when set
+  for (const e of edges) {
+    if (e.sourceHandle !== "s-right" && e.sourceHandle !== "s-left") continue;
+    const s = pos.get(e.source);
+    const t = pos.get(e.target);
+    if (!s || !t) continue;
+    if (e.sideDetourY === undefined) continue;
+    check(
+      e.sideDetourY > Math.max(s.y, t.y) + GATE_H,
+      `${label}: side detour clears the diamond row (${e.id})`,
+      String(e.sideDetourY),
+    );
+    check(e.via === undefined, `${label}: side detour is not corridor-routed (${e.id})`);
   }
 
   // 3b. gates only ever touch quests they DIRECTLY gate: gate→quest edges must
@@ -251,6 +312,16 @@ console.log("Scenario A — Lunar Diplomacy + The Hand in the Sand added manuall
   check(
     edges.some((e) => e.id === "gate:Crafting:49->hand in sand" && e.kind === "gate"),
     "gate edge Crafting 49 → Hand in the Sand",
+  );
+
+  // training totals: one OVERLAPPING grind per skill — the binding (highest)
+  // tier is the total; summing tiers would double-count the shared training
+  const cr = r.skillTotals.find((g) => g.skill === "Crafting");
+  const t61 = xpForLevel(62) - (xpForLevel(40) + 9000); // lunar tier nets hand's xp
+  check(
+    !!cr && cr.xpNeeded === t61 && cr.deficit === 21,
+    "skill total = binding tier's grind (not the tier sum)",
+    cr ? `xp=${cr.xpNeeded} deficit=${cr.deficit} (want xp=${t61} deficit=21)` : "missing",
   );
   check(
     edges.some((e) => e.id === "gate:Crafting:61->lunar diplomacy" && e.kind === "gate"),

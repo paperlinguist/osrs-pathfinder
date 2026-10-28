@@ -32,7 +32,6 @@ import { TOOLTIP_ARROW, TOOLTIP_BOX, skillSuggestAnchorId } from "@/components/s
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import {
-  CLEARANCE,
   GATE_DIAMOND,
   GATE_HANDLE_Y,
   GATE_H,
@@ -41,6 +40,8 @@ import {
   NODE_H,
   NODE_W,
   computeLayout,
+  edgePoints,
+  roundedPath,
   type EdgeKind,
   type LayoutEdge,
   type LayoutNode,
@@ -134,7 +135,11 @@ function QuestNode({ data, selected }: NodeProps<QuestFlowNode>) {
               : "border-stone-700"
       } ${selected ? "ring-1 ring-amber-500/70" : ""} ${done && !isTarget ? "opacity-70" : ""}`}
     >
-      {/* handles are structural only — edges anchor to spread points on the border */}
+      {/* handles are structural only — edges anchor to spread points on the
+          border. The null-id target(top)/source(bottom) pair must stay FIRST
+          in DOM order: RF resolves a null handle id to bounds[0]. "q-up" is
+          the top-exit source for upward XP cascades (leaving upward from the
+          bottom anchor would draw through this card). */}
       <Handle type="target" position={Position.Top} className="!opacity-0" />
       <div className="flex items-start justify-between gap-1.5">
         <a
@@ -180,6 +185,7 @@ function QuestNode({ data, selected }: NodeProps<QuestFlowNode>) {
         )}
       </div>
       <Handle type="source" position={Position.Bottom} className="!opacity-0" />
+      <Handle id="q-up" type="source" position={Position.Top} className="!opacity-0" />
     </div>
   );
 }
@@ -274,8 +280,10 @@ function GateNode({ data }: NodeProps<GateFlowNode>) {
       </TooltipContent>
       {/* default vertical-vertex handles (no id — edges without an explicit
           handle reference these): target on the top vertex, source on the
-          bottom vertex. Explicit ids below cover the side vertices and the
-          upward top-vertex exit used by same-row / upward tier chains. */}
+          bottom vertex. These MUST stay the first target/source handles in
+          DOM order — RF resolves a null handle id to bounds[0]. Explicit ids
+          below cover the side vertices and the upward top-vertex exit used
+          by same-row / upward tier chains. */}
       <Handle
         type="target"
         position={Position.Top}
@@ -390,43 +398,14 @@ const NODE_TYPES = { quest: QuestNode, gate: GateNode };
 
 /* ---------------------------------------------------------------- edges */
 
-/** SVG path through waypoints with rounded corners; zero-length runs are dropped. */
-function roundedPath(pts: [number, number][], r: number): string {
-  const clean: [number, number][] = [];
-  for (const p of pts) {
-    const q = clean[clean.length - 1];
-    if (!q || Math.abs(q[0] - p[0]) > 0.5 || Math.abs(q[1] - p[1]) > 0.5) clean.push(p);
-  }
-  if (clean.length < 2) return "";
-  let d = `M ${clean[0][0]} ${clean[0][1]}`;
-  for (let i = 1; i < clean.length - 1; i++) {
-    const [x0, y0] = clean[i - 1];
-    const [x1, y1] = clean[i];
-    const [x2, y2] = clean[i + 1];
-    const d1 = Math.hypot(x1 - x0, y1 - y0) || 1;
-    const d2 = Math.hypot(x2 - x1, y2 - y1) || 1;
-    const rr = Math.min(r, d1 / 2, d2 / 2);
-    d += ` L ${x1 - ((x1 - x0) / d1) * rr} ${y1 - ((y1 - y0) / d1) * rr}`;
-    d += ` Q ${x1} ${y1} ${x1 + ((x2 - x1) / d2) * rr} ${y1 + ((y2 - y1) / d2) * rr}`;
-  }
-  const last = clean[clean.length - 1];
-  d += ` L ${last[0]} ${last[1]}`;
-  return d;
-}
-
 /**
  * Orthogonal edge whose attach points are spread across the node borders.
- * The first and last segments are ALWAYS vertical: every downward edge leaves
- * its source through the bottom and enters its target through the top
- * (upward edges mirror that), no matter how many rows separate the
- * endpoints — a plain smoothstep would put its horizontal jog at the
- * source-target midpoint, slicing through intermediate node rows.
- *
- * The horizontal jog happens on a fixed row (CLEARANCE below the source for
- * downward edges / above the target for upward ones) inside the free band
- * between node rows. Edges whose vertical run would cross other nodes are
- * displaced to a precomputed corridor x (`data.via`) in the gaps between
- * columns, so lines stop running behind quest cards and gates.
+ * Path geometry lives in graph-layout's edgePoints()/roundedPath() — shared
+ * with the offline PNG preview so the two can't drift: the first and last
+ * segments are always vertical (bottom-exit / top-entry, mirrored for upward
+ * edges), the horizontal jog sits inside the free band between node rows,
+ * and long runs are displaced to a precomputed corridor x (`data.via`) in
+ * the gaps between columns, so lines stop running behind cards and gates.
  */
 function SpreadEdge({
   id,
@@ -443,37 +422,7 @@ function SpreadEdge({
   const sy = sourceY + (d.sourceOffsetY ?? 0);
   const tx = targetX + (d.targetOffset ?? 0);
   const ty = targetY + (d.targetOffsetY ?? 0);
-  const up = ty < sy;
-  const jog = Math.min(CLEARANCE, Math.abs(ty - sy) / 3);
-  let pts: [number, number][];
-  let labelX: number;
-  let labelY: number;
-  if (d.via !== undefined) {
-    // routed: step away from the source, run the corridor, step into the
-    // target — the approach is always from above the target's top attach
-    const leaveY = up ? sy - 16 : sy + 16;
-    const enterY = ty - 16;
-    pts = [
-      [sx, sy],
-      [sx, leaveY],
-      [d.via, leaveY],
-      [d.via, enterY],
-      [tx, enterY],
-      [tx, ty],
-    ];
-    labelX = d.via;
-    labelY = leaveY;
-  } else {
-    const midY = up ? ty + jog : sy + jog;
-    pts = [
-      [sx, sy],
-      [sx, midY],
-      [tx, midY],
-      [tx, ty],
-    ];
-    labelX = (sx + tx) / 2;
-    labelY = midY;
-  }
+  const { pts, labelX, labelY } = edgePoints(sx, sy, tx, ty, d.via, d.sideDetourY);
   return (
     <>
       <BaseEdge id={id} path={roundedPath(pts, 12)} style={style} markerEnd={markerEnd} />

@@ -102,6 +102,9 @@ export interface LayoutEdge {
   targetHandle?: string;
   /** corridor x the long vertical run is displaced to (routed edges) */
   via?: number;
+  /** same-row tier chains swing under the diamond row at this y when the
+   *  straight side-to-side line would cross intermediate diamonds */
+  sideDetourY?: number;
   /** small edge label (XP cascades) */
   label?: string;
 }
@@ -143,6 +146,7 @@ interface GateLayout {
   skill: string;
   level: number;
   gap: SkillGap; // representative gap (worst deficit among the tier's quests)
+  gapQuest: string; // the quest whose gap `gap` is — pairs with toStart in the UI
   fed: string[]; // quest keys needing exactly this level, chain order
 }
 
@@ -195,14 +199,19 @@ export function computeLayout(
     const id = `gate:${gap.skill}:${gap.required}`;
     let g = gates.get(id);
     if (!g) {
-      g = { id, skill: gap.skill, level: gap.required, gap, fed: [] };
+      g = { id, skill: gap.skill, level: gap.required, gap, gapQuest: questKey, fed: [] };
       gates.set(id, g);
     }
     // a tracked target that is also another target's prerequisite appears BOTH
     // as a plan step and as a target — feed it once (the step entry is the
     // authoritative one: its gaps reflect XP accrued up to that chain point)
     if (!g.fed.includes(questKey)) g.fed.push(questKey);
-    if (gap.deficit > g.gap.deficit) g.gap = gap; // worst grind represents the tier
+    // worst grind represents the tier (start-gated deficits are always the
+    // larger ones, so a mixed tier displays its start-gated quest + flag)
+    if (gap.deficit > g.gap.deficit) {
+      g.gap = gap;
+      g.gapQuest = questKey;
+    }
   };
   const fedKeys = new Set<string>();
   for (const s of steps) {
@@ -328,7 +337,7 @@ export function computeLayout(
       y: p.y,
       skill: g.skill,
       level: g.level,
-      quest: QUEST_BY_KEY[g.fed[0]]?.name ?? g.fed[0],
+      quest: QUEST_BY_KEY[g.gapQuest]?.name ?? g.gapQuest,
       toStart: g.gap.requiredToStart,
       deficit: g.gap.deficit,
       xp: g.gap.xpNeeded,
@@ -398,17 +407,22 @@ export function computeLayout(
     }
   }
 
-  // XP-cascade edges: dotted red lines from an XP grant down to the next
-  // node in the same skill (the quest itself when the level-up completes it,
-  // otherwise that requirement's own tier diamond)
+  // XP-cascade edges: dotted red lines from an XP grant to the next node in
+  // the same skill (the quest itself when the level-up completes it, otherwise
+  // that requirement's own tier diamond). Downward by default; when the
+  // recipient sits ABOVE the granting quest, the edge leaves through the
+  // quest's top ("q-up") — leaving upward from the bottom anchor would draw
+  // straight through the source card.
   for (const c of cascades) {
     const toId = c.toGate ? `gate:${c.skill}:${c.toLevel}` : c.toQuest;
     if (!pos.has(c.from) || !pos.has(toId)) continue; // defensive — both endpoints must exist
+    const goingUp = (pos.get(toId)?.y ?? 0) < (pos.get(c.from)?.y ?? 0);
     edges.push({
       id: `xp:${c.from}->${toId}:${c.skill}`,
       source: c.from,
       target: toId,
       kind: "cascade",
+      ...(goingUp ? { sourceHandle: "q-up" } : {}),
       // boundary-crossing grants show the level jump; own-gate-floored grants
       // (no crossing possible) show the raw xp added
       label:
@@ -515,6 +529,7 @@ export function computeLayout(
   }
 
   const usedCorridors: { x: number; y0: number; y1: number }[] = [];
+  const detourDepth = new Map<number, number>(); // gate row → stacked side-detour count
   const routeEdge = (e: LayoutEdge, sx: number, tx: number, sBottom: number, tTop: number) => {
     // vertical span between the two attach rows (upward edges invert the
     // source/target order — normalize so blocked-rect and overlap tests work
@@ -574,13 +589,122 @@ export function computeLayout(
   };
 
   for (const e of edges) {
-    if (isSideSource(e)) continue; // horizontal side-vertex lines need no corridor
     const sp = posOf(e.source);
     const tp = posOf(e.target);
+    if (isSideSource(e)) {
+      // same-row tier chain: a straight side-to-side line is clean unless it
+      // crosses other diamonds in the row — then swing it under the row
+      // (stacking parallel detours 24px apart)
+      const lo = Math.min(sp.x, tp.x);
+      const hi = Math.max(sp.x, tp.x);
+      const crosses = [...rects.entries()].some(([id, r]) => {
+        if (id === e.source || id === e.target) return false;
+        if (Math.abs(r.y0 - sp.y) > 1) return false; // same row only
+        const cx = (r.x0 + r.x1) / 2;
+        return cx + GATE_DIAMOND + 6 > lo && cx - GATE_DIAMOND - 6 < hi;
+      });
+      if (crosses) {
+        const depth = detourDepth.get(sp.y) ?? 0;
+        detourDepth.set(sp.y, depth + 1);
+        e.sideDetourY = sp.y + GATE_H + CLEARANCE + depth * 24;
+      }
+      continue;
+    }
     const sBottom = sp.y + boxH(e.source);
     const tTop = tp.y;
     routeEdge(e, sp.x + (e.sourceOffset ?? 0), tp.x + (e.targetOffset ?? 0), sBottom, tTop);
   }
 
   return { nodes, edges };
+}
+
+/* ------------------------------------------------------- edge path math */
+
+/** SVG path through waypoints with rounded corners; zero-length runs are dropped. */
+export function roundedPath(pts: [number, number][], r: number): string {
+  const clean: [number, number][] = [];
+  for (const p of pts) {
+    const q = clean[clean.length - 1];
+    if (!q || Math.abs(q[0] - p[0]) > 0.5 || Math.abs(q[1] - p[1]) > 0.5) clean.push(p);
+  }
+  if (clean.length < 2) return "";
+  let d = `M ${clean[0][0]} ${clean[0][1]}`;
+  for (let i = 1; i < clean.length - 1; i++) {
+    const [x0, y0] = clean[i - 1];
+    const [x1, y1] = clean[i];
+    const [x2, y2] = clean[i + 1];
+    const d1 = Math.hypot(x1 - x0, y1 - y0) || 1;
+    const d2 = Math.hypot(x2 - x1, y2 - y1) || 1;
+    const rr = Math.min(r, d1 / 2, d2 / 2);
+    d += ` L ${x1 - ((x1 - x0) / d1) * rr} ${y1 - ((y1 - y0) / d1) * rr}`;
+    d += ` Q ${x1} ${y1} ${x1 + ((x2 - x1) / d2) * rr} ${y1 + ((y2 - y1) / d2) * rr}`;
+  }
+  const last = clean[clean.length - 1];
+  d += ` L ${last[0]} ${last[1]}`;
+  return d;
+}
+
+/**
+ * Waypoints + label position for an edge, given its resolved attach points —
+ * the single source of truth shared by the React Flow edge renderer and the
+ * offline PNG preview. The first and last segments are ALWAYS vertical:
+ * every edge leaves its source through the bottom (or top, for upward edges)
+ * and enters its target through the top.
+ *
+ * - direct: one horizontal jog, pinned CLEARANCE below the source (downward
+ *   edges) / above the target (upward edges) — always inside the free band
+ *   between node rows, never inside either endpoint
+ * - routed (via): step away from the source, run the corridor, step into the
+ *   target from above
+ * - sideDetourY: same-row tier chains swinging under the diamond row
+ */
+export function edgePoints(
+  sx: number,
+  sy: number,
+  tx: number,
+  ty: number,
+  via?: number,
+  sideDetourY?: number,
+): { pts: [number, number][]; labelX: number; labelY: number } {
+  if (sideDetourY !== undefined) {
+    return {
+      pts: [
+        [sx, sy],
+        [sx, sideDetourY],
+        [tx, sideDetourY],
+        [tx, ty],
+      ],
+      labelX: (sx + tx) / 2,
+      labelY: sideDetourY,
+    };
+  }
+  const up = ty < sy;
+  if (via !== undefined) {
+    const leaveY = up ? sy - 16 : sy + 16;
+    const enterY = ty - 16; // always approach the target's top from above
+    return {
+      pts: [
+        [sx, sy],
+        [sx, leaveY],
+        [via, leaveY],
+        [via, enterY],
+        [tx, enterY],
+        [tx, ty],
+      ],
+      labelX: via,
+      labelY: leaveY,
+    };
+  }
+  const jog = Math.min(CLEARANCE, Math.abs(ty - sy) / 3);
+  const midY = up ? ty - jog : sy + jog;
+  return {
+    pts: [
+      [sx, sy],
+      [sx, midY],
+      [tx, midY],
+      [tx, ty],
+    ],
+    labelX: (sx + tx) / 2,
+    labelY: midY,
+  };
 }

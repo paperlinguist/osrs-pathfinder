@@ -353,6 +353,8 @@ export function resolveChain(
   // same skill that the resulting level-up reaches ("player has at least the
   // level to complete the granting quest" is folded into the starting level)
   const cascades: XpCascade[] = [];
+  let crossingCount = 0; // boundary-crossing cascades (budget: 80, walk stops past it)
+  let maskedCount = 0; // own-gate-floored raw-xp cascades (budget: 40, walk continues)
   const trainGates = new Set<string>(); // `${skill}:${level}` tiers gated by real training
   for (const s of steps) {
     for (const g of s.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
@@ -410,39 +412,37 @@ export function resolveChain(
         if (!req || req.level <= L0 || baseLevel >= req.level) continue;
         found = attach(t.quest.key, req.level);
       }
-      if (found) cascades.push(found);
+      if (!found) continue;
+      if (crossed) {
+        cascades.push(found);
+        // visible level-ups are the primary signal — they alone bound the walk
+        if (++crossingCount > 80) break;
+      } else if (maskedCount < 40) {
+        // own-gate-floored raw-xp progress renders too, but never at the
+        // cost of dropping later crossing cascades
+        cascades.push(found);
+        maskedCount++;
+      }
     }
-    if (cascades.length > 80) break;
   }
 
-  // 4. aggregated REAL training needs per skill, merged across all tiers.
-  // A skill can be gated at several levels along the plan (49 for one quest,
-  // 61 for another) — each tier gap's xpNeeded is the grind measured at its own
-  // chain position (quest XP already netted out), so the true total grind is
-  // the SUM of the per-tier grinds. The merged entry keeps the final tier's
-  // base/effective/flags (its requirement level is the ultimate target) and
-  // sums deficit + xpNeeded across tiers. Boost-ok / quest-xp-covered gaps are
-  // informational, not grind targets.
-  const tierGaps = new Map<string, SkillGap[]>();
+  // 4. aggregated REAL training needs per skill — ONE grind per skill, not one
+  // per tier. A skill gated at several levels (49 for one quest, 61 for
+  // another) has overlapping tiers: every tier's gap is measured from the same
+  // player pool (quest XP nets out along the chain, but levels trained for a
+  // lower tier are never credited to a higher tier's measurement), so the true
+  // remaining grind is the LARGEST tier gap — summing would double-count the
+  // shared training. The binding tier is the total. Boost-ok /
+  // quest-xp-covered gaps are informational, not grind targets.
+  const totalsMap = new Map<string, SkillGap>();
   for (const g of [...steps.flatMap((s) => s.gaps), ...targets.flatMap((t) => t.gaps)]) {
     if (g.status !== "train") continue;
-    const arr = tierGaps.get(g.skill);
-    if (arr) arr.push(g);
-    else tierGaps.set(g.skill, [g]);
+    const prev = totalsMap.get(g.skill);
+    if (!prev || g.xpNeeded > prev.xpNeeded) totalsMap.set(g.skill, g);
   }
-  const skillTotals: SkillGap[] = [];
-  for (const [skill, arr] of tierGaps) {
-    arr.sort((a, b) => a.required - b.required || a.xpNeeded - b.xpNeeded);
-    const final = arr[arr.length - 1];
-    skillTotals.push({
-      ...final,
-      deficit: arr.reduce((a, g) => a + g.deficit, 0),
-      xpNeeded: arr.reduce((a, g) => a + g.xpNeeded, 0),
-      // any tier gating on start means raw (unboosted) levels matter for the skill
-      requiredToStart: arr.some((g) => g.requiredToStart),
-    });
-  }
-  skillTotals.sort((a, b) => b.xpNeeded - a.xpNeeded || b.deficit - a.deficit);
+  const skillTotals = [...totalsMap.values()].sort(
+    (a, b) => b.xpNeeded - a.xpNeeded || b.deficit - a.deficit,
+  );
 
   // estimated quest points from quests the user marked complete (1 per quest,
   // 0 for miniquests/activities — see questPointsAwarded)

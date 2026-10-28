@@ -13,7 +13,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import sharp from "sharp";
 import {
-  CLEARANCE,
   GATE_DIAMOND,
   GATE_H,
   GATE_HANDLE_Y,
@@ -22,6 +21,8 @@ import {
   NODE_H,
   NODE_W,
   computeLayout,
+  edgePoints,
+  roundedPath,
   type LayoutEdge,
   type LayoutNode,
 } from "../src/lib/graph-layout";
@@ -35,29 +36,6 @@ const STYLE: Record<string, { stroke: string; width: number; dash?: string }> = 
   target: { stroke: "#d97706", width: 1.8 },
   cascade: { stroke: "#f87171", width: 1.4, dash: "2 4" },
 };
-
-function roundedPath(pts: [number, number][], r: number): string {
-  const clean: [number, number][] = [];
-  for (const p of pts) {
-    const q = clean[clean.length - 1];
-    if (!q || Math.abs(q[0] - p[0]) > 0.5 || Math.abs(q[1] - p[1]) > 0.5) clean.push(p);
-  }
-  if (clean.length < 2) return "";
-  let d = `M ${clean[0][0]} ${clean[0][1]}`;
-  for (let i = 1; i < clean.length - 1; i++) {
-    const [x0, y0] = clean[i - 1];
-    const [x1, y1] = clean[i];
-    const [x2, y2] = clean[i + 1];
-    const d1 = Math.hypot(x1 - x0, y1 - y0) || 1;
-    const d2 = Math.hypot(x2 - x1, y2 - y1) || 1;
-    const rr = Math.min(r, d1 / 2, d2 / 2);
-    d += ` L ${x1 - ((x1 - x0) / d1) * rr} ${y1 - ((y1 - y0) / d1) * rr}`;
-    d += ` Q ${x1} ${y1} ${x1 + ((x2 - x1) / d2) * rr} ${y1 + ((y2 - y1) / d2) * rr}`;
-  }
-  const last = clean[clean.length - 1];
-  d += ` L ${last[0]} ${last[1]}`;
-  return d;
-}
 
 /** gate handle anchor (container-relative) per handle id — mirrors GateNode */
 function gateAnchor(id: string | undefined): { x: number; y: number } {
@@ -78,7 +56,7 @@ function gateTargetAnchor(id: string | undefined): { x: number; y: number } {
   return { x: GATE_W / 2, y: GATE_TOP_Y };
 }
 
-/** SpreadEdge's path math, verbatim */
+/** SpreadEdge's path math — shared with the component via graph-layout */
 function edgePath(e: LayoutEdge, pos: Map<string, LayoutNode>): string {
   const s = pos.get(e.source)!;
   const t = pos.get(e.target)!;
@@ -87,6 +65,9 @@ function edgePath(e: LayoutEdge, pos: Map<string, LayoutNode>): string {
     const a = gateAnchor(e.sourceHandle);
     sx = s.x + a.x + (e.sourceOffset ?? 0);
     sy = s.y + a.y + (e.sourceOffsetY ?? 0);
+  } else if (e.sourceHandle === "q-up") {
+    sx = s.x + NODE_W / 2 + (e.sourceOffset ?? 0);
+    sy = s.y + (e.sourceOffsetY ?? 0); // top border
   } else {
     sx = s.x + NODE_W / 2 + (e.sourceOffset ?? 0);
     sy = s.y + NODE_H + (e.sourceOffsetY ?? 0);
@@ -99,29 +80,7 @@ function edgePath(e: LayoutEdge, pos: Map<string, LayoutNode>): string {
     tx = t.x + NODE_W / 2 + (e.targetOffset ?? 0);
     ty = t.y + (e.targetOffsetY ?? 0);
   }
-  const up = ty < sy;
-  const jog = Math.min(CLEARANCE, Math.abs(ty - sy) / 3);
-  let pts: [number, number][];
-  if (e.via !== undefined) {
-    const leaveY = up ? sy - 16 : sy + 16;
-    const enterY = ty - 16;
-    pts = [
-      [sx, sy],
-      [sx, leaveY],
-      [e.via, leaveY],
-      [e.via, enterY],
-      [tx, enterY],
-      [tx, ty],
-    ];
-  } else {
-    const midY = up ? ty + jog : sy + jog;
-    pts = [
-      [sx, sy],
-      [sx, midY],
-      [tx, midY],
-      [tx, ty],
-    ];
-  }
+  const { pts } = edgePoints(sx, sy, tx, ty, e.via, e.sideDetourY);
   return roundedPath(pts, 12);
 }
 
