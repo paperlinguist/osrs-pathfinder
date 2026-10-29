@@ -53,16 +53,18 @@ export interface TargetResult {
  * Quest-XP cascade: completing `from` raises `skill` from `levelFrom` to
  * `levelTo`, reaching the first downstream node that requires the same skill.
  * When the new level still isn't enough to complete that node, the edge should
- * attach to its training gate (`gate:${skill}:${toGateLevel}`) instead of the
- * quest node itself.
+ * attach to that requirement's own training gate (`gate:${skill}:${toLevel}` —
+ * one diamond per skill tier) instead of the quest node itself.
  */
 export interface XpCascade {
   from: string;
   skill: string;
   levelFrom: number;
-  levelTo: number;
+  levelTo: number; // === levelFrom when no boundary is crossed (raw-xp progress)
+  xpGain: number; // the grant that flows into the skill
   toQuest: string;
-  toGateLevel: number | null;
+  toLevel: number; // the downstream requirement level being approached
+  toGate: boolean;
 }
 
 export interface ResolveResult {
@@ -106,7 +108,7 @@ function computeReqGaps(
   for (const [skill, req] of Object.entries(q.skills) as [string, SkillReq][]) {
     const base = skill === "Combat"
       ? (player.combatLevel ?? 0)
-      : (player.levels[skill] ?? 1);
+      : (player.levels?.[skill] ?? 1);
     const eff = opts.includeQuestXp
       ? effectiveLevel(player, skill, bonusXp[skill] ?? 0)
       : base;
@@ -126,7 +128,7 @@ function computeReqGaps(
       status = "train";
     }
 
-    const curXp = (player.xp[skill] ?? 0) + (bonusXp[skill] ?? 0);
+    const curXp = (player.xp?.[skill] ?? 0) + (bonusXp[skill] ?? 0);
     const xpNeeded = status === "train"
       ? Math.max(0, xpForLevel(Math.min(99, req.level + 1)) - curXp)
       : 0;
@@ -351,7 +353,9 @@ export function resolveChain(
   // same skill that the resulting level-up reaches ("player has at least the
   // level to complete the granting quest" is folded into the starting level)
   const cascades: XpCascade[] = [];
-  const trainGates = new Set<string>(); // `${skill}:${level}` pairs gated by real training
+  let crossingCount = 0; // boundary-crossing cascades (budget: 80, walk stops past it)
+  let maskedCount = 0; // own-gate-floored raw-xp cascades (budget: 40, walk continues)
+  const trainGates = new Set<string>(); // `${skill}:${level}` tiers gated by real training
   for (const s of steps) {
     for (const g of s.gaps) if (g.status === "train") trainGates.add(`${g.skill}:${g.required}`);
   }
@@ -362,22 +366,37 @@ export function resolveChain(
     const q = steps[i].quest;
     for (const [skill, gain] of Object.entries(q.xp)) {
       if (!gain || skill === "Combat") continue; // virtual combat level isn't XP-derivable
-      const baseXp = player.xp[skill] ?? 0;
-      const baseLevel = player.levels[skill] ?? 1;
+      const baseXp = player.xp?.[skill] ?? 0;
+      const baseLevel = player.levels?.[skill] ?? 1;
       const ownReq = q.skills[skill]?.level ?? 0;
       // assumed starting level: at least enough to complete this quest
-      const L0 = Math.max(ownReq, baseLevel, levelForXp(baseXp + (preBonus[i][skill] ?? 0)));
-      const L1 = Math.max(L0, levelForXp(baseXp + (postBonus[i][skill] ?? 0)));
-      if (L1 <= L0) continue;
+      const preXp = baseXp + (preBonus[i][skill] ?? 0);
+      const natural = Math.max(baseLevel, levelForXp(preXp));
+      const L0 = Math.max(ownReq, natural);
+      // when the assumed start comes from this quest's own train-to-complete
+      // gate, the xp pool must reflect that training — the quest's reward XP
+      // stacks on top of the levels you trained to reach it, not on the
+      // pre-training pool (otherwise the grant can never register a gain)
+      const startXp = Math.max(preXp, xpForLevel(L0));
+      const L1 = Math.max(L0, levelForXp(startXp + gain));
+      // show the cascade when a boundary is crossed, or when the own-gate
+      // floor masks the grant (raw-xp progress toward the next tier, e.g.
+      // Hand in the Sand's 9k Crafting XP on top of trained-to-49 — smaller
+      // than the 49→50 gap, so no crossing, but still real progress)
+      const crossed = L1 > L0;
+      const trainFloored = ownReq > natural;
+      if (!crossed && !trainFloored) continue;
       const attach = (toQuest: string, reqLevel: number): XpCascade => ({
         from: q.key,
         skill,
         levelFrom: L0,
         levelTo: L1,
+        xpGain: gain,
         toQuest,
-        // enough to complete → point at the quest itself; otherwise the gate
-        toGateLevel:
-          L1 >= reqLevel ? null : trainGates.has(`${skill}:${reqLevel}`) ? reqLevel : null,
+        toLevel: reqLevel,
+        // enough to complete → point at the quest itself; otherwise that
+        // requirement's own tier diamond (if it needs real training at all)
+        toGate: L1 < reqLevel && trainGates.has(`${skill}:${reqLevel}`),
       });
       // first downstream node in this skill whose requirement the level-up reaches
       let found: XpCascade | null = null;
@@ -393,13 +412,28 @@ export function resolveChain(
         if (!req || req.level <= L0 || baseLevel >= req.level) continue;
         found = attach(t.quest.key, req.level);
       }
-      if (found) cascades.push(found);
+      if (!found) continue;
+      if (crossed) {
+        cascades.push(found);
+        // visible level-ups are the primary signal — they alone bound the walk
+        if (++crossingCount > 80) break;
+      } else if (maskedCount < 40) {
+        // own-gate-floored raw-xp progress renders too, but never at the
+        // cost of dropping later crossing cascades
+        cascades.push(found);
+        maskedCount++;
+      }
     }
-    if (cascades.length > 80) break;
   }
 
-  // 4. aggregated REAL training needs per skill (worst gap by xpNeeded);
-  //    boost-ok / quest-xp-covered gaps are informational, not grind targets
+  // 4. aggregated REAL training needs per skill — ONE grind per skill, not one
+  // per tier. A skill gated at several levels (49 for one quest, 61 for
+  // another) has overlapping tiers: every tier's gap is measured from the same
+  // player pool (quest XP nets out along the chain, but levels trained for a
+  // lower tier are never credited to a higher tier's measurement), so the true
+  // remaining grind is the LARGEST tier gap — summing would double-count the
+  // shared training. The binding tier is the total. Boost-ok /
+  // quest-xp-covered gaps are informational, not grind targets.
   const totalsMap = new Map<string, SkillGap>();
   for (const g of [...steps.flatMap((s) => s.gaps), ...targets.flatMap((t) => t.gaps)]) {
     if (g.status !== "train") continue;

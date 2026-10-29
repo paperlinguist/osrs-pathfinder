@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Quest Completions · Quest Pathfinder",
+  title: "Manage Quests · Quest Pathfinder",
   description:
-    "Bulk-set your OSRS quest completions and quest points — the planner trims every path accordingly.",
+    "Bulk-set your OSRS quest completions (or import them from RuneLite) — the planner trims every path accordingly.",
 };
 
 export default function CompletionsLayout({

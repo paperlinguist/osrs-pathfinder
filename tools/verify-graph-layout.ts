@@ -1,0 +1,490 @@
+/**
+ * Graph-layout verification harness (pure lib — no React needed).
+ *
+ * Run (repo root):
+ *   npx tsc tools/verify-graph-layout.ts --outDir .verify --module commonjs \
+ *       --target es2022 --moduleResolution node --esModuleInterop --skipLibCheck \
+ *       --resolveJsonModule
+ *   # quest-data uses the "@/data" alias — patch the compiled require + copy the json:
+ *   sed -i 's#@/data/quests.json#../../data/quests.json#' .verify/src/lib/quest-data.js
+ *   mkdir -p .verify/data && cp src/data/quests.json .verify/data/
+ *   node .verify/tools/verify-graph-layout.js
+ *
+ * Scenarios mirror the UI bugs this layout exists to prevent:
+ *   A. manually-added quests must tier-chain their shared skill requirement
+ *      (Lunar Diplomacy + The Hand in the Sand → Crafting 49 and 61 diamonds,
+ *      with a line from the 49-fed quest up to the 61 diamond)
+ *   B. XP cascades that don't complete a requirement must attach to that
+ *      requirement's own tier diamond
+ *   C. the Quest Cape pseudo-target must not crash the layout (it has no
+ *      dataset entry) — full-board stress test with global invariants
+ */
+
+import {
+  CLEARANCE,
+  CORRIDOR_SEP,
+  GATE_H,
+  NODE_H,
+  computeLayout,
+  edgePoints,
+  type LayoutEdge,
+  type LayoutNode,
+} from "../src/lib/graph-layout";
+import {
+  QUEST_BY_KEY,
+  SKILL_NAMES,
+  levelForXp,
+  xpForLevel,
+  type PlayerSkills,
+} from "../src/lib/quest-data";
+import { resolveChain } from "../src/lib/resolver";
+
+let failures = 0;
+let checks = 0;
+
+function check(ok: boolean, label: string, detail?: string) {
+  checks++;
+  if (!ok) {
+    failures++;
+    console.error(`  ✗ ${label}${detail ? ` — ${detail}` : ""}`);
+  }
+}
+
+function mkPlayer(over: Record<string, number>): PlayerSkills {
+  const levels: Record<string, number> = {};
+  const xp: Record<string, number> = {};
+  for (const s of SKILL_NAMES) {
+    levels[s] = over[s] ?? 99;
+    xp[s] = xpForLevel(levels[s]); // xp consistent with the level (like an import)
+  }
+  return {
+    levels,
+    xp,
+    combatLevel: over.Combat ?? 126,
+    source: "manual",
+  };
+}
+
+const OPTS = { allowBoosts: false, includeQuestXp: true };
+
+function layoutFor(targetKeys: string[], extras: string[], player: PlayerSkills) {
+  const r = resolveChain(targetKeys, player, new Set(), OPTS, extras);
+  if (!r) throw new Error("resolveChain returned null");
+  return { r, ...computeLayout(r.steps, r.targets, r.cascades) };
+}
+
+/* -------- edgePoints unit geometry (shared by renderer + preview) --------- */
+
+console.log("edgePoints — vertical entry/exit in every direction");
+{
+  const down = edgePoints(0, 0, 50, 100); // downward, direct
+  check(down.pts[1][1] === CLEARANCE, "down: jog CLEARANCE below source", String(down.pts[1][1]));
+  const up = edgePoints(0, 100, 50, 0); // upward, direct
+  check(
+    up.pts[1][1] === -CLEARANCE,
+    "up: jog CLEARANCE ABOVE the target (never inside it)",
+    String(up.pts[1][1]),
+  );
+  check(up.pts[2][1] === up.pts[1][1] && up.pts[3][0] === 50, "up: horizontal then vertical drop into top");
+  const rDown = edgePoints(0, 0, 200, 100, 80); // routed downward
+  check(rDown.pts[1][1] === 16 && rDown.pts[4][1] === 84, "routed down: leave +16, enter target from above");
+  const rUp = edgePoints(0, 100, 200, 0, 80); // routed upward
+  check(
+    rUp.pts[1][1] === 84 && rUp.pts[4][1] === -16,
+    "routed up: leave ABOVE the source, enter from above the target",
+    `${rUp.pts[1][1]}/${rUp.pts[4][1]}`,
+  );
+  const detour = edgePoints(0, 50, 200, 50, undefined, 120); // same-row swing
+  check(
+    detour.pts[1][1] === 120 && detour.pts[2][1] === 120,
+    "side detour: horizontal run entirely below the row",
+  );
+  const flat = edgePoints(0, 50, 200, 50); // same-row direct
+  check(flat.pts[1][1] === 50 && flat.pts[2][1] === 50, "same-row direct: straight horizontal");
+}
+
+/** Global invariants that must hold on ANY board. */
+function assertInvariants(nodes: LayoutNode[], edges: LayoutEdge[], label: string) {
+  const ids = new Set(nodes.map((n) => n.id));
+  const pos = new Map(nodes.map((n) => [n.id, n] as const));
+
+  // 1. every edge endpoint exists
+  for (const e of edges) {
+    check(ids.has(e.source) && ids.has(e.target), `${label}: edge endpoints exist`, e.id);
+  }
+
+  // 2. attach points are distinct per node side AND handle (a gate's
+  //    bottom-vertex fan and its tier-chain exits are separate attach sites)
+  const sideAttach = (pick: (e: LayoutEdge) => [string, string, number]) => {
+    const bySite = new Map<string, number[]>();
+    for (const e of edges) {
+      const [id, handle, x] = pick(e);
+      const key = `${id}|${handle}`;
+      const arr = bySite.get(key);
+      if (arr) arr.push(x);
+      else bySite.set(key, [x]);
+    }
+    for (const [key, xs] of bySite) {
+      const sorted = [...xs].sort((a, b) => a - b);
+      let minGap = Infinity;
+      for (let i = 1; i < sorted.length; i++) minGap = Math.min(minGap, sorted[i] - sorted[i - 1]);
+      check(
+        minGap > 0.5,
+        `${label}: distinct attach points on ${key}`,
+        `${xs.length} edges, min gap ${minGap === Infinity ? "n/a" : minGap.toFixed(1)}px`,
+      );
+    }
+  };
+  sideAttach((e) => [e.source, e.sourceHandle ?? "b", (pos.get(e.source)?.x ?? 0) + (e.sourceOffset ?? 0)]);
+  sideAttach((e) => [e.target, e.targetHandle ?? "t", (pos.get(e.target)?.x ?? 0) + (e.targetOffset ?? 0)]);
+
+  // 3. gate attach points ride ON the diamond's 45° boundary (y-shift mirrors
+  //    the x-shift) and quest attach points sit exactly on the horizontal
+  //    borders — vertical entry/exit everywhere. Side-vertex tier chains
+  //    anchor exactly at their handle (no spread offsets).
+  for (const e of edges) {
+    const s = pos.get(e.source);
+    const t = pos.get(e.target);
+    if (!s || !t) continue;
+    const sideSource = e.sourceHandle === "s-right" || e.sourceHandle === "s-left";
+    const sideTarget = e.targetHandle === "t-left" || e.targetHandle === "t-right";
+    if (sideSource) {
+      check(
+        e.sourceOffset === undefined && e.sourceOffsetY === undefined,
+        `${label}: side-source anchors at the handle (${e.id})`,
+      );
+    } else if (s.kind === "gate") {
+      const want = e.sourceHandle === "t-up" ? Math.abs(e.sourceOffset ?? 0) : -Math.abs(e.sourceOffset ?? 0);
+      check(
+        e.sourceOffsetY === want,
+        `${label}: gate source on slope (${e.id})`,
+        `offset=${e.sourceOffset} offsetY=${e.sourceOffsetY}`,
+      );
+    } else {
+      check(
+        e.sourceOffsetY === undefined,
+        `${label}: quest source on bottom border (${e.id})`,
+        `offsetY=${e.sourceOffsetY}`,
+      );
+    }
+    if (sideTarget) {
+      check(
+        e.targetOffset === undefined && e.targetOffsetY === undefined,
+        `${label}: side-target anchors at the handle (${e.id})`,
+      );
+    } else if (t.kind === "gate") {
+      check(
+        e.targetOffsetY === Math.abs(e.targetOffset ?? 0),
+        `${label}: gate target on upper slope (${e.id})`,
+        `offset=${e.targetOffset} offsetY=${e.targetOffsetY}`,
+      );
+    } else {
+      check(
+        e.targetOffsetY === undefined,
+        `${label}: quest target on top border (${e.id})`,
+        `offsetY=${e.targetOffsetY}`,
+      );
+    }
+  }
+
+  // 3c. upward edges must leave through a TOP anchor ("q-up" on quests,
+  //     "t-up" on gates) — leaving upward from a bottom anchor draws through
+  //     the source card
+  for (const e of edges) {
+    const s = pos.get(e.source);
+    const t = pos.get(e.target);
+    if (!s || !t || t.y >= s.y) continue;
+    if (s.kind === "gate") {
+      check(e.sourceHandle === "t-up", `${label}: upward gate edge exits the top vertex (${e.id})`, e.sourceHandle);
+    } else {
+      check(e.sourceHandle === "q-up", `${label}: upward quest edge exits the top border (${e.id})`, e.sourceHandle);
+    }
+  }
+
+  // 3d. same-row tier detours swing BELOW the diamond row when set
+  for (const e of edges) {
+    if (e.sourceHandle !== "s-right" && e.sourceHandle !== "s-left") continue;
+    const s = pos.get(e.source);
+    const t = pos.get(e.target);
+    if (!s || !t) continue;
+    if (e.sideDetourY === undefined) continue;
+    check(
+      e.sideDetourY > Math.max(s.y, t.y) + GATE_H,
+      `${label}: side detour clears the diamond row (${e.id})`,
+      String(e.sideDetourY),
+    );
+    check(e.via === undefined, `${label}: side detour is not corridor-routed (${e.id})`);
+  }
+
+  // 3b. gates only ever touch quests they DIRECTLY gate: gate→quest edges must
+  //     match the quest's own requirement at that level, and quest→gate edges
+  //     may only be XP cascades (tier chains are strictly gate→gate)
+  for (const e of edges) {
+    if (e.source.startsWith("gate:") && !e.target.startsWith("gate:")) {
+      const m = e.source.match(/^gate:([^:]+):(\d+)$/);
+      const q = m ? QUEST_BY_KEY[e.target] : undefined;
+      check(
+        e.kind === "gate" && q?.skills[m![1]]?.level === Number(m![2]),
+        `${label}: gate→quest edge is a direct requirement (${e.id})`,
+      );
+    }
+    if (!e.source.startsWith("gate:") && e.target.startsWith("gate:")) {
+      check(e.kind === "cascade", `${label}: quest→gate edge is a cascade (${e.id})`);
+    }
+    if (e.kind === "tier") {
+      check(
+        e.source.startsWith("gate:") && e.target.startsWith("gate:"),
+        `${label}: tier chain is gate→gate (${e.id})`,
+      );
+      check(e.via === undefined || e.sourceHandle !== "s-right", `${label}: side tier not routed (${e.id})`);
+    }
+  }
+
+  // 4. routed corridors sharing a vertical span keep CORRIDOR_SEP apart
+  const routed = edges.filter((e) => e.via !== undefined);
+  const spanOf = (e: LayoutEdge): [number, number] => {
+    const sB = (pos.get(e.source)?.y ?? 0) + (e.source.startsWith("gate:") ? GATE_H : NODE_H);
+    const tT = pos.get(e.target)?.y ?? 0;
+    return [Math.min(sB, tT), Math.max(sB, tT)];
+  };
+  for (let i = 0; i < routed.length; i++) {
+    for (let j = i + 1; j < routed.length; j++) {
+      const [a0, a1] = spanOf(routed[i]);
+      const [b0, b1] = spanOf(routed[j]);
+      if (a0 < b1 - 6 && b0 < a1 - 6) {
+        check(
+          Math.abs((routed[i].via as number) - (routed[j].via as number)) >= CORRIDOR_SEP - 0.01,
+          `${label}: corridors separated (${routed[i].id} vs ${routed[j].id})`,
+          `${(routed[i].via ?? 0).toFixed(1)} vs ${(routed[j].via ?? 0).toFixed(1)}`,
+        );
+      }
+    }
+  }
+  return routed.length;
+}
+
+/* -------- Scenario A: manual adds tier-chain a shared skill requirement --- */
+
+console.log("Scenario A — Lunar Diplomacy + The Hand in the Sand added manually");
+{
+  const player = mkPlayer({ Crafting: 40 }); // everything else 99
+  const { r, nodes, edges } = layoutFor(
+    ["rune mysteries"],
+    ["lunar diplomacy", "hand in sand"],
+    player,
+  );
+
+  const gate49 = nodes.find((n) => n.kind === "gate" && n.id === "gate:Crafting:49");
+  const gate61 = nodes.find((n) => n.kind === "gate" && n.id === "gate:Crafting:61");
+  check(!!gate49, "Crafting 49 diamond exists (Hand in the Sand tier)");
+  check(!!gate61, "Crafting 61 diamond exists (Lunar Diplomacy tier)");
+  check(
+    gate49?.kind === "gate" && gate49.fedCount === 1 && gate49.quest === "The Hand in the Sand",
+    "49 diamond fed by The Hand in the Sand",
+  );
+  check(
+    gate61?.kind === "gate" && gate61.fedCount === 1 && gate61.quest === "Lunar Diplomacy",
+    "61 diamond fed by Lunar Diplomacy",
+  );
+  check(
+    gate49?.kind === "gate" && gate49.xp > 0 && gate49.deficit === 9,
+    "49 tier grind is its own (deficit 9)",
+    gate49?.kind === "gate" ? `deficit=${gate49.deficit} xp=${gate49.xp}` : "",
+  );
+  // the 49→61 rung is NOT drawn as a tier edge here: Hand in the Sand's XP
+  // cascade into the 61 diamond already links the tiers through the quest —
+  // a direct gate-to-gate line would duplicate that story
+  check(
+    !edges.some((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61"),
+    "tier rung 49→61 suppressed when the quest's cascade covers it",
+  );
+  check(
+    edges.some((e) => e.kind === "cascade" && e.source === "hand in sand" && e.target === "gate:Crafting:61"),
+    "the covering cascade exists (Hand in the Sand → Crafting 61 diamond)",
+  );
+  check(
+    edges.some((e) => e.id === "gate:Crafting:49->hand in sand" && e.kind === "gate"),
+    "gate edge Crafting 49 → Hand in the Sand",
+  );
+
+  // training totals: one OVERLAPPING grind per skill — the binding (highest)
+  // tier is the total; summing tiers would double-count the shared training
+  const cr = r.skillTotals.find((g) => g.skill === "Crafting");
+  const t61 = xpForLevel(62) - (xpForLevel(40) + 9000); // lunar tier nets hand's xp
+  check(
+    !!cr && cr.xpNeeded === t61 && cr.deficit === 21,
+    "skill total = binding tier's grind (not the tier sum)",
+    cr ? `xp=${cr.xpNeeded} deficit=${cr.deficit} (want xp=${t61} deficit=21)` : "missing",
+  );
+  check(
+    edges.some((e) => e.id === "gate:Crafting:61->lunar diplomacy" && e.kind === "gate"),
+    "gate edge Crafting 61 → Lunar Diplomacy",
+  );
+  // every cascade edge that exists must resolve to a real node (none expected
+  // here: Hand's 9k Crafting XP doesn't clear its own raw-49 start gate)
+  const cascades = edges.filter((e) => e.kind === "cascade");
+  check(
+    cascades.every((e) => nodes.some((n) => n.id === e.target)),
+    "cascade edges resolve to real nodes",
+    `${cascades.length} cascade edges`,
+  );
+  assertInvariants(nodes, edges, "A");
+}
+
+/* -------- Scenario B: XP cascade lands on the requirement's own diamond --- */
+
+console.log("Scenario B — cascade attaches to the tier diamond it feeds");
+{
+  // Elemental Workshop II grants 7,500 Crafting XP with NO Crafting req —
+  // from base 40 that crosses a boundary (the 40→41 gap is ~5.5k) but is
+  // nowhere near Lunar Diplomacy's 61, so the cascade must land on the 61
+  // diamond rather than the quest
+  const base = 40;
+  check(
+    levelForXp(xpForLevel(base) + 7500) > base,
+    `precondition: 7,500 XP crosses Crafting ${base}→${base + 1}`,
+  );
+  const player = mkPlayer({ Crafting: base });
+  const { nodes, edges } = layoutFor(
+    ["lunar diplomacy"],
+    ["elemental workshop ii"],
+    player,
+  );
+
+  check(
+    !nodes.some((n) => n.id === "gate:Crafting:49"),
+    "no 49 diamond without a 49 requirement",
+  );
+  check(
+    nodes.some((n) => n.id === "gate:Crafting:61"),
+    "Crafting 61 diamond exists",
+  );
+  const cascade = edges.find(
+    (e) => e.kind === "cascade" && e.source === "elemental workshop ii",
+  );
+  check(
+    cascade?.target === "gate:Crafting:61",
+    "Elemental Workshop II XP cascades INTO the Crafting 61 diamond",
+    cascade ? `→ ${cascade.target}` : "no cascade edge found",
+  );
+  assertInvariants(nodes, edges, "B");
+}
+
+/* -------- Scenario D: XP-donor quest cascades out of its own bottom ------- */
+
+console.log("Scenario D — added-for-XP quest cascades into the tier diamond");
+{
+  // low Crafting: FT's and Shilo's XP grants already cascade into the 61
+  // diamond. Hand in the Sand (9k Crafting XP, must TRAIN to raw 49 to start)
+  // must cascade too — its reward stacks on the trained-to-49 xp pool.
+  const { nodes, edges } = layoutFor(
+    ["lunar diplomacy"],
+    ["hand in sand"],
+    mkPlayer({ Crafting: 25 }),
+  );
+
+  const handCascade = edges.find((e) => e.kind === "cascade" && e.source === "hand in sand");
+  check(
+    handCascade?.target === "gate:Crafting:61",
+    "Hand in the Sand XP cascades from its bottom INTO the Crafting 61 diamond",
+    handCascade ? `→ ${handCascade.target} (${handCascade.label})` : "no cascade edge found",
+  );
+  check(
+    handCascade?.label === "Crafting +9,000",
+    "masked grant labelled with raw xp (no fake level jump)",
+    handCascade?.label ?? "",
+  );
+  const ftCascade = edges.find((e) => e.kind === "cascade" && e.source === "fremennik trials");
+  check(
+    ftCascade !== undefined && ftCascade.target.startsWith("gate:"),
+    "Fremennik Trials cascade still present (from its bottom)",
+    ftCascade ? `→ ${ftCascade.target}` : "missing",
+  );
+  assertInvariants(nodes, edges, "D");
+}
+
+/* -------- Scenario E: tier rungs stay when nothing else links them -------- */
+
+console.log("Scenario E — uncovered tier rungs still ladder");
+{
+  // crafting 25: gates at 31 (Lost City), 49 (Hand in the Sand), 61 (Lunar).
+  // Lost City grants no XP, so the 31→49 rung has no covering cascade and
+  // must ladder gate-to-gate; the 49→61 rung stays suppressed (hand covers).
+  const { nodes, edges } = layoutFor(
+    ["rune mysteries"],
+    ["lunar diplomacy", "hand in sand", "lost city"],
+    mkPlayer({ Crafting: 25 }),
+  );
+
+  check(nodes.some((n) => n.id === "gate:Crafting:31"), "Crafting 31 diamond exists (Lost City)");
+  const tierEdge = edges.find((e) => e.id === "tier:gate:Crafting:31->gate:Crafting:49");
+  check(!!tierEdge, "uncovered rung 31→49 still drawn gate-to-gate");
+  if (tierEdge) {
+    const g31 = nodes.find((n) => n.id === "gate:Crafting:31");
+    const g49 = nodes.find((n) => n.id === "gate:Crafting:49");
+    const sameRow = Math.abs((g31?.y ?? 0) - (g49?.y ?? 1)) < 1;
+    const sideHandles =
+      tierEdge.sourceHandle === "s-right" || tierEdge.sourceHandle === "s-left";
+    check(
+      sameRow === sideHandles,
+      "tier edge shape matches geometry (side-to-side on same row, vertical across rows)",
+      `sameRow=${sameRow} handles=${tierEdge.sourceHandle}->${tierEdge.targetHandle}`,
+    );
+    check(
+      !sameRow || (tierEdge.sourceOffset === undefined && tierEdge.targetOffset === undefined),
+      "side-to-side tier anchors at the vertices (no offsets)",
+    );
+  }
+  check(
+    !edges.some((e) => e.id === "tier:gate:Crafting:49->gate:Crafting:61"),
+    "covered rung 49→61 still suppressed",
+  );
+  assertInvariants(nodes, edges, "E");
+}
+
+/* -------- Scenario C: Quest Cape pseudo-target (crash regression) --------- */
+
+console.log("Scenario C — Quest Cape full-board stress");
+{
+  // fresh account: every skill trains, so the whole board lights up
+  const player = mkPlayer(Object.fromEntries([...SKILL_NAMES, "Combat"].map((s) => [s, 1])));
+  player.combatLevel = 3;
+  const { nodes, edges } = layoutFor(["__quest_cape__"], [], player);
+
+  const cape = nodes.find((n) => n.id === "__quest_cape__");
+  check(
+    cape?.kind === "quest" && cape.quest.name === "Quest Cape",
+    "cape node carries the synthetic quest (name readable)",
+  );
+  const routed = assertInvariants(nodes, edges, "C");
+  const gateCount = nodes.filter((n) => n.kind === "gate").length;
+  const tierEdges = edges.filter((e) => e.kind === "tier").length;
+  console.log(
+    `  board: ${nodes.length} nodes (${gateCount} gates), ${edges.length} edges, ${routed} routed, ${tierEdges} tier chains`,
+  );
+  check(gateCount > 50, "full board produces a dense gate set", `${gateCount} gates`);
+  check(tierEdges > 20, "full board chains many skill tiers", `${tierEdges} tier edges`);
+
+  // a known multi-tier skill: Cooking gates at many levels across the cape
+  // plan — every rung must be expressed, either as a tier edge or covered by
+  // a quest cascade into the next diamond
+  const cooking = nodes
+    .filter((n) => n.kind === "gate" && n.skill === "Cooking")
+    .map((n) => (n.kind === "gate" ? n.level : 0))
+    .sort((a, b) => a - b);
+  check(cooking.length >= 2, "Cooking tiers split into separate diamonds", cooking.join(","));
+  for (let i = 0; i + 1 < cooking.length; i++) {
+    const upper = `gate:Cooking:${cooking[i + 1]}`;
+    const laddered = edges.some((e) => e.kind === "tier" && e.source === `gate:Cooking:${cooking[i]}` && e.target === upper);
+    const covered = edges.some((e) => e.kind === "cascade" && e.target === upper);
+    check(
+      laddered || covered,
+      `Cooking ${cooking[i]} → ${cooking[i + 1]} expressed (tier edge or covering cascade)`,
+    );
+  }
+}
+
+/* -------- summary -------------------------------------------------------- */
+
+console.log(`\n${checks - failures}/${checks} checks passed${failures ? ` — ${failures} FAILED` : ""}`);
+if (failures > 0) process.exit(1);
