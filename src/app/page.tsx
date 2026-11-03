@@ -288,6 +288,9 @@ export default function Home() {
     } catch { /* ignore */ }
     return "xp";
   });
+  // "can do now" suggestion filter — default ON (ready quests only); read in
+  // the hydration effect like the onboarding flag (this page prerenders)
+  const [sugReadyOnly, setSugReadyOnly] = useState(true);
   const hydrated = useRef(false);
   const { toast } = useToast();
 
@@ -333,6 +336,7 @@ export default function Home() {
       const aq = localStorage.getItem("osrs-qp-added");
       if (aq) setAddedQuests(new Set(JSON.parse(aq)));
       if (localStorage.getItem("osrs-qp-onboard-hide") === "1") setOnboardHidden(true);
+      if (localStorage.getItem("osrs-qp-sugready") === "0") setSugReadyOnly(false);
       const ch = localStorage.getItem("osrs-qp-chars");
       if (ch) {
         const parsed = JSON.parse(ch);
@@ -383,7 +387,8 @@ export default function Home() {
     localStorage.setItem("osrs-qp-view", viewMode);
     localStorage.setItem("osrs-qp-chars", JSON.stringify(chars));
     localStorage.setItem("osrs-qp-sugsort", sugSort);
-  }, [allowBoosts, includeQuestXp, manualQp, addedQuests, viewMode, chars, sugSort]);
+    localStorage.setItem("osrs-qp-sugready", sugReadyOnly ? "1" : "0");
+  }, [allowBoosts, includeQuestXp, manualQp, addedQuests, viewMode, chars, sugSort, sugReadyOnly]);
 
   // ---- auto-sync quest progress into the active character slot, so Load /
   // Export always see live completions without a manual "Save current" first
@@ -521,7 +526,11 @@ export default function Home() {
   // per-skill quest suggestions targeting the real training gaps, sorted by the
   // user's choice — all sort modes account for each candidate's OPEN prereqs
   // (count + estimated playtime of the whole unmet closure); every candidate
-  // also carries its own skill reqs vs the player so unmet ones render red
+  // also carries its own skill reqs vs the player so unmet ones render red.
+  // Candidates partition into "ready" (no train-status reqs — current levels,
+  // boosts or planned quest XP cover everything) and "gated"; the default view
+  // shows only ready quests so a 50k-XP suggestion gated behind a HIGHER skill
+  // req than the gate you're solving can't crowd out quests you can actually do.
   const suggestionGroups = useMemo<SuggestionGroup[]>(() => {
     if (!result || result.skillTotals.length === 0) return [];
     const pool = QUESTS.filter((q) => !inPlan.has(q.key) && !completed.has(q.key));
@@ -539,52 +548,61 @@ export default function Home() {
             (a, k) => a + (questMinutes(QUEST_BY_KEY[k]) ?? 0),
             0,
           );
+          const reqs = questSkillGaps(q, gapPlayer, gapOpts);
           return {
             quest: q,
             xp: q.xp[g.skill] ?? 0,
             openPrereqs: closure.length,
             minutes: questMinutes(q),
             prereqMinutes,
-            reqs: questSkillGaps(q, gapPlayer, gapOpts),
+            reqs,
+            ready: reqs.every((r) => r.status !== "train"),
           };
         });
       const unmetTrain = (s: { reqs: SkillGap[] }) =>
         s.reqs.filter((r) => r.status === "train").length;
-      switch (sugSort) {
-        case "eff":
-          cands.sort(
-            (a, b) =>
+      const byMode = (a: (typeof cands)[number], b: (typeof cands)[number]) => {
+        switch (sugSort) {
+          case "eff":
+            return (
               b.xp / Math.max(1, totalMinutes(b)) - a.xp / Math.max(1, totalMinutes(a)) ||
-              a.quest.name.localeCompare(b.quest.name),
-          );
-          break;
-        case "time":
-          cands.sort(
-            (a, b) => totalMinutes(a) - totalMinutes(b) || b.xp - a.xp,
-          );
-          break;
-        case "reqs":
-          cands.sort(
-            (a, b) =>
+              a.quest.name.localeCompare(b.quest.name)
+            );
+          case "time":
+            return totalMinutes(a) - totalMinutes(b) || b.xp - a.xp;
+          case "reqs":
+            return (
               a.openPrereqs + unmetTrain(a) - (b.openPrereqs + unmetTrain(b)) ||
               totalMinutes(a) - totalMinutes(b) ||
-              b.xp - a.xp,
-          );
-          break;
-        default:
-          cands.sort(
-            (a, b) => b.xp - a.xp || a.quest.name.localeCompare(b.quest.name),
-          );
-      }
+              b.xp - a.xp
+            );
+          default:
+            return b.xp - a.xp || a.quest.name.localeCompare(b.quest.name);
+        }
+      };
+      const ready = cands.filter((c) => c.ready).sort(byMode);
+      // circular suggestions — training req in the gate's own skill at/above the
+      // gate level (solve Crafting 61 via a quest needing Crafting 65) — sort to
+      // the very back of the gated partition
+      const circular = (c: (typeof cands)[number]) =>
+        c.reqs.some(
+          (r) => r.status === "train" && r.skill === g.skill && r.required >= g.required,
+        );
+      const gated = cands
+        .filter((c) => !c.ready)
+        .sort((a, b) => Number(circular(a)) - Number(circular(b)) || byMode(a, b));
       return {
         skill: g.skill,
         required: g.required,
         deficit: g.deficit,
         xpNeeded: g.xpNeeded,
-        suggestions: cands.slice(0, 4),
+        suggestions: sugReadyOnly
+          ? ready.slice(0, 4)
+          : [...ready, ...gated].slice(0, 4),
+        hiddenGated: sugReadyOnly ? gated.length : 0,
       };
     });
-  }, [result, inPlan, completed, sugSort, player, allowBoosts, includeQuestXp]);
+  }, [result, inPlan, completed, sugSort, sugReadyOnly, player, allowBoosts, includeQuestXp]);
 
   const toggleCompleted = useCallback((key: string) => {
     setCompleted((prev) => {
@@ -1898,6 +1916,8 @@ export default function Home() {
                   onClearAdded={clearAdded}
                   sortBy={sugSort}
                   onSortChange={setSugSort}
+                  readyOnly={sugReadyOnly}
+                  onReadyOnlyChange={setSugReadyOnly}
                 />
                 </motion.div>
               )}

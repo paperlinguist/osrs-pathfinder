@@ -261,6 +261,7 @@ export interface QuestSuggestion {
   minutes: number | null; // estimated playtime of the quest itself
   prereqMinutes: number; // est. playtime of the open prereq closure (0 if none)
   reqs: SkillGap[]; // the quest's own skill reqs vs the player (unmet = red chips)
+  ready: boolean; // no train-status reqs — doable with current skill levels
 }
 
 export interface SuggestionGroup {
@@ -269,6 +270,8 @@ export interface SuggestionGroup {
   deficit: number;
   xpNeeded: number;
   suggestions: QuestSuggestion[];
+  /** gated suggestions hidden by the "can do now" filter (0 when showing all) */
+  hiddenGated: number;
 }
 
 export type SugSort = "xp" | "eff" | "time" | "reqs";
@@ -287,6 +290,8 @@ export function SkillSuggestionsPanel({
   onClearAdded,
   sortBy,
   onSortChange,
+  readyOnly,
+  onReadyOnlyChange,
 }: {
   groups: SuggestionGroup[];
   addedKeys: Set<string>;
@@ -294,6 +299,8 @@ export function SkillSuggestionsPanel({
   onClearAdded: () => void;
   sortBy: SugSort;
   onSortChange: (s: SugSort) => void;
+  readyOnly: boolean;
+  onReadyOnlyChange: (v: boolean) => void;
 }) {
   if (groups.length === 0) return null;
   return (
@@ -345,6 +352,19 @@ export function SkillSuggestionsPanel({
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            onClick={() => onReadyOnlyChange(!readyOnly)}
+            aria-pressed={readyOnly}
+            title="Quests whose skill requirements you already meet (boosts and planned quest XP count). Turn off to also see quests that need training first."
+            className={`rounded-md border px-2 py-1 text-[10px] font-medium transition-colors ${
+              readyOnly
+                ? "border-emerald-800 bg-emerald-950/70 text-emerald-300"
+                : "border-stone-700 text-stone-400 hover:bg-stone-800 hover:text-stone-200"
+            }`}
+          >
+            ✓ can do now
+          </button>
           <span className="text-[10px] text-stone-600">
             times include the quest&apos;s unmet prerequisites
           </span>
@@ -361,9 +381,21 @@ export function SkillSuggestionsPanel({
                 need {gr.required} · train {gr.deficit} lv (~{formatXp(gr.xpNeeded)} XP)
               </span>
             </div>
-            {gr.suggestions.length === 0 ? (
+            {gr.suggestions.length === 0 && gr.hiddenGated === 0 ? (
               <p className="text-[11px] text-stone-500">
                 Every quest granting {gr.skill} XP is already completed or in your plan.
+              </p>
+            ) : gr.suggestions.length === 0 && gr.hiddenGated > 0 ? (
+              <p className="text-[11px] text-stone-500">
+                No {gr.skill} XP quests you can do at your current levels — {gr.hiddenGated}{" "}
+                {gr.hiddenGated === 1 ? "needs" : "need"} training first.{" "}
+                <button
+                  type="button"
+                  onClick={() => onReadyOnlyChange(false)}
+                  className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
+                >
+                  Show {gr.hiddenGated === 1 ? "it" : "them"}
+                </button>
               </p>
             ) : (
               <div className="grid sm:grid-cols-2 gap-1.5">
@@ -386,11 +418,11 @@ export function SkillSuggestionsPanel({
                           delay: Math.min(idx * 0.05, 0.25),
                           layout: { duration: 0.25, ease: "easeInOut" },
                         }}
-                        className={`flex items-center gap-2 rounded-md border px-2.5 py-1.5 transition-colors ${
+                        className={`flex items-center gap-2 rounded-md border border-l-2 px-2.5 py-1.5 transition-colors ${
                           isAdded
                             ? "border-sky-800/60 bg-sky-950/20"
                             : "border-stone-800 bg-stone-950/40 hover:border-stone-700 hover:bg-stone-900/70"
-                        }`}
+                        } ${s.ready ? "border-l-emerald-700/70" : "border-l-red-900/60"}`}
                       >
                       <div className="flex-1 min-w-0">
                         <a
@@ -456,6 +488,19 @@ export function SkillSuggestionsPanel({
                   })}
                 </AnimatePresence>
               </div>
+            )}
+            {gr.hiddenGated > 0 && (
+              <p className="mt-1 text-[10px] text-stone-500">
+                {gr.hiddenGated} quest{gr.hiddenGated === 1 ? "" : "s"} hidden — skill reqs above
+                your current levels.{" "}
+                <button
+                  type="button"
+                  onClick={() => onReadyOnlyChange(false)}
+                  className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
+                >
+                  Show all
+                </button>
+              </p>
             )}
           </div>
         ))}
