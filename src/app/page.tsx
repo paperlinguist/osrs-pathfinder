@@ -596,10 +596,10 @@ export default function Home() {
         required: g.required,
         deficit: g.deficit,
         xpNeeded: g.xpNeeded,
-        suggestions: sugReadyOnly
-          ? ready.slice(0, 4)
-          : [...ready, ...gated].slice(0, 4),
-        hiddenGated: sugReadyOnly ? gated.length : 0,
+        // full ordered list, never pre-capped — the panel collapses it to 4
+        // in the ready-only view and reveals everything when "Show all"
+        suggestions: sugReadyOnly ? ready : [...ready, ...gated],
+        gatedCount: gated.length,
       };
     });
   }, [result, inPlan, completed, sugSort, sugReadyOnly, player, allowBoosts, includeQuestXp]);

@@ -269,9 +269,11 @@ export interface SuggestionGroup {
   required: number;
   deficit: number;
   xpNeeded: number;
+  /** ordered suggestions — ready-only while the "can do now" filter is on,
+   *  ready-then-gated (circular last) when off; never pre-capped */
   suggestions: QuestSuggestion[];
-  /** gated suggestions hidden by the "can do now" filter (0 when showing all) */
-  hiddenGated: number;
+  /** gated candidates (train reqs unmet), regardless of the current filter */
+  gatedCount: number;
 }
 
 export type SugSort = "xp" | "eff" | "time" | "reqs";
@@ -369,7 +371,14 @@ export function SkillSuggestionsPanel({
             times include the quest&apos;s unmet prerequisites
           </span>
         </div>
-        {groups.map((gr) => (
+        {groups.map((gr) => {
+          // collapsed view caps the list at 4; "Show all" turns the filter off
+          // and reveals EVERY candidate, so the control never does nothing —
+          // it only renders when something is genuinely hidden
+          const visible = readyOnly ? gr.suggestions.slice(0, 4) : gr.suggestions;
+          const total = gr.suggestions.length + gr.gatedCount;
+          const hidden = total - visible.length;
+          return (
           <div
             key={gr.skill}
             id={skillSuggestAnchorId(gr.skill)}
@@ -381,26 +390,32 @@ export function SkillSuggestionsPanel({
                 need {gr.required} · train {gr.deficit} lv (~{formatXp(gr.xpNeeded)} XP)
               </span>
             </div>
-            {gr.suggestions.length === 0 && gr.hiddenGated === 0 ? (
+            {gr.suggestions.length === 0 && gr.gatedCount === 0 ? (
               <p className="text-[11px] text-stone-500">
                 Every quest granting {gr.skill} XP is already completed or in your plan.
               </p>
-            ) : gr.suggestions.length === 0 && gr.hiddenGated > 0 ? (
+            ) : gr.suggestions.length === 0 && gr.gatedCount > 0 ? (
               <p className="text-[11px] text-stone-500">
-                No {gr.skill} XP quests you can do at your current levels — {gr.hiddenGated}{" "}
-                {gr.hiddenGated === 1 ? "needs" : "need"} training first.{" "}
+                No {gr.skill} XP quests you can do at your current levels — {gr.gatedCount}{" "}
+                {gr.gatedCount === 1 ? "needs" : "need"} training first.{" "}
                 <button
                   type="button"
                   onClick={() => onReadyOnlyChange(false)}
                   className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
                 >
-                  Show {gr.hiddenGated === 1 ? "it" : "them"}
+                  Show {gr.gatedCount === 1 ? "it" : "them"}
                 </button>
               </p>
             ) : (
-              <div className="grid sm:grid-cols-2 gap-1.5">
+              <div
+                className={`grid sm:grid-cols-2 gap-1.5 ${
+                  !readyOnly && gr.suggestions.length > 8
+                    ? "max-h-[420px] overflow-y-auto pr-1"
+                    : ""
+                }`}
+              >
                 <AnimatePresence initial={false}>
-                  {gr.suggestions.map((s, idx) => {
+                  {visible.map((s, idx) => {
                     const isAdded = addedKeys.has(s.quest.key);
                     const otherXp = Object.entries(s.quest.xp)
                       .filter(([sk]) => sk !== gr.skill)
@@ -489,21 +504,26 @@ export function SkillSuggestionsPanel({
                 </AnimatePresence>
               </div>
             )}
-            {gr.hiddenGated > 0 && (
+            {readyOnly && hidden > 0 && (
               <p className="mt-1 text-[10px] text-stone-500">
-                {gr.hiddenGated} quest{gr.hiddenGated === 1 ? "" : "s"} hidden — skill reqs above
-                your current levels.{" "}
                 <button
                   type="button"
                   onClick={() => onReadyOnlyChange(false)}
                   className="text-sky-400 underline underline-offset-2 hover:text-sky-300"
                 >
-                  Show all
+                  Show all {total}
                 </button>
+                {gr.gatedCount > 0 ? (
+                  <span>
+                    {" "}
+                    — {gr.gatedCount} quest{gr.gatedCount === 1 ? "" : "s"} need training first
+                  </span>
+                ) : null}
               </p>
             )}
           </div>
-        ))}
+          );
+        })}
       </CardContent>
     </Card>
   );
