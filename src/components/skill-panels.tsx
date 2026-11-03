@@ -16,7 +16,7 @@ import {
 import { Quest, formatHours, formatMinutes, formatXp, trainHours } from "@/lib/quest-data";
 import { SkillGap } from "@/lib/resolver";
 import { AnimatePresence, motion } from "framer-motion";
-import { Clock } from "lucide-react";
+import { Clock, Loader2, Zap } from "lucide-react";
 
 function wikiUrl(name: string) {
   return `https://oldschool.runescape.wiki/w/${encodeURIComponent(name).replace(/%2F/g, "/").replace(/%20/g, "_")}`;
@@ -294,6 +294,8 @@ export function SkillSuggestionsPanel({
   onSortChange,
   readyOnly,
   onReadyOnlyChange,
+  onAutoRoute,
+  solving,
 }: {
   groups: SuggestionGroup[];
   addedKeys: Set<string>;
@@ -303,6 +305,9 @@ export function SkillSuggestionsPanel({
   onSortChange: (s: SugSort) => void;
   readyOnly: boolean;
   onReadyOnlyChange: (v: boolean) => void;
+  /** run the greedy XP-route solver over the whole plan */
+  onAutoRoute: () => void;
+  solving: boolean;
 }) {
   if (groups.length === 0) return null;
   return (
@@ -317,16 +322,33 @@ export function SkillSuggestionsPanel({
             optimal order (high XP first) and its reward counts toward later requirements.
           </CardDescription>
         </div>
-        {addedKeys.size > 0 && (
+        <div className="flex items-center gap-1.5 shrink-0">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            onClick={onClearAdded}
-            className="text-stone-500 hover:text-red-300 hover:bg-stone-900 shrink-0"
+            onClick={onAutoRoute}
+            disabled={solving}
+            title="Simulate quest additions and propose the set that most reduces your remaining training"
+            className="h-7 border-amber-800/60 bg-amber-950/30 px-2.5 text-[11px] font-medium text-amber-300 hover:bg-amber-950/60 hover:text-amber-200 disabled:opacity-50"
           >
-            Remove added ({addedKeys.size})
+            {solving ? (
+              <Loader2 className="h-3 w-3 animate-spin" aria-hidden />
+            ) : (
+              <Zap className="h-3 w-3" aria-hidden />
+            )}
+            Auto-route
           </Button>
-        )}
+          {addedKeys.size > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClearAdded}
+              className="text-stone-500 hover:text-red-300 hover:bg-stone-900 shrink-0"
+            >
+              Remove added ({addedKeys.size})
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-wrap items-center gap-2">

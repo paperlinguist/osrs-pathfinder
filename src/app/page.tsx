@@ -40,6 +40,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { QuestGraph } from "@/components/quest-graph";
 import { ReqChip, SkillSuggestionsPanel, SuggestionGroup, SugSort, TOOLTIP_ARROW, TOOLTIP_BOX, UnmetEntry, UnmetRequirementsPanel } from "@/components/skill-panels";
+import { solveXpRoute, type RouteProposal } from "@/lib/route-solver";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import {
   Check,
@@ -55,6 +56,7 @@ import {
   Network,
   RefreshCw,
   Sparkles,
+  Zap,
   Upload,
   UserPlus,
   X,
@@ -954,6 +956,51 @@ export default function Home() {
     setAddedQuests((prev) => new Set([...prev, pendingAdd.questKey, ...pendingAdd.missing]));
     setPendingAdd(null);
   }, [pendingAdd]);
+
+  // ---- auto-route: greedy simulation over the plan — for each round every
+  // candidate quest is spliced in via resolveChain and the total remaining
+  // training XP compared (a candidate's own unmet reqs are priced in, so
+  // quests that cost more than they save can never be proposed)
+  const [solving, setSolving] = useState(false);
+  const [routeProposal, setRouteProposal] = useState<RouteProposal | null>(null);
+  const runAutoRoute = useCallback(() => {
+    if (solving || targetKeys.length === 0) return;
+    setSolving(true);
+    // let the spinner paint before the synchronous search runs
+    window.setTimeout(() => {
+      try {
+        const p = solveXpRoute(
+          targetKeys,
+          player ?? DEFAULT_PLAYER,
+          completed,
+          { allowBoosts, includeQuestXp },
+          [...addedQuests],
+        );
+        if (!p || p.steps.length === 0) {
+          toast({
+            title: "No route beats training right now",
+            description:
+              "No addable quest cuts your remaining training XP efficiently — everything either costs more than it saves or is already planned.",
+          });
+        } else {
+          setRouteProposal(p);
+        }
+      } finally {
+        setSolving(false);
+      }
+    }, 30);
+  }, [solving, targetKeys, player, completed, allowBoosts, includeQuestXp, addedQuests, toast]);
+
+  const applyRoute = useCallback(() => {
+    if (!routeProposal) return;
+    const count = routeProposal.addKeys.length;
+    setAddedQuests((prev) => new Set([...prev, ...routeProposal.addKeys]));
+    toast({
+      title: `Route added — ${count} quest${count === 1 ? "" : "s"}`,
+      description: `Plan re-ordered; training drops by ≈${formatXp(routeProposal.savedXp)} XP.`,
+    });
+    setRouteProposal(null);
+  }, [routeProposal, toast]);
 
   // ---- backup / restore
   const buildBackupJson = useCallback(
@@ -1918,6 +1965,8 @@ export default function Home() {
                   onSortChange={setSugSort}
                   readyOnly={sugReadyOnly}
                   onReadyOnlyChange={setSugReadyOnly}
+                  onAutoRoute={runAutoRoute}
+                  solving={solving}
                 />
                 </motion.div>
               )}
@@ -2137,6 +2186,65 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* auto-route proposal — greedy simulation result, add-all-or-nothing */}
+      <Dialog open={!!routeProposal} onOpenChange={(o) => { if (!o) setRouteProposal(null); }}>
+        <DialogContent className="bg-stone-900 border-stone-700 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-stone-100">
+              Quest XP route — saves ≈{routeProposal ? formatXp(routeProposal.savedXp) : ""} XP of training
+            </DialogTitle>
+            <DialogDescription className="text-stone-400">
+              Each step was simulated against your whole plan; a quest whose own requirements
+              cost more than its reward can never appear here.
+            </DialogDescription>
+          </DialogHeader>
+          {routeProposal && (
+            <>
+              <div className="max-h-56 overflow-y-auto rounded-md border border-stone-800 bg-stone-950/70 p-2 space-y-1">
+                {routeProposal.steps.map((s, i) => (
+                  <div key={s.key} className="flex items-center gap-2 text-xs">
+                    <span className="w-4 shrink-0 text-right text-[10px] text-stone-600">{i + 1}</span>
+                    <a
+                      href={wikiUrl(s.name)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 truncate font-medium text-stone-100 hover:text-amber-300 hover:underline"
+                    >
+                      {s.name}
+                    </a>
+                    <span className="shrink-0 text-emerald-300/90 text-[10px] tabular-nums">
+                      −{formatXp(s.savedXp)} XP
+                    </span>
+                    <span className="shrink-0 text-stone-500 text-[10px] tabular-nums">
+                      {s.minutes !== null ? `≈${formatMinutes(s.minutes)}` : "—"}
+                      {s.prereqCount > 0 && ` · +${s.prereqCount} pre`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-stone-400">
+                Adds <b className="text-stone-200">{routeProposal.addKeys.length}</b> quest
+                {routeProposal.addKeys.length === 1 ? "" : "s"} (incl. prerequisites),{" "}
+                {routeProposal.estMinutes > 0 && (
+                  <>≈{formatMinutes(routeProposal.estMinutes)} of questing — </>
+                )}
+                training drops from ≈{formatXp(routeProposal.baselineXp)} to{" "}
+                <b className="text-emerald-300">≈{formatXp(routeProposal.finalXp)} XP</b>.
+              </p>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={() => setRouteProposal(null)} className="border-stone-700 text-stone-300 hover:bg-stone-800">
+                  Not now
+                </Button>
+                <Button size="sm" onClick={applyRoute} className="bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold">
+                  <Zap className="h-3.5 w-3.5" aria-hidden />
+                  Add route
+                </Button>
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </TooltipProvider>
