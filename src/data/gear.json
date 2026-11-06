@@ -6,8 +6,8 @@
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-06T23:06:00.618Z",
-  "items": 78
+  "priceSnapshot": "2026-11-06T23:11:21.980Z",
+  "items": 81
  },
  "items": [
   {
@@ -2283,6 +2283,100 @@
    "reqQuests": [],
    "override": null,
    "price": 675700
+  },
+  {
+   "id": 12821,
+   "name": "Spectral spirit shield",
+   "rawName": "Spectral spirit shield",
+   "slot": "Shield",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 53,
+    "slashDefence": 55,
+    "crushDefence": 73,
+    "magicDefence": 30,
+    "rangedDefence": 52,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 3
+   },
+   "reqLevels": {
+    "Defence": 75,
+    "Prayer": 70,
+    "Magic": 65
+   },
+   "reqQuests": [],
+   "override": "wiki: 75 Defence + 70 Prayer + 65 Magic (cache has none)",
+   "price": 17600000
+  },
+  {
+   "id": 22978,
+   "name": "Dragon hunter lance",
+   "rawName": "Dragon hunter lance",
+   "slot": "Weapon",
+   "members": true,
+   "stats": {
+    "stabAttack": 85,
+    "slashAttack": 65,
+    "crushAttack": 65,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 70,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 4,
+   "reqLevels": {
+    "Attack": 78
+   },
+   "reqQuests": [
+    "barbarian training"
+   ],
+   "override": "wiki: 78 Attack + Barbarian Training (cache has none)",
+   "price": 38300000
+  },
+  {
+   "id": 13263,
+   "name": "Abyssal bludgeon",
+   "rawName": "Abyssal bludgeon",
+   "slot": "Two-handed",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 102,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 85,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 4,
+   "reqLevels": {
+    "Attack": 70,
+    "Strength": 70
+   },
+   "reqQuests": [],
+   "override": "wiki: 70 Attack + 70 Strength (cache has none)",
+   "price": 11000000
   }
  ]
 }

@@ -149,6 +149,8 @@ export default function BossesPage() {
   const [query, setQuery] = useState("");
   const [readyFilter, setReadyFilter] = useState<"all" | "ready" | "gated">("all");
   const [tierFilter, setTierFilter] = useState<string>("all");
+  /** set when a card click should scroll to the just-selected boss detail */
+  const pendingDetailScroll = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* ------------------------------------------------- localStorage hydration */
@@ -320,6 +322,20 @@ export default function BossesPage() {
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, []);
+
+  /** select a boss card and scroll its detail into view once it's mounted */
+  const selectBoss = useCallback((key: string) => {
+    pendingDetailScroll.current = true;
+    setSelectedKey(key);
+  }, []);
+
+  useEffect(() => {
+    if (!pendingDetailScroll.current) return;
+    pendingDetailScroll.current = false;
+    document
+      .getElementById("boss-detail")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedKey]);
 
   /** every quest already on the resolved plan (tracked target OR prereq step) —
    *  same resolver the planner runs, over the same saved targets/extras */
@@ -588,7 +604,7 @@ export default function BossesPage() {
               return (
               <button
                 key={b.key}
-                onClick={() => setSelectedKey(b.key)}
+                onClick={() => selectBoss(b.key)}
                 className={`text-left rounded-lg border p-3 space-y-2 transition-colors ${
                   active
                     ? "border-amber-700/70 bg-stone-900"
@@ -619,13 +635,15 @@ export default function BossesPage() {
 
         {/* selected boss detail */}
         {selected && selectedVerdict && (
-          <BossDetail
-            key={selected.key}
-            boss={selected}
-            verdict={selectedVerdict}
-            coins={owned.coins}
-            planned={plannedKeys}
-          />
+          <div id="boss-detail" className="scroll-mt-24">
+            <BossDetail
+              key={selected.key}
+              boss={selected}
+              verdict={selectedVerdict}
+              coins={owned.coins}
+              planned={plannedKeys}
+            />
+          </div>
         )}
 
         {/* upgrade advisor — end-of-page summary: what to buy next across all bosses */}

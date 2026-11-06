@@ -13,6 +13,25 @@ env:
   IMAGE_NAME: ${{ github.repository }}   # owner/repo — metadata-action lowercases it
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # no package-lock.json (bun is the package manager; it's gitignored),
+      # so install resolves from package.json — the same npm path dev uses
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run regression tests
+        run: npm run test
+
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
