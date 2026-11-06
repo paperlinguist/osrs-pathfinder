@@ -149,6 +149,7 @@ export default function BossesPage() {
   const [query, setQuery] = useState("");
   const [readyFilter, setReadyFilter] = useState<"all" | "ready" | "gated">("all");
   const [tierFilter, setTierFilter] = useState<string>("all");
+  const [page, setPage] = useState(1);
   /** set when a card click should scroll to the just-selected boss detail */
   const pendingDetailScroll = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -312,6 +313,16 @@ export default function BossesPage() {
       return true;
     });
   }, [query, readyFilter, tierFilter, verdicts]);
+
+  // reset to the first page whenever the filters change
+  useEffect(() => {
+    setPage(1);
+  }, [query, readyFilter, tierFilter]);
+
+  const PAGE_SIZE = 12;
+  const totalPages = Math.max(1, Math.ceil(filteredBosses.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageBosses = filteredBosses.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   /** header shortcut: expand the advisor and bring it into view */
   const jumpToAdvisor = useCallback(() => {
@@ -533,7 +544,7 @@ export default function BossesPage() {
             the boss flow comes first; the summary line keeps it discoverable */}
 
         {/* boss cards */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div id="boss-list" className="scroll-mt-24 flex flex-wrap items-center gap-2">
           <div className="relative min-w-[12rem] flex-1">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-500" aria-hidden />
             <Input
@@ -598,7 +609,7 @@ export default function BossesPage() {
           </p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredBosses.map((b) => {
+            {pageBosses.map((b) => {
               const v = verdicts.get(b.key)!;
               const active = b.key === selectedKey;
               return (
@@ -630,6 +641,45 @@ export default function BossesPage() {
               </button>
             );
           })}
+          </div>
+        )}
+
+        {/* pagination — only when the filtered list overflows a page */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={safePage <= 1}
+              onClick={() => {
+                setPage(safePage - 1);
+                pendingDetailScroll.current = false;
+                document
+                  .getElementById("boss-list")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="border-stone-700 text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] disabled:opacity-40"
+            >
+              ← Prev
+            </Button>
+            <span className="text-xs text-stone-400 tabular-nums">
+              page {safePage} / {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={safePage >= totalPages}
+              onClick={() => {
+                setPage(safePage + 1);
+                pendingDetailScroll.current = false;
+                document
+                  .getElementById("boss-list")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="border-stone-700 text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] disabled:opacity-40"
+            >
+              Next →
+            </Button>
           </div>
         )}
 
@@ -1097,8 +1147,8 @@ function PresetCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        {/* rollup */}
-        {knownOwned && (
+        {/* rollup — skipped for note-only presets (e.g. Gauntlet, gear crafted in-raid) */}
+        {knownOwned && totalSlots > 0 && (
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
             <span className="text-stone-400">
               <b className={ownedCount === totalSlots ? "text-emerald-300" : "text-stone-200"}>
@@ -1160,7 +1210,8 @@ function PresetCard({
           </details>
         )}
 
-        {/* slot rows */}
+        {/* slot rows — skipped for note-only presets (empty slots) */}
+        {totalSlots > 0 && (
         <div className="divide-y divide-stone-800/70 rounded-md border border-stone-800 bg-stone-950/40">
           {SLOT_KEYS.filter((k) => preset.slots[k]).map((k) => {
             const check = bySlot.get(k);
@@ -1176,6 +1227,7 @@ function PresetCard({
             );
           })}
         </div>
+        )}
 
         {/* inventory */}
         {preset.inventory.length > 0 && (
