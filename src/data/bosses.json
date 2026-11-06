@@ -1801,6 +1801,300 @@
         }
       ],
       "notes": "Drops the Zaryte crossbow, Torva armour and the Nexling pet. The 70s-in-four-skills gate is the entry ticket."
+    },
+    {
+      "key": "chaos-elemental",
+      "name": "Chaos Elemental",
+      "tier": "Easy",
+      "tagline": "The Wildy's oldest boss — d2h nostalgia.",
+      "members": true,
+      "wiki": "Chaos Elemental",
+      "location": "West of the Rogue's Castle, level 50 Wilderness",
+      "duration": "1–2 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 60, "note": "Or 60 Ranged — he's squishy" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Whip or obby melee. His teleport attack is the only mechanic.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Obsidian cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Obsidian platebody",
+            "hands": "Combat bracelet",
+            "legs": "Obsidian platelegs",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Level 50 Wilderness — one-click teleport ready. He teleports you around the area and unequips your items occasionally."
+        }
+      ],
+      "notes": "Drops the dragon 2h sword and the Chaos Elemental pet. PKers are the real fight."
+    },
+    {
+      "key": "skotizo",
+      "name": "Skotizo",
+      "tier": "Medium",
+      "tagline": "The dark demon of the Catacombs — one dark totem per fight.",
+      "members": true,
+      "wiki": "Skotizo",
+      "location": "Catacombs of Kourend (dark totem to enter)",
+      "duration": "2–4 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 80, "note": "Arclight is BiS against demons" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Arclight (ancient shards) shreds him — the whip works while you build it.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Dark totem", "qty": "1", "note": "One attempt — assembled from Catacombs slayer drops" },
+            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+          ],
+          "notes": "Hit the four glowing dark altars to stop him healing — Arclight's demon bonus makes this quick. Sporadic: you fight him when you have a totem."
+        }
+      ],
+      "notes": "Drops the Skotizo pet and guaranteed elite clue scrolls. Ancient shards (for Arclight) are his real value."
+    },
+    {
+      "key": "inferno",
+      "name": "Inferno",
+      "tier": "Hard",
+      "tagline": "TzKal-Zuk and 68 waves — the hardest solo PvM in the game.",
+      "members": true,
+      "wiki": "Inferno",
+      "location": "TzHaar city, Karamja (the Inferno)",
+      "duration": "1.5–3h per attempt",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Ranged", "level": 90, "note": "Crossbow or Twisted bow" },
+        { "skill": "Defence", "level": 90, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Higher prayer + Rigour makes the triple-Jad waves far kinder" }
+      ],
+      "styles": ["Ranged"],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "The Twisted bow is the meta — an Armadyl crossbow with dragon bolts is the entry setup. This is a marathon, not a boss.",
+          "slots": {
+            "head": "Armadyl helmet",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Armadyl crossbow",
+            "body": "Armadyl chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Armadyl chainskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Saradomin brew(4)", "qty": "8–12", "note": "A wave-fight, not a kill" },
+            { "name": "Super restore(4)", "qty": "4–6", "note": "Restores the brews' drain" },
+            { "name": "Ranging potion(4)", "qty": "2", "note": "" },
+            { "name": "Emergency teleport", "qty": "1", "note": "Death is a safe-reward wipe — be ready to bail" }
+          ],
+          "notes": "68 waves, then triple Jads, then Zuk. The shield is the point — this is a 1.5–3h execution test, not a gear check."
+        }
+      ],
+      "notes": "The Infernal cape is the BiS melee cape. Learning wave safespots matters more than any single item."
+    },
+    {
+      "key": "chambers-of-xeric",
+      "name": "Chambers of Xeric",
+      "tier": "Hard",
+      "tagline": "Raids 1 — team up for Olm in Mount Quidamortem.",
+      "members": true,
+      "wiki": "Chambers of Xeric",
+      "location": "Mount Quidamortem, Kourend (team raid)",
+      "duration": "20–40 min per raid",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Ranged", "level": 85, "note": "Or 85 melee — CoX wants both" },
+        { "skill": "Defence", "level": 85, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Overheads through the rooms" }
+      ],
+      "styles": ["Ranged", "Melee"],
+      "presets": [
+        {
+          "name": "Ranged entry",
+          "description": "An entry ranged setup — CoX swaps styles per room, so treat this as the ranged half of a switch.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "weapon": "Toxic blowpipe",
+            "ammo": "Amethyst dart",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Melee switch", "qty": "—", "note": "Whip + defender for Tekton and melee hand" },
+            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
+            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
+            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+          ],
+          "notes": "Team raid — learn the rooms in a learner clan. Olm's head phase is the mechanic wall."
+        }
+      ],
+      "notes": "Drops the Twisted bow, ancestral robes and the Olmlet pet. Team content — a learner-friendly raid."
+    },
+    {
+      "key": "theatre-of-blood",
+      "name": "Theatre of Blood",
+      "tier": "Hard",
+      "tagline": "Raids 2 — the vampyric blood sport of Ver Sinhaza.",
+      "members": true,
+      "wiki": "Theatre of Blood",
+      "location": "Ver Sinhaza, Morytania (team raid)",
+      "duration": "25–45 min per raid",
+      "requirements": {
+        "quests": ["priest in peril"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 90, "note": "Melee is the spine of ToB" },
+        { "skill": "Defence", "level": 90, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Tight prayer switching" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee entry",
+          "description": "Entry melee — the Scythe of Vitur is the endgame pick, but teams take whip/fang learners all day.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
+            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+          ],
+          "notes": "ToB is the hardest raid to learn — Verzik's phases punish mistakes. A Night at the Theatre quest is the solo easy-mode on-ramp."
+        }
+      ],
+      "notes": "Drops the Scythe of Vitur, Avernic defender and Justiciar armour."
+    },
+    {
+      "key": "tombs-of-amascut",
+      "name": "Tombs of Amascut",
+      "tier": "Hard",
+      "tagline": "Raids 3 — solo-friendly with scaling invocations.",
+      "members": true,
+      "wiki": "Tombs of Amascut",
+      "location": "The Necropolis, Kharidian Desert",
+      "duration": "20–40 min per raid",
+      "requirements": {
+        "quests": ["beneath cursed sands"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 85, "note": "Fang territory — melee carries" },
+        { "skill": "Ranged", "level": 85, "note": "Zebak and the ranged sections" },
+        { "skill": "Prayer", "level": 43, "note": "" }
+      ],
+      "styles": ["Melee", "Ranged"],
+      "presets": [
+        {
+          "name": "Melee entry",
+          "description": "Entry (150 invocation) melee — ToA scales from solo entry to team expert.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Ranged switch", "qty": "—", "note": "Blowpipe or crossbow for Zebak" },
+            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
+            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
+            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+          ],
+          "notes": "The invocation system scales difficulty — start at 0–150 and climb. It's the most solo-friendly raid."
+        }
+      ],
+      "notes": "Drops the Osmumten's fang, Lightbearer and the Tumeken's shadow. Beneath Cursed Sands is the gate."
+    },
+    {
+      "key": "gauntlet",
+      "name": "The Gauntlet",
+      "tier": "Hard",
+      "tagline": "The Song of the Elves gauntlet — craft everything, bring nothing.",
+      "members": true,
+      "wiki": "The Gauntlet",
+      "location": "Prifddinas (Song of the Elves)",
+      "duration": "10–15 min per run",
+      "requirements": {
+        "quests": ["song of elves"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Ranged", "level": 85, "note": "Or 85 Magic — pick one to craft toward" },
+        { "skill": "Defence", "level": 85, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from the Hunllef's style" }
+      ],
+      "styles": ["Ranged"],
+      "presets": [
+        {
+          "name": "Crafted in-raid",
+          "description": "You enter with nothing — weapons, armour and food are all crafted inside from gathered materials. There is no loadout to wear.",
+          "slots": {},
+          "inventory": [
+            { "name": "Nothing", "qty": "—", "note": "Every item is made inside from gathered resources" },
+            { "name": "Crystal bow / staff", "qty": "—", "note": "Craft one and armour it up before the Hunllef" },
+            { "name": "Food", "qty": "—", "note": "Cook paddlefish/egnoto inside for the fight" }
+          ],
+          "notes": "The regular Gauntlet is the trainer; the Corrupted Gauntlet is the profitable, time-pressured version. Prep speed is the real skill."
+        }
+      ],
+      "notes": "Drops the enhanced crystal weapon seed (→ Bow of Faerdhinen / blade of Saeldor). No gear to import — the whole point is crafting under time pressure."
     }
   ]
 }
