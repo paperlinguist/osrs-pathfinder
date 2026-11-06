@@ -181,7 +181,7 @@ export default function CompletionsPage() {
     setPendingBulk(null);
   }, [pendingBulk, visible]);
 
-  // ---- RuneLite Quest State Exporter import -------------------------------
+  // ---- RuneLite quest-state import (Character Export / Quest State Exporter)
   const onImportFile = useCallback(
     async (file: File) => {
       let parsed: ParsedQuestState | null = null;
@@ -194,7 +194,7 @@ export default function CompletionsPage() {
         toast({
           title: "Import failed",
           description:
-            "That file doesn't look like a Quest State Exporter JSON export.",
+            "That file doesn't look like a Character Export or Quest State Exporter quests JSON.",
           variant: "destructive",
         });
         return;
@@ -387,7 +387,7 @@ export default function CompletionsPage() {
           </CardContent>
         </Card>
 
-        {/* RuneLite Quest State Exporter import */}
+        {/* RuneLite quest-state import (Character Export / Quest State Exporter) */}
         <Card className="border-stone-800 bg-stone-900/60">
           <CardContent className="pt-4 pb-4 px-4 space-y-3">
             <div className="flex flex-wrap items-center gap-3">
@@ -397,7 +397,18 @@ export default function CompletionsPage() {
               <div className="min-w-[14rem] flex-1">
                 <p className="text-sm font-medium text-stone-200">Import from RuneLite</p>
                 <p className="text-xs text-stone-500">
-                  Bulk-set completions from the JSON written by the{" "}
+                  Bulk-set completions from the <code className="rounded bg-stone-900 px-1 py-0.5 text-[10px] text-amber-200">quests.json</code>{" "}
+                  written by the{" "}
+                  <a
+                    href="https://runelite.net/plugin-hub/show/character-export"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-amber-400/90 underline decoration-dotted hover:text-amber-300"
+                  >
+                    Character Export
+                  </a>{" "}
+                  plugin (recommended — it also exports your stats and bank for
+                  the boss planner). The older{" "}
                   <a
                     href="https://runelite.net/plugin-hub/show/quest-state-exporter"
                     target="_blank"
@@ -406,7 +417,7 @@ export default function CompletionsPage() {
                   >
                     Quest State Exporter
                   </a>{" "}
-                  plugin — no ticking by hand.
+                  file works too — no ticking by hand either way.
                 </p>
               </div>
               <Button
@@ -444,27 +455,38 @@ export default function CompletionsPage() {
                   (puzzle-piece icon).
                 </li>
                 <li>
-                  Search for <b className="text-stone-200">Quest State Exporter</b>, install it and
-                  leave it enabled. It&apos;s an official Plugin Hub plugin that only reads quest
-                  states — nothing else about your account.
+                  Search for <b className="text-stone-200">Character Export</b>, install it and
+                  leave it enabled. It&apos;s an official Plugin Hub plugin that writes JSON files
+                  of your progress locally — the boss gear planner can use its other exports
+                  (stats, bank) too.
                 </li>
                 <li>
-                  Log in to the character you want to import. There is no button to press: the file
-                  is written automatically a few seconds after login, whenever quest progress
-                  changes, and on a five-minute heartbeat while you&apos;re online.
+                  Log in to the character you want to import. There is no button to press:{" "}
+                  <code className="rounded bg-stone-900 px-1 py-0.5 text-[10px] text-amber-200">
+                    quests.json
+                  </code>{" "}
+                  is written automatically a few seconds after login and whenever quest progress
+                  changes.
                 </li>
                 <li>
-                  Find the JSON on your computer — it&apos;s inside the{" "}
+                  Find the file inside the{" "}
                   <code className="rounded bg-stone-900 px-1 py-0.5 text-[10px] text-amber-200">
                     .runelite
                   </code>{" "}
-                  folder in your home directory, named after the account:
+                  folder in your home directory, under a folder named after the account:
                   <span className="mt-1 block space-y-0.5 font-mono text-[10px] text-stone-300">
                     <span className="block">
-                      Windows: C:\Users\&lt;You&gt;\.runelite\quest-state-exporter\&lt;Account&gt;.json
+                      Windows: C:\Users\&lt;You&gt;\.runelite\character-exporter\&lt;Account&gt;\quests.json
                     </span>
-                    <span className="block">macOS: ~/.runelite/quest-state-exporter/&lt;Account&gt;.json</span>
-                    <span className="block">Linux: ~/.runelite/quest-state-exporter/&lt;Account&gt;.json</span>
+                    <span className="block">macOS: ~/.runelite/character-exporter/&lt;Account&gt;/quests.json</span>
+                    <span className="block">Linux: ~/.runelite/character-exporter/&lt;Account&gt;/quests.json</span>
+                  </span>
+                </li>
+                <li>
+                  Using the older <b className="text-stone-200">Quest State Exporter</b> instead?
+                  Its file works in the same picker — it lives at{" "}
+                  <span className="block font-mono text-[10px] text-stone-300">
+                    ~/.runelite/quest-state-exporter/&lt;Account&gt;.json
                   </span>
                 </li>
                 <li>Pick that file above and apply it below — quests the file says are FINISHED get checked, everything else is left alone (or fully synced with the red button).</li>

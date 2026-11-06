@@ -45,6 +45,13 @@ visitor's browser (with export/import character backups in-app).
 - **Backups (v2)** — the Backup dialog and per-character exports now include
   your tracked targets and a total-quest-points figure (1 QP per quest,
   miniquests/activities 0). v1 files import unchanged.
+- **Backups (v3) & boss planner** — `/bosses` checks whether your imported
+  character is ready for a boss (required + recommended stats, quest gates) and
+  shows budget-tier loadouts with per-item equip/quest locks, owned-badges from
+  your imported bank/worn/inventory files (RuneLite **Character Export**
+  plugin), GE prices and a cheapest-first shopping list priced against your
+  coin pile. Backups and character slots carry the imported items along;
+  v1/v2 backup files import unchanged.
 - **"Gated by training"** counts every quest in the path whose skill levels
   need real grinding — including the target quest itself (e.g. Lunar
   Diplomacy's own 65 Magic now shows up).
