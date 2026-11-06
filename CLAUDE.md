@@ -38,9 +38,32 @@ to vX.Y.Z` (optionally append `(vX.Y.Z)` to the feature commit title instead).
 ## Local development
 
 - `bun` is the CI package manager, but this Windows machine uses npm —
-  `npx next dev -p 3000` for the dev server, `npx tsc --noEmit` to typecheck.
+  `npx next dev -p 3000` for the dev server, `npx tsc --noEmit` to typecheck,
+  `npm test` / `npx vitest run` for the test suite.
 - `package-lock.json` and `AGENTS.md` (Next dev artifact) are gitignored on
-  purpose; `bun.lock` is the committed lockfile.
+  purpose; `bun.lock` is the committed lockfile. After adding a dependency via
+  npm, run `npx --yes bun install` to sync `bun.lock` — the Docker build uses
+  `bun install --frozen-lockfile` and CI will fail otherwise.
+
+## README & docs maintenance
+
+Keep `README.md` in lockstep with the code — it's the public description of
+what the app does. Update it in the same PR as the change:
+
+- **Boss batch** → bump the "· X bosses" count on the intro line, and add a
+  feature bullet only if a *capability* changed (e.g. a new filter), not for
+  each boss.
+- **New page / feature / import-flow change** → add/adjust a bullet under
+  "Using the app", and refresh the intro paragraph if it changes what the app
+  fundamentally is (e.g. "two tools in one").
+- **Quest dataset regeneration** → update the "· X quests" count if it moved.
+- **CI / release workflow change** → update the "How releases work" table.
+- **New/changed scripts** → update "Local development" commands.
+- **AI-disclosure section** → keep it accurate if the provenance story changes
+  (e.g. a new data source).
+
+Rule of thumb: if a user reading the README would be misled about a shipped
+feature, the README is out of date and should go in that same PR.
 
 ## PR flow
 
