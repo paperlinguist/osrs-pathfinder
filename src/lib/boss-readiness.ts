@@ -93,26 +93,35 @@ function skillGap(
   };
 }
 
+/** equip/quest gates for one item against the imported character (shared by
+ *  the preset checks and the upgrade advisor) */
+export function computeItemLocks(
+  item: GearItem,
+  player: PlayerSkills | null,
+  completed: Set<string> | null,
+): LockReason[] {
+  const locks: LockReason[] = [];
+  for (const [skill, required] of Object.entries(item.reqLevels)) {
+    const current = player ? (player.levels[skill] ?? 1) : null;
+    if (current === null || current < required) {
+      locks.push({ type: "level", skill, required, current });
+    }
+  }
+  for (const q of item.reqQuests) {
+    if (completed === null || !completed.has(q)) {
+      locks.push({ type: "quest", key: q });
+    }
+  }
+  return locks;
+}
+
 function checkItem(
   slotKey: SlotKey,
   name: string,
   input: ReadinessInput,
 ): ItemCheck {
   const item = gearFor(name);
-  const locks: LockReason[] = [];
-  if (item) {
-    for (const [skill, required] of Object.entries(item.reqLevels)) {
-      const current = input.player ? (input.player.levels[skill] ?? 1) : null;
-      if (current === null || current < required) {
-        locks.push({ type: "level", skill, required, current });
-      }
-    }
-    for (const q of item.reqQuests) {
-      if (input.completed === null || !input.completed.has(q)) {
-        locks.push({ type: "quest", key: q });
-      }
-    }
-  }
+  const locks = item ? computeItemLocks(item, input.player, input.completed) : [];
   const owned = input.ownedIndex ? (input.ownedIndex.get(ownedKey(name)) !== undefined) : null;
   const ownedFrom = owned && input.ownedIndex ? input.ownedIndex.get(ownedKey(name))?.sources ?? null : null;
   const price = item?.price ?? null;
