@@ -1,12 +1,16 @@
 # OSRS Quest Pathfinder
 
-OSRS prerequisite planner — track one or more target quests and get the optimal
-prerequisite chain: quest order, skill gaps with training gates, boost flags,
-XP and playtime estimates, quest-XP coverage (with visual XP-cascade edges),
-character import via the OSRS hiscores / Wise Old Man, and a dedicated page for
-bulk-setting your quest completions.
+OSRS progress planner — two tools in one, sharing one imported character:
 
-215 quests · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
+- **Quest planner** — track one or more target quests and get the optimal
+  prerequisite chain: quest order, skill gaps with training gates, boost flags,
+  XP and playtime estimates, quest-XP cascades (visual XP-flow edges), and a
+  dedicated page for bulk-setting your quest completions.
+- **Boss gear planner** (`/bosses`) — readiness verdicts and budget-tier
+  loadouts for **29 bosses**, checked against your imported character, bank and
+  worn equipment, with an upgrade advisor for what to buy next.
+
+215 quests · 29 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
 Fully stateless: no database, no accounts — all player progress lives in each
 visitor's browser (with export/import character backups in-app).
@@ -18,17 +22,20 @@ visitor's browser (with export/import character backups in-app).
 - **Track multiple targets** — the target picker *adds* quests instead of
   replacing one; selected targets show as removable chips and the planner
   resolves one merged, topologically-ordered prerequisite tree for all of them
-  (Quest Cape mixes fine with regular quests).
+  (Quest Cape mixes fine with regular quests). "Barrows Gloves (RfD)" tracks
+  the full Recipe for Disaster subquest chain in one click.
 - **Completions page** (`/completions`) — search/filter all 215 quests and
   bulk-set or unset what you've already finished (with a live quest-points
   tally). The planner reads the same saved progress; the old reset-everything
   button is gone — unchecking on this page is the deliberate way to do that.
-- **Import from RuneLite** — on the completions page, upload the JSON written
-  by the [Quest State Exporter](https://runelite.net/plugin-hub/show/quest-state-exporter)
-  Plugin Hub plugin to set every finished quest in one go (step-by-step setup
-  instructions included on the page). **Add** marks the file's FINISHED quests;
-  **Sync** also unchecks everything the file says isn't finished (quests the
-  plugin doesn't track are left untouched).
+- **Import from RuneLite** — the [Character Export](https://runelite.net/plugin-hub/show/character-export)
+  Plugin Hub plugin writes JSON files of your character (skills, quests, bank,
+  worn equipment, inventory) as you play. Upload them anywhere the app offers a
+  file picker — one upload covers skills, quest completions and the boss
+  planner's owned-items pool. Parsed **client-side only**, never uploaded.
+  The older [Quest State Exporter](https://runelite.net/plugin-hub/show/quest-state-exporter)
+  quest file is still auto-detected on the completions page (**Add** marks its
+  FINISHED quests; **Sync** also unchecks everything it says isn't finished).
 - **Full-graph PNG export** — the graph's PNG button downloads the *entire*
   plan, not just the visible viewport; huge graphs (e.g. Quest Cape) are
   scaled down just enough to fit inside browser canvas limits.
@@ -42,18 +49,26 @@ visitor's browser (with export/import character backups in-app).
   level-up helps but isn't enough (e.g. `Magic 14` against the `65` gate).
   Assumes you can complete the granting quest (its own requirement is your
   starting level).
-- **Backups (v2)** — the Backup dialog and per-character exports now include
-  your tracked targets and a total-quest-points figure (1 QP per quest,
-  miniquests/activities 0). v1 files import unchanged.
-- **Backups (v3) & boss planner** — `/bosses` checks whether your imported
-  character is ready for a boss (required + recommended stats, quest gates) and
-  shows budget-tier loadouts with per-item equip/quest locks, owned-badges from
-  your imported bank/worn/inventory files (RuneLite **Character Export**
-  plugin), GE prices and a cheapest-first shopping list priced against your
-  coin pile. A cross-boss **upgrade advisor** ranks every preset item you don't
-  own against your best owned item per slot/style into buy-now / save-up /
-  earn-in-game / locked groups. Backups and character slots carry the imported
-  items along; v1/v2 backup files import unchanged.
+- **Boss gear planner** (`/bosses`) — every boss's required + recommended
+  stats, quest gates and combat-style loadouts in budget tiers, checked against
+  your imported character. Each item shows equip/quest locks (`Defence 65 → 70`,
+  `quest: Underground Pass`), an owned badge (bank **and worn** equipment), its
+  GE price, and a cheapest-first shopping list against your imported coin pile.
+  Search, a ready / not-yet filter, and a tier filter keep the roster navigable;
+  clicking a boss scrolls to its loadouts.
+- **Upgrade advisor** — a cross-boss "what should I buy next" view: every
+  preset item you don't own is scored (attack + damage bonus, compared against
+  your best owned item per slot/style) and grouped into buy-now / save-up /
+  earn-in-game / locked, biggest gain first. Reachable from the header.
+- **Planned-quest states** — any quest already on your quest plan (a tracked
+  target *or* a prerequisite step) shows a green ✓ **planned** next to its name
+  on the boss page, instead of **plan it**, and still links back to the plan.
+- **Backups (v3)** — backups and per-character exports carry skills, quest
+  completions, tracked targets, and the boss planner's imported items across
+  devices and account switches; v1/v2 files import unchanged.
+- **Regression test suite** — Vitest covers the planning logic and a data-
+  integrity suite (quest/skill/item reference validity, F2P-preset cleanliness)
+  runs on every PR alongside the Docker build.
 - **"Gated by training"** counts every quest in the path whose skill levels
   need real grinding — including the target quest itself (e.g. Lunar
   Diplomacy's own 65 Magic now shows up).
@@ -109,7 +124,7 @@ Then open `https://osrs-pathfinder.abifin.org`, import a username, pick a goal.
 |---|---|
 | Push to `main` | GH Actions builds image → `ghcr.io/<owner>/osrs-pathfinder:latest` + `:sha-<hash>` |
 | Tag `v1.2.3` | also published as `:1.2.3` and `:1.2` |
-| Pull request | **CI runs** (bun install → production build → docker image build, no push) |
+| Pull request | **CI runs** (regression tests + production build → docker image build, no push) |
 | Server re-run of `setup.sh` | pulls `latest`, recreates container (zero-downtime-ish; seconds) |
 
 **First publish only:** open the repo → *Packages* → the new `osrs-pathfinder`
@@ -179,7 +194,32 @@ docker run -d --name osrs-pathfinder -p 127.0.0.1:3001:3000 --restart unless-sto
 ## Local development
 
 ```bash
-bun install
+bun install        # CI/Docker use bun (bun.lock)
 bun run dev        # http://localhost:3000
 bun run build      # production build (standalone output)
+bun test           # regression suite (Vitest) — also works via `npm test`
 ```
+
+On a machine without bun, `npm install && npx next dev -p 3000` works; keep
+`bun.lock` in sync (`bun install`) after adding dependencies, since the Docker
+build installs with `--frozen-lockfile`.
+
+## AI disclosure
+
+This project is developed with **substantial AI assistance** — Claude Code
+(Anthropic) driving the z.ai chat workflow described above. AI is used for
+implementation, documentation, and for drafting the curated content:
+
+- **Boss/quest data is AI-drafted, then human-verified.** Presets, requirement
+  facts and notes in `src/data/bosses.json` were assembled by AI and checked
+  against the OSRS Wiki before merge; where the underlying cache data (osrs-db)
+  was wrong or missing, wiki-verified overrides are tagged per-item in the
+  generated `gear.json` for audit.
+- **Generated files come from committed scripts.** `src/data/gear.json` is the
+  output of `tools/build-gear.ts` over the MIT-licensed osrs-db dataset and the
+  Jagex item DB — never hand-edited.
+- **PRs are labelled AI-generated** (the Claude Code attribution in their
+  descriptions), and every page footer shows the exact build SHA for provenance.
+
+Game-data accuracy is best-effort: the app links every quest, boss and item to
+its OSRS Wiki page, so treat in-game numbers as authoritative.
