@@ -160,3 +160,17 @@ export function formatPrice(gp: number): string {
 export function questName(key: string): string {
   return QUEST_BY_KEY[key]?.name ?? key;
 }
+
+/**
+ * Simple style score for upgrade comparisons: the style's attack bonus plus
+ * its damage bonus (melee: best attack style + strength; ranged: attack +
+ * ranged strength; magic: attack + magic damage). Deliberately transparent —
+ * defence bonuses are ignored and no DPS formula is pretended; exact math
+ * belongs to the wiki DPS calculator.
+ */
+export function styleScore(item: GearItem, style: string): number {
+  const s = item.stats;
+  if (style === "Ranged") return s.rangedAttack + s.rangedStrength;
+  if (style === "Magic") return s.magicAttack + s.magicDamage;
+  return Math.max(s.stabAttack, s.slashAttack, s.crushAttack) + s.strengthBonus;
+}

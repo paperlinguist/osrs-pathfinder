@@ -50,8 +50,10 @@ visitor's browser (with export/import character backups in-app).
   shows budget-tier loadouts with per-item equip/quest locks, owned-badges from
   your imported bank/worn/inventory files (RuneLite **Character Export**
   plugin), GE prices and a cheapest-first shopping list priced against your
-  coin pile. Backups and character slots carry the imported items along;
-  v1/v2 backup files import unchanged.
+  coin pile. A cross-boss **upgrade advisor** ranks every preset item you don't
+  own against your best owned item per slot/style into buy-now / save-up /
+  earn-in-game / locked groups. Backups and character slots carry the imported
+  items along; v1/v2 backup files import unchanged.
 - **"Gated by training"** counts every quest in the path whose skill levels
   need real grinding — including the target quest itself (e.g. Lunar
   Diplomacy's own 65 Magic now shows up).
