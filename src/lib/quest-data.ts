@@ -50,7 +50,7 @@ export interface PlayerSkills {
   xp: Record<string, number>;
   username?: string;
   combatLevel?: number;
-  source: "wiseoldman" | "hiscores" | "manual";
+  source: "wiseoldman" | "hiscores" | "manual" | "character-export";
 }
 
 /** OSRS 1-99 XP table (cumulative XP at level start) */
@@ -127,7 +127,8 @@ export function normalizePlayer(raw: unknown): PlayerSkills | null {
     username: typeof p.username === "string" && p.username ? p.username : undefined,
     combatLevel: asNumber(p.combatLevel),
     source:
-      p.source === "wiseoldman" || p.source === "hiscores" || p.source === "manual"
+      p.source === "wiseoldman" || p.source === "hiscores" || p.source === "manual" ||
+      p.source === "character-export"
         ? p.source
         : "manual",
   };

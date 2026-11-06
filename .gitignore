@@ -11,3 +11,8 @@ server.log
 tsconfig.tsbuildinfo
 next-env.d.ts
 .verify/
+.data-cache/
+
+# local-tooling artifacts (bun is the package manager; Next generates AGENTS.md in dev runs)
+package-lock.json
+AGENTS.md

@@ -56,6 +56,7 @@ import {
   Network,
   RefreshCw,
   Sparkles,
+  Swords,
   Zap,
   Upload,
   UserPlus,
@@ -86,6 +87,7 @@ import {
   trainHours,
 } from "@/lib/quest-data";
 import { ResolveResult, SkillGap, TargetResult, missingPrereqClosure, questSkillGaps, resolveChain } from "@/lib/resolver";
+import { EMPTY_OWNED, mergeOwned, normalizeOwned, readCharacterExportFiles, type OwnedItems } from "@/lib/character-export";
 import { APP_BUILD, APP_VERSION } from "@/lib/version";
 
 /* ------------------------------------------------------------------ utils */
@@ -123,6 +125,8 @@ type CharSlot = {
   added: string[];
   /** tracked target quests (multi-track) */
   targets: string[];
+  /** boss-planner imported items (bank/equipment/inventory), v3 slots */
+  owned?: OwnedItems | null;
   savedAt: string;
 };
 
@@ -139,6 +143,8 @@ type BackupData = {
   manualQp: number | "";
   username: string;
   player: PlayerSkills | null;
+  /** boss-planner imported items (bank/equipment/inventory), v3 backups; null in older files */
+  owned: OwnedItems | null;
 };
 
 function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false; text: string } {
@@ -197,6 +203,7 @@ function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false;
           : "",
       username: typeof d.username === "string" ? d.username : "",
       player,
+      owned: d.owned ? normalizeOwned(d.owned) : null,
     },
   };
 }
@@ -368,6 +375,24 @@ export default function Home() {
       if (ss === "xp" || ss === "eff" || ss === "time" || ss === "reqs") setSugSort(ss);
     } catch { /* ignore */ }
     hydrated.current = true;
+  }, []);
+
+  // ---- ?target=<key> deep links (boss planner "plan it" buttons, shared URLs)
+  // consumes the param once on mount: merges valid targets into the tracked
+  // list (the targetKeys persistence effect above saves them) and strips the
+  // param so refreshing doesn't re-add a target the user removed
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const incoming = params
+      .getAll("target")
+      .flatMap((v) => v.split(","))
+      .map((v) => v.trim().toLowerCase())
+      .filter((v) => isValidTargetKey(v));
+    if (incoming.length === 0) return;
+    setTargetKeys((prev) => [...new Set([...prev, ...incoming])]);
+    params.delete("target");
+    const qs = params.toString();
+    window.history.replaceState({}, "", window.location.pathname + (qs ? `?${qs}` : ""));
   }, []);
 
   useEffect(() => {
@@ -659,6 +684,18 @@ export default function Home() {
     [],
   );
 
+  /** live boss-planner items (the planner itself holds them only in localStorage) */
+  const liveOwned = useCallback((): OwnedItems | null => {
+    try {
+      const raw = localStorage.getItem("osrs-qp-owned");
+      if (!raw) return null;
+      const owned = normalizeOwned(JSON.parse(raw));
+      return owned.updatedAt ? owned : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   const saveCurrentChar = useCallback(() => {
     const name = (username.trim() || player?.username || "").trim();
     if (!name) return;
@@ -669,13 +706,14 @@ export default function Home() {
       questPoints: totalQuestPoints(completed),
       added: [...addedQuests],
       targets: [...targetKeys],
+      owned: liveOwned(),
       savedAt: new Date().toISOString(),
     });
     toast({
       title: `Saved ${name}`,
       description: "Skills, quest progress and plan stored locally — load it anytime without re-importing.",
     });
-  }, [username, player, completed, addedQuests, targetKeys, upsertChar, toast]);
+  }, [username, player, completed, addedQuests, targetKeys, upsertChar, toast, liveOwned]);
 
   const loadChar = useCallback(
     (c: CharSlot) => {
@@ -694,6 +732,10 @@ export default function Home() {
       // flush the shared keys immediately so /completions hydrates THIS character's state
       localStorage.setItem("osrs-qp-completed", JSON.stringify(c.completed ?? []));
       localStorage.setItem("osrs-qp-added", JSON.stringify(c.added ?? []));
+      // boss-planner items swap with the character too (flushes the shared key)
+      const slotOwned = c.owned && c.owned.updatedAt ? c.owned : null;
+      if (slotOwned) localStorage.setItem("osrs-qp-owned", JSON.stringify(slotOwned));
+      else localStorage.removeItem("osrs-qp-owned");
       toast({
         title: `Loaded ${c.name}`,
         description: "Restored skills, quest progress and plan instantly — no hiscores request needed.",
@@ -745,6 +787,7 @@ export default function Home() {
       localStorage.setItem("osrs-qp-completed", "[]");
       localStorage.setItem("osrs-qp-added", "[]");
       localStorage.removeItem("osrs-qp-targets");
+      localStorage.removeItem("osrs-qp-owned");
       if (!opts?.silent)
         toast({
           title: "Character closed",
@@ -784,12 +827,13 @@ export default function Home() {
             questPoints: totalQuestPoints(completed),
             added: [...addedQuests],
             targets: [...targetKeys],
+            owned: liveOwned(),
             savedAt: new Date().toISOString(),
           }
         : c;
       if (isActive) upsertChar(snapshot);
       const json = JSON.stringify(
-        { app: "quest-pathfinder", kind: "character", version: 2, exportedAt: new Date().toISOString(), data: snapshot },
+        { app: "quest-pathfinder", kind: "character", version: 3, exportedAt: new Date().toISOString(), data: snapshot },
         null,
         2,
       );
@@ -809,7 +853,7 @@ export default function Home() {
           : "A restore file for this character — re-import it after clearing cookies or on another device.",
       });
     },
-    [toast, username, player, completed, addedQuests, targetKeys, upsertChar],
+    [toast, username, player, completed, addedQuests, targetKeys, upsertChar, liveOwned],
   );
 
   const charFileRef = useRef<HTMLInputElement>(null);
@@ -862,6 +906,8 @@ export default function Home() {
             ? [d.target] // v1 character files stored a single target
             : [];
         const completedKeys = cleanKeys(d.completed);
+        // boss-planner items ride along in v3 character files (tolerant of older ones)
+        const owned = d.owned ? normalizeOwned(d.owned) : null;
         const slot: CharSlot = {
           name: d.name.trim(),
           player,
@@ -878,6 +924,7 @@ export default function Home() {
               ),
             ),
           ],
+          owned: owned && owned.updatedAt ? owned : null,
           savedAt: typeof d.savedAt === "string" ? d.savedAt : new Date().toISOString(),
         };
         upsertChar(slot);
@@ -921,6 +968,59 @@ export default function Home() {
       setImporting(false);
     }
   }, [username, upsertPlayerSkills]);
+
+  /**
+   * Character Export file upload — the default import flow. One picker takes
+   * character.json (skills), quests.json (completions, merged add-only) and
+   * bank/equipment/inventory.json (boss-planner items) in any combination.
+   */
+  const charExportRef = useRef<HTMLInputElement>(null);
+  const onCharExportFiles = useCallback(
+    async (files: File[]) => {
+      const readout = await readCharacterExportFiles(files);
+      if (!readout.player && !readout.questState && readout.containers.length === 0) {
+        setImportMsg({
+          ok: false,
+          text: "Nothing imported — expected Character Export files (character.json, quests.json, bank.json…) or a Quest State Exporter file.",
+        });
+        return;
+      }
+      const bits: string[] = [];
+      if (readout.player) {
+        const p = readout.player;
+        setPlayer(p);
+        localStorage.setItem("osrs-qp-player", JSON.stringify(p));
+        if (p.username) {
+          setUsername(p.username);
+          localStorage.setItem("osrs-qp-username", p.username);
+          upsertPlayerSkills(p.username, p);
+        }
+        bits.push(`skills · combat ${p.combatLevel}`);
+      }
+      if (readout.questState) {
+        const qs = readout.questState;
+        // merge-only: finished quests get marked, manual progress is never unset
+        setCompleted((prev) => new Set([...prev, ...qs.finishedKeys]));
+        bits.push(`${qs.finishedKeys.length} quests marked finished`);
+      }
+      if (readout.containers.length > 0) {
+        try {
+          const prevRaw = localStorage.getItem("osrs-qp-owned");
+          const prev = prevRaw ? normalizeOwned(JSON.parse(prevRaw)) : EMPTY_OWNED;
+          localStorage.setItem("osrs-qp-owned", JSON.stringify(mergeOwned(prev, readout.containers)));
+        } catch { /* keep going without the items */ }
+        bits.push(`${readout.containers.length} item file${readout.containers.length === 1 ? "" : "s"} → boss planner`);
+      }
+      if (readout.unrecognized.length > 0) {
+        bits.push(`${readout.unrecognized.length} file${readout.unrecognized.length === 1 ? "" : "s"} skipped`);
+      }
+      setImportMsg({
+        ok: true,
+        text: `Imported${readout.player?.username ? ` ${readout.player.username}` : ""}: ${bits.join(" · ")}.`,
+      });
+    },
+    [upsertPlayerSkills],
+  );
 
   // ---- add-suggestion flow: extras never silently skip prereqs — and never
   // silently sign you up for hours of skill grinding either. If the quest has
@@ -1008,7 +1108,7 @@ export default function Home() {
       JSON.stringify(
         {
           app: "quest-pathfinder",
-          version: 2,
+          version: 3,
           exportedAt: new Date().toISOString(),
           data: {
             completed: [...completed],
@@ -1020,12 +1120,13 @@ export default function Home() {
             manualQp: typeof manualQp === "number" ? manualQp : null,
             username,
             player,
+            owned: liveOwned(),
           },
         },
         null,
         2,
       ),
-    [completed, addedQuests, targetKeys, allowBoosts, includeQuestXp, manualQp, username, player],
+    [completed, addedQuests, targetKeys, allowBoosts, includeQuestXp, manualQp, username, player, liveOwned],
   );
 
   const downloadBackup = useCallback(() => {
@@ -1093,13 +1194,22 @@ export default function Home() {
     else localStorage.removeItem("osrs-qp-username");
     if (d.targets.length) localStorage.setItem("osrs-qp-targets", JSON.stringify(d.targets));
     else localStorage.removeItem("osrs-qp-targets");
+    // boss-planner items (v3 backups) — restore or clear like every other key
+    const ownedCount = d.owned
+      ? d.owned.bank.length + d.owned.equipment.length + d.owned.inventory.length
+      : 0;
+    if (d.owned && ownedCount > 0) localStorage.setItem("osrs-qp-owned", JSON.stringify(d.owned));
+    else localStorage.removeItem("osrs-qp-owned");
     setBackupOpen(false);
     setImportRaw("");
     setImportFileName(null);
     setBackupMsg(null);
     toast({
       title: "Data restored",
-      description: `${d.completed.length} completed quest${d.completed.length === 1 ? "" : "s"} and ${d.added.length} plan addition${d.added.length === 1 ? "" : "s"} are back.`,
+      description:
+        `${d.completed.length} completed quest${d.completed.length === 1 ? "" : "s"}, ${d.added.length} plan addition${d.added.length === 1 ? "" : "s"}${
+          ownedCount > 0 ? ` and ${ownedCount} boss-planner item${ownedCount === 1 ? "" : "s"}` : ""
+        } are back.`,
     });
   }, [importRaw, toast]);
 
@@ -1220,18 +1330,21 @@ export default function Home() {
                 <li className="flex gap-1.5">
                   <span className="font-bold text-amber-400">1 ·</span>
                   <span>
-                    <b className="text-stone-100">Import your character</b> below — skills come straight
-                    from Wise Old Man / the hiscores.
+                    <b className="text-stone-100">Import your character</b> below — upload your
+                    Character Export files (skills + finished quests in one go) or search a username.
                   </span>
                 </li>
                 <li className="flex gap-1.5">
                   <span className="font-bold text-amber-400">2 ·</span>
                   <span>
-                    <b className="text-stone-100">Mark quests you&apos;ve finished</b> with{" "}
+                    Already done if you uploaded{" "}
+                    <code className="rounded bg-stone-900 px-1 text-[10px] text-amber-200">quests.json</code>.
+                    Otherwise{" "}
+                    <b className="text-stone-100">mark quests you&apos;ve finished</b> with{" "}
                     <Link href="/completions" className="font-semibold text-amber-300 underline underline-offset-2 hover:text-amber-200">
                       Manage Quests
                     </Link>{" "}
-                    — tick them in bulk, or import your whole RuneLite quest list in one file.
+                    — tick them in bulk, or import your RuneLite quest list there.
                   </span>
                 </li>
                 <li className="flex gap-1.5">
@@ -1252,11 +1365,78 @@ export default function Home() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base text-stone-200">1 · Import your character</CardTitle>
                 <CardDescription className="text-xs">
-                  Skills load from Wise Old Man / official hiscores — then tell us which quests
-                  you&apos;ve already finished via Manage Quests.
+                  Fastest: upload your Character Export files — skills <b>and</b> finished
+                  quests in one go (bank/equipment files feed the boss planner too). Or use a
+                  username below.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                {/* Character Export upload — the default import flow */}
+                <button
+                  onClick={() => charExportRef.current?.click()}
+                  className="group flex w-full items-center gap-3 rounded-md border border-amber-800/70 bg-amber-950/20 px-3 py-3 text-left transition-colors hover:border-amber-600 hover:bg-amber-950/40"
+                >
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-amber-800/50 bg-amber-950/40 text-amber-300">
+                    <Upload className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="flex flex-wrap items-center gap-x-2 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
+                      Upload Character Export files
+                      <span className="rounded bg-amber-900/40 px-1.5 py-0.5 text-[10px] font-medium text-amber-300">
+                        recommended
+                      </span>
+                    </span>
+                    <span className="block text-xs text-stone-400">
+                      Pick <code className="rounded bg-stone-900 px-1 text-[10px] text-amber-200">character.json</code>,{" "}
+                      <code className="rounded bg-stone-900 px-1 text-[10px] text-amber-200">quests.json</code> and any item
+                      files together — parsed in your browser, never uploaded.
+                    </span>
+                  </span>
+                </button>
+                <input
+                  ref={charExportRef}
+                  type="file"
+                  accept=".json,application/json"
+                  multiple
+                  className="hidden"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files ?? []);
+                    if (files.length) void onCharExportFiles(files);
+                    e.target.value = "";
+                  }}
+                />
+                <details className="rounded-md border border-stone-800 bg-stone-950/60 px-3 py-2">
+                  <summary className="cursor-pointer select-none text-xs font-medium text-stone-300 marker:text-stone-600 hover:text-stone-100">
+                    Don&apos;t have the files yet? (one-time RuneLite setup)
+                  </summary>
+                  <p className="mt-2 text-xs leading-relaxed text-stone-400">
+                    Install the{" "}
+                    <a
+                      href="https://runelite.net/plugin-hub/show/character-export"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-amber-400/90 underline decoration-dotted hover:text-amber-300"
+                    >
+                      Character Export
+                    </a>{" "}
+                    plugin (Plugin Hub), log in, and open your bank once — the files write
+                    themselves:
+                  </p>
+                  <span className="mt-1 block space-y-0.5 font-mono text-[10px] text-stone-300">
+                    <span className="block">
+                      Windows: C:\Users\&lt;You&gt;\.runelite\character-exporter\&lt;Account&gt;\
+                    </span>
+                    <span className="block">macOS / Linux: ~/.runelite/character-exporter/&lt;Account&gt;/</span>
+                  </span>
+                </details>
+
+                <div className="flex items-center gap-2 pt-1" aria-hidden>
+                  <span className="h-px flex-1 bg-stone-800" />
+                  <span className="text-[10px] uppercase tracking-wide text-stone-600">or by username</span>
+                  <span className="h-px flex-1 bg-stone-800" />
+                </div>
                 <div className="flex gap-2">
                   <Input
                     placeholder="Username (e.g. Zezima)"
@@ -1293,6 +1473,25 @@ export default function Home() {
                     <span className="block truncate text-xs text-stone-400">
                       Tick finished quests in bulk — or import them all from RuneLite&apos;s Quest
                       State Exporter file.
+                    </span>
+                  </span>
+                </Link>
+                <Link
+                  href="/bosses"
+                  aria-label="Boss gear planner: readiness checks and budget loadouts"
+                  className="group flex items-center gap-3 rounded-md border border-stone-700 bg-stone-950/60 px-3 py-2.5 transition-colors hover:border-amber-700/60 hover:bg-stone-900"
+                >
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-amber-800/50 bg-amber-950/40 text-amber-300">
+                    <Swords className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1.5 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
+                      Boss gear planner
+                      <span className="text-[10px] font-medium text-stone-500">new</span>
+                    </span>
+                    <span className="block truncate text-xs text-stone-400">
+                      Am I ready for the Fight Caves? Readiness checks, budget loadouts and buy
+                      lists from your imported bank.
                     </span>
                   </span>
                 </Link>
