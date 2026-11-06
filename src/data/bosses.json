@@ -553,6 +553,214 @@
         }
       ],
       "notes": "The Fremennik Trials gate is soft: the Rellekka guards let you in once you've STARTED the quest, which is when the boat becomes usable. Kings respawn quickly — most learners start with solo Rex. Watch the 81-Agility crevice shortcut for faster trips."
+    },
+    {
+      "key": "vorkath",
+      "name": "Vorkath",
+      "tier": "Hard",
+      "tagline": "The blue dragon of Ungael — OSRS's most consistent money-maker.",
+      "members": true,
+      "wiki": "Vorkath",
+      "location": "Ungael, reachable after Dragon Slayer II",
+      "duration": "2–3 min per kill",
+      "requirements": {
+        "quests": ["dragon slayer ii"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Ranged", "level": 80, "note": "Or 80 Magic — pick one style and commit to it" },
+        { "skill": "Defence", "level": 80, "note": "Dragonfire is the real threat, not the melee" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic through the fight" }
+      ],
+      "styles": ["Ranged", "Magic"],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Dragon hunter crossbow + dragon bolts is the Vorkath meta. A rune crossbow with dragon bolts is the budget stand-in until you can afford the DHCB.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Dragon hunter crossbow",
+            "shield": "Dragonfire shield",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "Non-negotiable — his dragonfire is the fight" },
+            { "name": "Ruby → diamond bolt swap", "qty": "—", "note": "Ruby (e) for the first ~65%, Diamond dragon bolts (e) after" },
+            { "name": "Prayer potion(4)", "qty": "3–4", "note": "" },
+            { "name": "Antivenom+ / antidote++", "qty": "1–2", "note": "His ranged spit venoms" }
+          ],
+          "notes": "The Dragonfire shield needs Dragon Slayer I and 75 Defence; an Anti-dragon shield (Dragon Slayer I) works at any Defence while you build toward it. Dodge the acid pools in his last phase."
+        },
+        {
+          "name": "Magic",
+          "description": "Trident + Ahrim's. The occult and seers ring you already own slot right in.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "shield": "Anti-dragon shield",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "3–4", "note": "" },
+            { "name": "Antivenom+ / antidote++", "qty": "1–2", "note": "" }
+          ],
+          "notes": "The imbued god cape is a Mage Arena II reward — the plain god cape (Mage Arena I) is the stand-in."
+        }
+      ],
+      "notes": "His 'blue fireball' special is a line-of-sight dodge — step sideways, don't tank it. Count his attacks to predict the acid pool phase."
+    },
+    {
+      "key": "phantom-muspah",
+      "name": "Phantom Muspah",
+      "tier": "Medium",
+      "tagline": "The frozen phantom — mechanics-heavy money-maker.",
+      "members": true,
+      "wiki": "Phantom Muspah",
+      "location": "Muspah's lair, reachable after Secrets of the North",
+      "duration": "3–5 min per kill",
+      "requirements": {
+        "quests": ["secrets of north"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Magic", "level": 80, "note": "Trident territory; 75 is the floor" },
+        { "skill": "Defence", "level": 70, "note": "His ranged phase hits through prayer gaps" },
+        { "skill": "Prayer", "level": 43, "note": "Switch overheads with his attack style" }
+      ],
+      "styles": ["Magic", "Ranged"],
+      "presets": [
+        {
+          "name": "Magic",
+          "description": "Trident + Ahrim's through both phases. The occult and seers ring you already own slot straight in.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "His smite phase drains prayer hard" },
+            { "name": "Stamina potion(4)", "qty": "1–2", "note": "He teleports across the lair constantly" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "He's only 33% susceptible to freezes — keep him in the north-west corner with a step-under lure instead of relying on freeze."
+        },
+        {
+          "name": "Ranged",
+          "description": "Blowpipe for the walk phases. Most killers run a magic switch — treat this as the ranged half.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "weapon": "Toxic blowpipe",
+            "ammo": "Amethyst dart",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Scales + darts", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
+            { "name": "Stamina potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Prayer switch is the whole fight — ranged phase hits through Protect from Magic and vice versa. Watch for the smite attack's prayer-drain debuff."
+        }
+      ],
+      "notes": "His freeze resistance means 33% reduced freeze duration — don't plan around full freezes. Bring a spade? No — that's for Barrows. Venom is the main chip damage."
+    },
+    {
+      "key": "god-wars-dungeon",
+      "name": "God Wars Dungeon",
+      "tier": "Medium",
+      "tagline": "The four generals — Bandos, Armadyl, Saradomin, Zamorak.",
+      "members": true,
+      "wiki": "God Wars Dungeon",
+      "location": "Trollheim, north-west of Burthorpe (40 kill count per boss)",
+      "duration": "team-based · trips scale with supplies",
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 80, "note": "Graardor tanking wants 80+ melee" },
+        { "skill": "Defence", "level": 80, "note": "The generals hit through prayer gaps" },
+        { "skill": "Ranged", "level": 80, "note": "Kree'arra's ranged team" },
+        { "skill": "Prayer", "level": 43, "note": "One overhead per general's style" }
+      ],
+      "styles": ["Melee", "Ranged"],
+      "presets": [
+        {
+          "name": "General Graardor · Melee",
+          "description": "The classic team boss. Bandos' Stronghold door needs 70 Strength and a hammer.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Hammer", "qty": "1", "note": "Opens Bandos' Stronghold door" },
+            { "name": "Prayer potion(4)", "qty": "6–10", "note": "Trips live and die on prayer" },
+            { "name": "Super combat potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "12–20", "note": "" }
+          ],
+          "notes": "40 kill count (20 with an ecumenical key from Wilderness bosses) before the door opens. Tank prays Melee, teammates Ranged. Godsword shards are the chase drop."
+        },
+        {
+          "name": "Kree'arra · Ranged",
+          "description": "Armadyl's Eyrie needs 70 Ranged and a mith grapple to cross the chasm.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "ammo": "Diamond dragon bolts (e)",
+            "weapon": "Armadyl crossbow",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Mith grapple", "qty": "1", "note": "Crosses the chasm to Armadyl's Eyrie" },
+            { "name": "Prayer potion(4)", "qty": "4–8", "note": "Protect from Ranged against Kree'arra" },
+            { "name": "Ranging potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "12–20", "note": "" }
+          ],
+          "notes": "40 kill count (or ecumenical key). Armadyl crossbow and dragon bolts are the ranged meta here; a rune crossbow with diamond bolts (e) works on a budget."
+        }
+      ],
+      "notes": "Commander Zilyana's chamber needs 70 Agility (unboostable) + two ropes on the first visit; K'ril Tsutsaroth's needs no extra level. Zamorakian/Saradominist kill count opens those doors. Teams split the four generals for their godsword hilts."
     }
   ]
 }
