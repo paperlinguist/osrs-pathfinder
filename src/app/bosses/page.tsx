@@ -135,6 +135,8 @@ export default function BossesPage() {
   const [targets, setTargets] = useState<string[]>([]);
   const [added, setAdded] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>(BOSSES[0]?.key ?? "");
+  /** advisor open state lives here so the header shortcut can open it */
+  const [advisorOpen, setAdvisorOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* ------------------------------------------------- localStorage hydration */
@@ -275,6 +277,23 @@ export default function BossesPage() {
     [player, completed, ownedIndex, owned.coins],
   );
 
+  const advisorHasContent =
+    advisor !== null &&
+    (advisor.buyNow.length > 0 ||
+      advisor.saveUp.length > 0 ||
+      advisor.earn.length > 0 ||
+      advisor.locked.length > 0);
+
+  /** header shortcut: expand the advisor and bring it into view */
+  const jumpToAdvisor = useCallback(() => {
+    setAdvisorOpen(true);
+    requestAnimationFrame(() => {
+      document
+        .getElementById("upgrade-advisor")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
   /** every quest already on the resolved plan (tracked target OR prereq step) —
    *  same resolver the planner runs, over the same saved targets/extras */
   const plannedKeys = useMemo(() => {
@@ -324,6 +343,22 @@ export default function BossesPage() {
             <ListChecks className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Quests</span>
           </Link>
+          {advisorHasContent && (
+            <button
+              type="button"
+              onClick={jumpToAdvisor}
+              title="What should I buy next? — jump to the upgrade advisor"
+              className="inline-flex items-center gap-1.5 rounded-md border border-amber-800/70 bg-amber-950/30 px-2.5 py-1.5 text-sm text-amber-200 hover:bg-amber-950/50 transition-transform active:scale-[0.97] shrink-0"
+            >
+              <Banknote className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Upgrades</span>
+              {advisor!.buyNow.length > 0 && (
+                <span className="rounded-full bg-emerald-900/60 px-1.5 text-[10px] font-semibold tabular-nums text-emerald-300">
+                  {advisor!.buyNow.length}
+                </span>
+              )}
+            </button>
+          )}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Boss gear planner</h1>
             <p className="text-xs text-stone-400">
@@ -502,7 +537,15 @@ export default function BossesPage() {
         )}
 
         {/* upgrade advisor — end-of-page summary: what to buy next across all bosses */}
-        {advisor && <AdvisorCard advisor={advisor} coins={owned.coins} planned={plannedKeys} />}
+        {advisor && (
+          <AdvisorCard
+            advisor={advisor}
+            coins={owned.coins}
+            planned={plannedKeys}
+            open={advisorOpen}
+            onToggle={() => setAdvisorOpen((o) => !o)}
+          />
+        )}
 
         <footer className="pt-4 pb-2 text-center text-[11px] text-stone-600 space-y-1">
           <p>
@@ -540,12 +583,15 @@ function AdvisorCard({
   advisor,
   coins,
   planned,
+  open,
+  onToggle,
 }: {
   advisor: UpgradeReport;
   coins: number | null;
   planned: Set<string>;
+  open: boolean;
+  onToggle: () => void;
 }) {
-  const [open, setOpen] = useState(false);
   const empty =
     advisor.buyNow.length === 0 &&
     advisor.saveUp.length === 0 &&
@@ -553,11 +599,11 @@ function AdvisorCard({
     advisor.locked.length === 0;
 
   return (
-    <Card className="border-stone-800 bg-stone-900/60">
+    <Card id="upgrade-advisor" className="scroll-mt-24 border-stone-800 bg-stone-900/60">
       <CardHeader className="pb-2">
         <button
           type="button"
-          onClick={() => setOpen((o) => !o)}
+          onClick={onToggle}
           aria-expanded={open}
           className="flex w-full items-center gap-2 text-left"
         >
