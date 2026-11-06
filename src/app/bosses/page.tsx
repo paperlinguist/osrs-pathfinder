@@ -14,7 +14,7 @@ import {
   readCharacterExportFiles,
   type OwnedItems,
 } from "@/lib/character-export";
-import { normalizePlayer, type PlayerSkills } from "@/lib/quest-data";
+import { QUESTS, normalizePlayer, type PlayerSkills } from "@/lib/quest-data";
 import {
   BOSSES,
   SLOT_KEYS,
@@ -31,7 +31,8 @@ import {
   type ItemCheck,
   type PresetCheck,
 } from "@/lib/boss-readiness";
-import { suggestUpgrades, type UpgradeSuggestion } from "@/lib/upgrade-advisor";
+import { suggestUpgrades, type UpgradeReport, type UpgradeSuggestion } from "@/lib/upgrade-advisor";
+import { resolveChain } from "@/lib/resolver";
 import { useToast } from "@/hooks/use-toast";
 import { APP_BUILD, APP_VERSION } from "@/lib/version";
 import {
@@ -39,6 +40,7 @@ import {
   ArrowLeft,
   Banknote,
   CheckCircle2,
+  ChevronDown,
   CircleHelp,
   Coins,
   ExternalLink,
@@ -55,6 +57,68 @@ function wikiUrl(name: string) {
   return `https://oldschool.runescape.wiki/w/${encodeURIComponent(name).replace(/%2F/g, "/").replace(/%20/g, "_")}`;
 }
 
+/** planner deep-link for tracking a quest */
+function planUrl(key: string) {
+  return `/?target=${encodeURIComponent(key)}`;
+}
+
+/* quest names for prose linkification — canonical display names (registryName
+   where the dataset name is non-canonical), longest first so e.g. "Desert
+   Treasure II" wins over "Desert Treasure" */
+const QUEST_MENTIONS: { name: string; key: string }[] = (() => {
+  const seen = new Set<string>();
+  const out: { name: string; key: string }[] = [];
+  for (const q of QUESTS) {
+    for (const n of [q.registryName ?? q.name, q.name]) {
+      if (!n || seen.has(n)) continue;
+      seen.add(n);
+      out.push({ name: n, key: q.key });
+    }
+  }
+  return out.sort((a, b) => b.name.length - a.name.length);
+})();
+
+/** render free text with every mentioned quest as a "plan it" deep-link —
+ *  quests already on the plan turn emerald with a ✓ */
+function linkifyQuests(text: string, planned: Set<string>): React.ReactNode {
+  const matches: { start: number; end: number; key: string }[] = [];
+  for (const q of QUEST_MENTIONS) {
+    let idx = text.indexOf(q.name);
+    while (idx !== -1) {
+      if (!matches.some((m) => idx < m.end && m.start < idx + q.name.length)) {
+        matches.push({ start: idx, end: idx + q.name.length, key: q.key });
+      }
+      idx = text.indexOf(q.name, idx + 1);
+    }
+  }
+  if (matches.length === 0) return text;
+  matches.sort((a, b) => a.start - b.start);
+  const out: React.ReactNode[] = [];
+  let pos = 0;
+  for (const m of matches) {
+    if (m.start > pos) out.push(text.slice(pos, m.start));
+    const isPlanned = planned.has(m.key);
+    out.push(
+      <Link
+        key={m.start}
+        href={isPlanned ? "/" : planUrl(m.key)}
+        title={isPlanned ? "Already on your plan — view it" : "Track this quest in the planner"}
+        className={
+          isPlanned
+            ? "font-medium text-emerald-400 underline decoration-dotted underline-offset-2 hover:text-emerald-300"
+            : "font-medium text-amber-300/90 underline decoration-dotted underline-offset-2 hover:text-amber-200"
+        }
+      >
+        {text.slice(m.start, m.end)}
+        {isPlanned ? " ✓" : ""}
+      </Link>,
+    );
+    pos = m.end;
+  }
+  if (pos < text.length) out.push(text.slice(pos));
+  return out;
+}
+
 const VERDICT_STYLES: Record<BossVerdict["status"], { label: string; cls: string }> = {
   ready: { label: "Ready", cls: "bg-emerald-900/60 text-emerald-300 border-emerald-700/50" },
   gated: { label: "Not yet", cls: "bg-amber-900/50 text-amber-300 border-amber-700/50" },
@@ -68,7 +132,11 @@ export default function BossesPage() {
   const [player, setPlayer] = useState<PlayerSkills | null>(null);
   const [completed, setCompleted] = useState<Set<string> | null>(null);
   const [owned, setOwned] = useState<OwnedItems>(EMPTY_OWNED);
+  const [targets, setTargets] = useState<string[]>([]);
+  const [added, setAdded] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>(BOSSES[0]?.key ?? "");
+  /** advisor open state lives here so the header shortcut can open it */
+  const [advisorOpen, setAdvisorOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* ------------------------------------------------- localStorage hydration */
@@ -82,6 +150,16 @@ export default function BossesPage() {
       if (c !== null) setCompleted(new Set(JSON.parse(c) as string[]));
       const o = localStorage.getItem("osrs-qp-owned");
       if (o) setOwned(normalizeOwned(JSON.parse(o)));
+      const t = localStorage.getItem("osrs-qp-targets");
+      if (t) {
+        const arr = JSON.parse(t);
+        if (Array.isArray(arr)) setTargets(arr.filter((k): k is string => typeof k === "string"));
+      }
+      const a = localStorage.getItem("osrs-qp-added");
+      if (a) {
+        const arr = JSON.parse(a);
+        if (Array.isArray(arr)) setAdded(arr.filter((k): k is string => typeof k === "string"));
+      }
     } catch {
       /* corrupt saves — start fresh */
     }
@@ -99,6 +177,19 @@ export default function BossesPage() {
       if (e.key === "osrs-qp-owned") {
         try {
           setOwned(e.newValue ? normalizeOwned(JSON.parse(e.newValue)) : EMPTY_OWNED);
+        } catch { /* ignore */ }
+      }
+      // plan tracking changes on the planner update "planned" badges live
+      if (e.key === "osrs-qp-targets" && e.newValue !== null) {
+        try {
+          const arr = JSON.parse(e.newValue);
+          setTargets(Array.isArray(arr) ? arr.filter((k): k is string => typeof k === "string") : []);
+        } catch { /* ignore */ }
+      }
+      if (e.key === "osrs-qp-added" && e.newValue !== null) {
+        try {
+          const arr = JSON.parse(e.newValue);
+          setAdded(Array.isArray(arr) ? arr.filter((k): k is string => typeof k === "string") : []);
         } catch { /* ignore */ }
       }
     };
@@ -186,6 +277,46 @@ export default function BossesPage() {
     [player, completed, ownedIndex, owned.coins],
   );
 
+  const advisorHasContent =
+    advisor !== null &&
+    (advisor.buyNow.length > 0 ||
+      advisor.saveUp.length > 0 ||
+      advisor.earn.length > 0 ||
+      advisor.locked.length > 0);
+
+  /** header shortcut: expand the advisor and bring it into view */
+  const jumpToAdvisor = useCallback(() => {
+    setAdvisorOpen(true);
+    requestAnimationFrame(() => {
+      document
+        .getElementById("upgrade-advisor")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
+  /** every quest already on the resolved plan (tracked target OR prereq step) —
+   *  same resolver the planner runs, over the same saved targets/extras */
+  const plannedKeys = useMemo(() => {
+    const set = new Set<string>();
+    if (targets.length === 0) return set;
+    try {
+      const r = resolveChain(
+        targets,
+        player ?? { levels: {}, xp: {}, source: "manual" },
+        completed ?? new Set<string>(),
+        { allowBoosts: true, includeQuestXp: true },
+        added,
+      );
+      if (r) {
+        for (const s of r.steps) set.add(s.quest.key);
+        for (const t of r.targets) set.add(t.quest.key);
+      }
+    } catch {
+      /* unresolvable targets — treat as nothing planned */
+    }
+    return set;
+  }, [targets, added, player, completed]);
+
   const selected: Boss | undefined = BOSSES.find((b) => b.key === selectedKey);
   const selectedVerdict = selected ? verdicts.get(selected.key) : undefined;
 
@@ -212,6 +343,22 @@ export default function BossesPage() {
             <ListChecks className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Quests</span>
           </Link>
+          {advisorHasContent && (
+            <button
+              type="button"
+              onClick={jumpToAdvisor}
+              title="What should I buy next? — jump to the upgrade advisor"
+              className="inline-flex items-center gap-1.5 rounded-md border border-amber-800/70 bg-amber-950/30 px-2.5 py-1.5 text-sm text-amber-200 hover:bg-amber-950/50 transition-transform active:scale-[0.97] shrink-0"
+            >
+              <Banknote className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Upgrades</span>
+              {advisor!.buyNow.length > 0 && (
+                <span className="rounded-full bg-emerald-900/60 px-1.5 text-[10px] font-semibold tabular-nums text-emerald-300">
+                  {advisor!.buyNow.length}
+                </span>
+              )}
+            </button>
+          )}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Boss gear planner</h1>
             <p className="text-xs text-stone-400">
@@ -339,79 +486,8 @@ export default function BossesPage() {
           </Card>
         )}
 
-        {/* upgrade advisor — cross-boss "what should I buy next" */}
-        {advisor && (
-          <Card className="border-stone-800 bg-stone-900/60">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base text-stone-200">
-                <Banknote className="h-4 w-4 text-amber-300" aria-hidden />
-                Upgrade advisor
-              </CardTitle>
-              <CardDescription className="text-xs">
-                Every preset item you don&apos;t own that beats what&apos;s in that slot — grouped by
-                what&apos;s holding it back, biggest gain first. Score = attack + damage bonus for
-                the style (defence ignored), compared against your best owned item from the preset
-                pool; exact DPS belongs to the{" "}
-                <a
-                  href="https://oldschool.runescape.wiki/w/Calculator/Combat/DPS"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline decoration-dotted hover:text-amber-300"
-                >
-                  wiki calculator
-                </a>
-                .
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {advisor.buyNow.length === 0 &&
-              advisor.saveUp.length === 0 &&
-              advisor.earn.length === 0 &&
-              advisor.locked.length === 0 ? (
-                <p className="text-xs text-stone-400">
-                  Nothing to buy — every item the presets want is either already on your account or
-                  a downgrade for its slot. Rare.
-                </p>
-              ) : (
-                <>
-                  {advisor.buyNow.length > 0 && (
-                    <AdvisorSection
-                      title={`Buy now (${advisor.buyNow.length})`}
-                      accent="emerald"
-                      suggestions={advisor.buyNow}
-                      coins={owned.coins}
-                      total={advisor.buyNowTotal}
-                    />
-                  )}
-                  {advisor.saveUp.length > 0 && (
-                    <AdvisorSection
-                      title={`Save up for (${advisor.saveUp.length})`}
-                      accent="amber"
-                      suggestions={advisor.saveUp}
-                      coins={owned.coins}
-                    />
-                  )}
-                  {advisor.earn.length > 0 && (
-                    <AdvisorSection
-                      title={`Earn in game — untradeable (${advisor.earn.length})`}
-                      accent="stone"
-                      suggestions={advisor.earn}
-                      coins={owned.coins}
-                    />
-                  )}
-                  {advisor.locked.length > 0 && (
-                    <AdvisorSection
-                      title={`Locked — train or quest first (${advisor.locked.length})`}
-                      accent="stone"
-                      suggestions={advisor.locked}
-                      coins={owned.coins}
-                    />
-                  )}
-                </>
-              )}
-            </CardContent>
-          </Card>
-        )}
+        {/* upgrade advisor lives BELOW the loadouts — collapsed by default so
+            the boss flow comes first; the summary line keeps it discoverable */}
 
         {/* boss cards */}
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -456,6 +532,18 @@ export default function BossesPage() {
             boss={selected}
             verdict={selectedVerdict}
             coins={owned.coins}
+            planned={plannedKeys}
+          />
+        )}
+
+        {/* upgrade advisor — end-of-page summary: what to buy next across all bosses */}
+        {advisor && (
+          <AdvisorCard
+            advisor={advisor}
+            coins={owned.coins}
+            planned={plannedKeys}
+            open={advisorOpen}
+            onToggle={() => setAdvisorOpen((o) => !o)}
           />
         )}
 
@@ -491,17 +579,143 @@ export default function BossesPage() {
 
 /* --------------------------------------------------------- advisor section */
 
+function AdvisorCard({
+  advisor,
+  coins,
+  planned,
+  open,
+  onToggle,
+}: {
+  advisor: UpgradeReport;
+  coins: number | null;
+  planned: Set<string>;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const empty =
+    advisor.buyNow.length === 0 &&
+    advisor.saveUp.length === 0 &&
+    advisor.earn.length === 0 &&
+    advisor.locked.length === 0;
+
+  return (
+    <Card id="upgrade-advisor" className="scroll-mt-24 border-stone-800 bg-stone-900/60">
+      <CardHeader className="pb-2">
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          className="flex w-full items-center gap-2 text-left"
+        >
+          <Banknote className="h-4 w-4 text-amber-300 shrink-0" aria-hidden />
+          <CardTitle className="flex-1 min-w-0 text-base text-stone-200">
+            Upgrade advisor
+            <span className="ml-2 text-xs font-normal text-stone-400">
+              {empty ? (
+                <>nothing to buy — every preset item is owned or a downgrade</>
+              ) : (
+                <>
+                  <b className="text-emerald-300">{advisor.buyNow.length} buy now</b>
+                  {advisor.buyNowTotal > 0 && (
+                    <> · {formatPrice(advisor.buyNowTotal)}</>
+                  )}
+                  {advisor.saveUp.length > 0 && <> · {advisor.saveUp.length} save up</>}
+                  {advisor.earn.length > 0 && <> · {advisor.earn.length} to earn</>}
+                  {advisor.locked.length > 0 && <> · {advisor.locked.length} locked</>}
+                </>
+              )}
+            </span>
+          </CardTitle>
+          <ChevronDown
+            className={`h-4 w-4 shrink-0 text-stone-500 transition-transform ${open ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </button>
+        {open && (
+          <CardDescription className="text-xs pt-1">
+            Every preset item you don&apos;t own that beats what&apos;s in that slot — grouped by
+            what&apos;s holding it back, biggest gain first. Score = attack + damage bonus for the
+            style (defence ignored), compared against your best owned item from the preset pool;
+            exact DPS belongs to the{" "}
+            <a
+              href="https://oldschool.runescape.wiki/w/Calculator/Combat/DPS"
+              target="_blank"
+              rel="noreferrer"
+              className="underline decoration-dotted hover:text-amber-300"
+            >
+              wiki calculator
+            </a>
+            .
+          </CardDescription>
+        )}
+      </CardHeader>
+      {open && (
+        <CardContent className="space-y-3">
+          {empty ? (
+            <p className="text-xs text-stone-400">
+              Nothing to buy — every item the presets want is either already on your account or a
+              downgrade for its slot. Rare.
+            </p>
+          ) : (
+            <>
+              {advisor.buyNow.length > 0 && (
+                <AdvisorSection
+                  title={`Buy now (${advisor.buyNow.length})`}
+                  accent="emerald"
+                  suggestions={advisor.buyNow}
+                  coins={coins}
+                  planned={planned}
+                  total={advisor.buyNowTotal}
+                />
+              )}
+              {advisor.saveUp.length > 0 && (
+                <AdvisorSection
+                  title={`Save up for (${advisor.saveUp.length})`}
+                  accent="amber"
+                  suggestions={advisor.saveUp}
+                  coins={coins}
+                  planned={planned}
+                />
+              )}
+              {advisor.earn.length > 0 && (
+                <AdvisorSection
+                  title={`Earn in game — untradeable (${advisor.earn.length})`}
+                  accent="stone"
+                  suggestions={advisor.earn}
+                  coins={coins}
+                  planned={planned}
+                />
+              )}
+              {advisor.locked.length > 0 && (
+                <AdvisorSection
+                  title={`Locked — train or quest first (${advisor.locked.length})`}
+                  accent="stone"
+                  suggestions={advisor.locked}
+                  coins={coins}
+                  planned={planned}
+                />
+              )}
+            </>
+          )}
+        </CardContent>
+      )}
+    </Card>
+  );
+}
+
 function AdvisorSection({
   title,
   accent,
   suggestions,
   coins,
+  planned,
   total,
 }: {
   title: string;
   accent: "emerald" | "amber" | "stone";
   suggestions: UpgradeSuggestion[];
   coins: number | null;
+  planned: Set<string>;
   /** buy-now only: cost of buying the whole section */
   total?: number;
 }) {
@@ -520,16 +734,15 @@ function AdvisorSection({
       </div>
       <div className="divide-y divide-stone-800/70 rounded-md border border-stone-800 bg-stone-950/40">
         {suggestions.map((s) => (
-          <AdvisorRow key={s.item.id} s={s} />
+          <AdvisorRow key={s.item.id} s={s} planned={planned} />
         ))}
       </div>
     </div>
   );
 }
 
-function AdvisorRow({ s }: { s: UpgradeSuggestion }) {
+function AdvisorRow({ s, planned }: { s: UpgradeSuggestion; planned: Set<string> }) {
   const style = s.styles[0] ?? "Melee";
-  const questLock = s.locks.find((l) => l.type === "quest");
   return (
     <div className="px-3 py-2 flex flex-wrap items-center gap-x-2 gap-y-1">
       <a
@@ -575,19 +788,36 @@ function AdvisorRow({ s }: { s: UpgradeSuggestion }) {
               <AlertTriangle className="h-3 w-3 mr-0.5" aria-hidden />
               {l.skill} {l.current ?? "?"} → {l.required}
             </Badge>
+          ) : planned.has(l.key) ? (
+            <Link
+              key={i}
+              href="/"
+              title={`${questName(l.key)} is already on your plan — view it`}
+              className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+            >
+              <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+              planned: {questName(l.key)}
+            </Link>
+          ) : planned.has(l.key) ? (
+            <Link
+              key={i}
+              href="/"
+              title={`${questName(l.key)} is already on your plan — view it`}
+              className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+            >
+              <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+              planned: {questName(l.key)}
+            </Link>
           ) : (
-            <Badge key={i} className="border-amber-800/50 bg-amber-950/30 text-amber-300">
+            <Link
+              key={i}
+              href={planUrl(l.key)}
+              title={`Track ${questName(l.key)} in the planner`}
+              className="inline-flex items-center rounded-full border border-amber-800/50 bg-amber-950/30 px-2.5 py-0.5 text-[11px] font-medium text-amber-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-amber-600 hover:text-amber-200"
+            >
               quest: {questName(l.key)}
-            </Badge>
+            </Link>
           ),
-        )}
-        {questLock && (
-          <Link
-            href={`/?target=${encodeURIComponent(questLock.key)}`}
-            className="text-[11px] text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
-          >
-            plan it →
-          </Link>
         )}
       </span>
     </div>
@@ -598,10 +828,12 @@ function BossDetail({
   boss,
   verdict,
   coins,
+  planned,
 }: {
   boss: Boss;
   verdict: BossVerdict;
   coins: number | null;
+  planned: Set<string>;
 }) {
   return (
     <div className="space-y-4">
@@ -647,14 +879,24 @@ function BossDetail({
                   <span className={q.done ? "text-emerald-400" : "text-amber-300"}>
                     {q.done ? "✓" : q.done === false ? "✗" : "•"} quest: {questName(q.key)}
                   </span>
-                  {!q.done && (
-                    <Link
-                      href={`/?target=${encodeURIComponent(q.key)}`}
-                      className="text-xs text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
-                    >
-                      plan it →
-                    </Link>
-                  )}
+                  {!q.done &&
+                    (planned.has(q.key) ? (
+                      <Link
+                        href="/"
+                        title="Already on your plan — view it"
+                        className="inline-flex items-center gap-0.5 text-xs text-emerald-400 underline underline-offset-2 hover:text-emerald-300"
+                      >
+                        <CheckCircle2 className="h-3 w-3" aria-hidden />
+                        planned
+                      </Link>
+                    ) : (
+                      <Link
+                        href={planUrl(q.key)}
+                        className="text-xs text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
+                      >
+                        plan it →
+                      </Link>
+                    ))}
                 </div>
               ))}
             </div>
@@ -692,13 +934,17 @@ function BossDetail({
               )}
             </div>
           )}
-          {boss.notes && <p className="text-xs leading-relaxed text-stone-400">{boss.notes}</p>}
+          {boss.notes && (
+            <p className="text-xs leading-relaxed text-stone-400">
+              {linkifyQuests(boss.notes, planned)}
+            </p>
+          )}
         </CardContent>
       </Card>
 
       {/* presets */}
       {verdict.presets.map((p) => (
-        <PresetCard key={p.preset.name} presetCheck={p} coins={coins} />
+        <PresetCard key={p.preset.name} presetCheck={p} coins={coins} planned={planned} />
       ))}
     </div>
   );
@@ -709,9 +955,11 @@ function BossDetail({
 function PresetCard({
   presetCheck,
   coins,
+  planned,
 }: {
   presetCheck: PresetCheck;
   coins: number | null;
+  planned: Set<string>;
 }) {
   const { preset, style, items, ownedCount, knownOwned, missingCost, affordableCount, overBudgetCount } =
     presetCheck;
@@ -734,7 +982,9 @@ function PresetCard({
         <CardTitle className="text-base text-stone-200">
           {preset.name} <span className="text-xs font-normal text-stone-500">· {style}</span>
         </CardTitle>
-        <CardDescription className="text-xs">{preset.description}</CardDescription>
+        <CardDescription className="text-xs">
+          {linkifyQuests(preset.description, planned)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         {/* rollup */}
@@ -805,7 +1055,15 @@ function PresetCard({
           {SLOT_KEYS.filter((k) => preset.slots[k]).map((k) => {
             const check = bySlot.get(k);
             if (!check) return null;
-            return <SlotRow key={k} slotLabel={SLOT_LABELS[k]} check={check} style={style} />;
+            return (
+              <SlotRow
+                key={k}
+                slotLabel={SLOT_LABELS[k]}
+                check={check}
+                style={style}
+                planned={planned}
+              />
+            );
           })}
         </div>
 
@@ -831,7 +1089,7 @@ function PresetCard({
 
         {preset.notes && (
           <p className="text-xs leading-relaxed text-stone-500 border-t border-stone-800/70 pt-2">
-            {preset.notes}
+            {linkifyQuests(preset.notes, planned)}
           </p>
         )}
       </CardContent>
@@ -845,10 +1103,12 @@ function SlotRow({
   slotLabel,
   check,
   style,
+  planned,
 }: {
   slotLabel: string;
   check: ItemCheck;
   style: string;
+  planned: Set<string>;
 }) {
   const { item, owned, locks, price, affordable } = check;
   return (
@@ -903,24 +1163,70 @@ function SlotRow({
                 untradeable — earn it
               </Badge>
             )}
-            {locks.map((l, i) => (
-              <Badge
-                key={i}
-                className="border-amber-800/50 bg-amber-950/30 text-amber-300"
-                title={l.type === "level" ? `${l.skill} ${l.current ?? "?"} → ${l.required}` : questName(l.key)}
-              >
-                <AlertTriangle className="h-3 w-3 mr-0.5" aria-hidden />
-                {l.type === "level"
-                  ? `${l.skill} ${l.required}${l.current !== null ? ` (${l.current})` : ""}`
-                  : `quest: ${questName(l.key)}`}
-              </Badge>
-            ))}
+            {locks.map((l, i) =>
+              l.type === "level" ? (
+                <Badge
+                  key={i}
+                  className="border-amber-800/50 bg-amber-950/30 text-amber-300"
+                  title={`${l.skill} ${l.current ?? "?"} → ${l.required}`}
+                >
+                  <AlertTriangle className="h-3 w-3 mr-0.5" aria-hidden />
+                  {l.skill} {l.required}
+                  {l.current !== null ? ` (${l.current})` : ""}
+                </Badge>
+              ) : planned.has(l.key) ? (
+                <Link
+                  key={i}
+                  href="/"
+                  title={`${questName(l.key)} is already on your plan — view it`}
+                  className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+                >
+                  <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                  planned: {questName(l.key)}
+                </Link>
+              ) : (
+                <Link
+                  key={i}
+                  href={planUrl(l.key)}
+                  title={`Track ${questName(l.key)} in the planner`}
+                  className="inline-flex items-center rounded-full border border-amber-800/50 bg-amber-950/30 px-2.5 py-0.5 text-[11px] font-medium text-amber-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-amber-600 hover:text-amber-200"
+                >
+                  <AlertTriangle className="h-3 w-3 mr-0.5" aria-hidden />
+                  quest: {questName(l.key)}
+                </Link>
+              ),
+            )}
           </>
         )}
         {owned === null && locks.length > 0 && (
-          <Badge className="border-stone-700 bg-stone-900 text-stone-500">
-            {locks.map((l) => (l.type === "level" ? `${l.skill} ${l.required}` : `quest: ${questName(l.key)}`)).join(" · ")}
-          </Badge>
+          <>
+            {locks.map((l, i) =>
+              l.type === "level" ? (
+                <Badge key={i} className="border-stone-700 bg-stone-900 text-stone-500">
+                  {l.skill} {l.required}
+                </Badge>
+              ) : planned.has(l.key) ? (
+                <Link
+                  key={i}
+                  href="/"
+                  title={`${questName(l.key)} is already on your plan — view it`}
+                  className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 hover:border-emerald-600 hover:text-emerald-200"
+                >
+                  <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                  planned: {questName(l.key)}
+                </Link>
+              ) : (
+                <Link
+                  key={i}
+                  href={planUrl(l.key)}
+                  title={`Track ${questName(l.key)} in the planner`}
+                  className="inline-flex items-center rounded-full border border-stone-700 bg-stone-900 px-2.5 py-0.5 text-[11px] font-medium text-stone-400 underline decoration-dotted underline-offset-2 hover:border-amber-700/70 hover:text-amber-200"
+                >
+                  quest: {questName(l.key)}
+                </Link>
+              ),
+            )}
+          </>
         )}
       </span>
     </div>
