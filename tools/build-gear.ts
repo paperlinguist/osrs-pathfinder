@@ -40,6 +40,9 @@ const REQ_OVERRIDES: Record<string, { levels: Record<string, number>; quests?: s
   "iban's staff (u)": { levels: { Magic: 50, Attack: 50 }, quests: ["underground pass"], why: "wiki: same wield reqs as base staff; cache has none for the upgraded variant" },
   "ruby dragon bolts (e)": { levels: { Ranged: 64 }, why: "wiki: dragon bolts require 64 Ranged (cache has none)" },
   "diamond dragon bolts (e)": { levels: { Ranged: 64 }, why: "wiki: dragon bolts require 64 Ranged (cache has none)" },
+  "spectral spirit shield": { levels: { Defence: 75, Prayer: 70, Magic: 65 }, why: "wiki: 75 Defence + 70 Prayer + 65 Magic (cache has none)" },
+  "dragon hunter lance": { levels: { Attack: 78 }, quests: ["barbarian training"], why: "wiki: 78 Attack + Barbarian Training (cache has none)" },
+  "abyssal bludgeon": { levels: { Attack: 70, Strength: 70 }, why: "wiki: 70 Attack + 70 Strength (cache has none)" },
 };
 
 /** variant suffix preference when several osrs-db entries share a base name */

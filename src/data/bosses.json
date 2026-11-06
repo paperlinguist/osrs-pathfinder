@@ -1294,6 +1294,283 @@
         }
       ],
       "notes": "Drops the Ring of the gods and dragon pickaxe. Salve amulet (e) is the single biggest upgrade for this fight."
+    },
+    {
+      "key": "abyssal-sire",
+      "name": "Abyssal Sire",
+      "tier": "Hard",
+      "tagline": "The abyssal demon king — the Sire of the Slayer ladder.",
+      "members": true,
+      "wiki": "Abyssal Sire",
+      "location": "Sire's lair, reached through the Abyss (85 Slayer + one Abyss visit)",
+      "duration": "2–3 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 85, "note": "Abyssal demon task; visit the Abyss once first" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 85, "note": "Melee the main body after the tentacles" },
+        { "skill": "Strength", "level": 85, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee on the final phase" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Arclight (Shadow of the Storm) is BiS against demons — the whip works while you unlock it.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Rune crossbow + bolts", "qty": "—", "note": "Kill the four respiratory systems first" },
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "The fight is four respiratory systems, then the Sire itself — pray Melee once the body wakes. Arclight (ancient shards) makes the last phase much faster."
+        }
+      ],
+      "notes": "Drops the Unsired → bludgeon pieces and the abyssal orphan pet."
+    },
+    {
+      "key": "cerberus",
+      "name": "Cerberus",
+      "tier": "Hard",
+      "tagline": "The three-headed hellhound — spectral shield territory.",
+      "members": true,
+      "wiki": "Cerberus",
+      "location": "Cerberus' Lair, Taverley Dungeon (91 Slayer + hellhound task)",
+      "duration": "2–3 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 91, "note": "Hellhound task (wild pies can boost the level)" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 90, "note": "Whip or better" },
+        { "skill": "Defence", "level": 90, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "The three ghost attacks drain 66% of your prayer each" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee + spectral",
+          "description": "A Spectral spirit shield halves the ghost prayer-drain — the single best defensive upgrade for this fight.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Spectral spirit shield",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "4–6", "note": "The ghosts eat your prayer" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "Three ghost attacks: A (Melee prayer), B (Ranged prayer), C (Magic prayer) — the wrong overhead means 66% prayer gone. Spectral halves it."
+        }
+      ],
+      "notes": "Drops the primordial, pegasian and eternal crystals (the boot upgrades). 91 Slayer is the real gate."
+    },
+    {
+      "key": "thermonuclear-smoke-devil",
+      "name": "Thermonuclear Smoke Devil",
+      "tier": "Medium",
+      "tagline": "Thermy — the magic-vulnerable smoke devil boss.",
+      "members": true,
+      "wiki": "Thermonuclear smoke devil",
+      "location": "Smoke Devil Dungeon, south of Castle Wars (93 Slayer + task)",
+      "duration": "1–2 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 93, "note": "Smoke devil task only" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Magic", "level": 87, "note": "Trident melts him" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+      ],
+      "styles": ["Magic"],
+      "presets": [
+        {
+          "name": "Magic",
+          "description": "Trident + Ahrim's. The occult and seers ring you already own slot straight in.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Stand just out of melee range and it can't reach you — it only attacks with magic. Pure trident DPS from there."
+        }
+      ],
+      "notes": "Drops the Occult necklace and smoke battlestaff. Very AFK once you're in position."
+    },
+    {
+      "key": "alchemical-hydra",
+      "name": "Alchemical Hydra",
+      "tier": "Hard",
+      "tagline": "The Karuulm experiment — lance territory at 95 Slayer.",
+      "members": true,
+      "wiki": "Alchemical Hydra",
+      "location": "Karuulm Slayer Dungeon, Mount Karuulm (95 Slayer + hydra task)",
+      "duration": "2–3 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 95, "note": "Hydra task only" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 90, "note": "Dragon hunter lance is the meta" },
+        { "skill": "Defence", "level": 90, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic/Melee as it swaps" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee (lance)",
+          "description": "The Dragon hunter lance is purpose-built for draconic bosses — whip/hasta work on a budget.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Dragon hunter lance",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "Skip the flame phase by standing on the vents in the corners. Dodge the lightning tiles in phase two. The lance makes this the best consistent Slayer money."
+        }
+      ],
+      "notes": "Drops the Hydra's claw (→ Dragon hunter lance) and leather. 95 Slayer is the long grind."
+    },
+    {
+      "key": "hespori",
+      "name": "Hespori",
+      "tier": "Easy",
+      "tagline": "The Farming Guild's house boss — plant a seed, fight a flower.",
+      "members": true,
+      "wiki": "Hespori",
+      "location": "Farming Guild, west wing (65 Farming + Hespori seed)",
+      "duration": "2–3 min, repeatable every ~16h",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Farming", "level": 65, "note": "Plant a hespori seed in the patch to spawn it" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 75, "note": "Melee works fine" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Whip + defender. She's tanky but predictable.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "She periodically spawns flowers that heal her — chop or kill them fast. It's a Farming boss, so treat it as a daily-ish profit rather than a camp."
+        }
+      ],
+      "notes": "Drops the bottomless compost bucket and seeds. The hespori seed comes from your own farming patches."
+    },
+    {
+      "key": "nightmare",
+      "name": "The Nightmare",
+      "tier": "Hard",
+      "tagline": "Slepe's dream boss — crush her with a team.",
+      "members": true,
+      "wiki": "The Nightmare",
+      "location": "Sisterhood Sanctuary, under Slepe (Morytania access)",
+      "duration": "5–8 min per kill, team-based",
+      "requirements": {
+        "quests": ["priest in peril"],
+        "skills": []
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 90, "note": "Crush is her weakness" },
+        { "skill": "Defence", "level": 90, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Overheads through the parasite phases" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee (crush)",
+          "description": "The Abyssal bludgeon's crush is ideal — a Zamorakian spear or whip works on a budget.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal bludgeon",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "Team boss — the parasite phases (grasping claws) and the pillar phase are the mechanics to learn. Phosani's Nightmare is the brutal solo hard mode."
+        }
+      ],
+      "notes": "Drops the Inquisitor's armour and Nightmare staff pieces. Morytania access (Priest in Peril) is the only hard gate."
     }
   ]
 }
