@@ -58,6 +58,7 @@ import {
   Shirt,
   Swords,
   Upload,
+  X,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ utils */
@@ -552,8 +553,18 @@ export default function BossesPage() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search bosses…"
               aria-label="Search bosses"
-              className="bg-stone-950 border-stone-700 pl-8 focus-visible:ring-amber-600"
+              className="bg-stone-950 border-stone-700 pl-8 pr-8 focus-visible:ring-amber-600"
             />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-300"
+              >
+                <X className="h-3.5 w-3.5" aria-hidden />
+              </button>
+            )}
           </div>
           <div
             role="group"
@@ -598,8 +609,23 @@ export default function BossesPage() {
             </SelectContent>
           </Select>
           <span className="text-[11px] text-stone-500 tabular-nums">
-            {filteredBosses.length} / {BOSSES.length}
+            {filteredBosses.length === 0
+              ? `0 of ${BOSSES.length}`
+              : `${(safePage - 1) * PAGE_SIZE + 1}–${Math.min(safePage * PAGE_SIZE, filteredBosses.length)} of ${filteredBosses.length}`}
           </span>
+          {(query.trim() || readyFilter !== "all" || tierFilter !== "all") && (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setReadyFilter("all");
+                setTierFilter("all");
+              }}
+              className="text-[11px] text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
+            >
+              Reset
+            </button>
+          )}
         </div>
 
         {filteredBosses.length === 0 ? (

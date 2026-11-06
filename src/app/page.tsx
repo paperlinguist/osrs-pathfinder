@@ -1496,7 +1496,6 @@ export default function Home() {
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
                       Boss gear planner
-                      <span className="text-[10px] font-medium text-stone-500">new</span>
                     </span>
                     <span className="block truncate text-xs text-stone-400">
                       Am I ready for the Fight Caves? Readiness checks, budget loadouts and buy

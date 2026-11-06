@@ -498,7 +498,7 @@ export default function CompletionsPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="min-w-[12rem] flex-1 text-sm text-stone-200">
                     <span className="font-semibold text-emerald-300">
-                      {importPreview.rsn ?? "Unknown character"}
+                      {importPreview.rsn ?? (importPreview.source === "character-export" ? "Character Export file" : "Unknown character")}
                     </span>
                     {importPreview.timestampIso &&
                       !Number.isNaN(Date.parse(importPreview.timestampIso)) && (
