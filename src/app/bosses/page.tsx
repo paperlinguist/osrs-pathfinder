@@ -544,7 +544,7 @@ export default function BossesPage() {
             the boss flow comes first; the summary line keeps it discoverable */}
 
         {/* boss cards */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div id="boss-list" className="scroll-mt-24 flex flex-wrap items-center gap-2">
           <div className="relative min-w-[12rem] flex-1">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-500" aria-hidden />
             <Input
@@ -654,7 +654,9 @@ export default function BossesPage() {
               onClick={() => {
                 setPage(safePage - 1);
                 pendingDetailScroll.current = false;
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                document
+                  .getElementById("boss-list")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
               className="border-stone-700 text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] disabled:opacity-40"
             >
@@ -670,7 +672,9 @@ export default function BossesPage() {
               onClick={() => {
                 setPage(safePage + 1);
                 pendingDetailScroll.current = false;
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                document
+                  .getElementById("boss-list")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
               className="border-stone-700 text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] disabled:opacity-40"
             >
