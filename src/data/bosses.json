@@ -761,6 +761,539 @@
         }
       ],
       "notes": "Commander Zilyana's chamber needs 70 Agility (unboostable) + two ropes on the first visit; K'ril Tsutsaroth's needs no extra level. Zamorakian/Saradominist kill count opens those doors. Teams split the four generals for their godsword hilts."
+    },
+    {
+      "key": "king-black-dragon",
+      "name": "King Black Dragon",
+      "tier": "Easy",
+      "tagline": "The classic dragon — everyone's first real dragon boss.",
+      "members": false,
+      "wiki": "King Black Dragon",
+      "location": "KBD Lair, deep Wilderness (use the Lava Maze entry for a safespot)",
+      "duration": "1–2 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 70, "note": "Or 70 Ranged — pick a style" },
+        { "skill": "Defence", "level": 70, "note": "Dragonfire is the only real danger" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee blanks his claw attacks" }
+      ],
+      "styles": ["Melee", "Ranged"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Whip + dragonfire shield. The shield needs Dragon Slayer I and 75 Defence; an Anti-dragon shield works before that.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragonfire shield",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "Stacks with the shield for full dragonfire protection" },
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Wilderness boss — be ready to teleport out at 30 Wilderness if a PKer shows. The Lava Maze entrance gives a safe ladder to hop."
+        },
+        {
+          "name": "Ranged",
+          "description": "Crossbow + dragonfire shield from a distance.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of fury",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Rune crossbow",
+            "shield": "Dragonfire shield",
+            "body": "Karil's leathertop",
+            "hands": "Black d'hide vambraces",
+            "legs": "Karil's leatherskirt",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "His firebreath hits magic defence — d'hide's high magic defence is why ranged is the safe pick."
+        }
+      ],
+      "notes": "Dragon pickaxe and pet are the chase drops. Safespot him behind the ladder by the Lava Maze entrance if soloing low-level."
+    },
+    {
+      "key": "kalphite-queen",
+      "name": "Kalphite Queen",
+      "tier": "Medium",
+      "tagline": "Two phases, two prayer styles — the queen of the Kalphite Lair.",
+      "members": true,
+      "wiki": "Kalphite Queen",
+      "location": "Kalphite Lair, west of the Shantay Pass (bring two ropes)",
+      "duration": "3–5 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 75, "note": "Crush is her weakness in phase two" },
+        { "skill": "Defence", "level": 75, "note": "Her attacks are 100% accurate — prayer is mandatory" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic phase 1, Protect from Missiles phase 2" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Crush weapons hit hardest in phase two. A Dragon mace is the budget crush pick.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Ropes", "qty": "2", "note": "First time down the lair only" },
+            { "name": "Prayer potion(4)", "qty": "4–6", "note": "Two phases of overheads" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "Phase two drops prayer protection — swap to Protect from Missiles the moment she swaps styles. A Dragon mace or Zamorakian spear (crush) out-hits the whip here."
+        }
+      ],
+      "notes": "Drops the Dragon chainbody and dragon 2h sword pieces. Bring a ranged/magic switch for the first phase's workers if soloing."
+    },
+    {
+      "key": "scurrius",
+      "name": "Scurrius",
+      "tier": "Introductory",
+      "tagline": "The giant rat of the Varrock Sewers — the modern combat trainer.",
+      "members": false,
+      "wiki": "Scurrius",
+      "location": "Varrock Sewers",
+      "duration": "1–2 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 40, "note": "Any style works — bone weapons are his drops" },
+        { "skill": "Defence", "level": 40, "note": "" },
+        { "skill": "Prayer", "level": 37, "note": "Protect from Melee stops the rat swarm" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Full rune or better. His Bone mace drops make him the best low-mid combat XP in the game.",
+          "slots": {
+            "head": "Rune full helm",
+            "cape": "Obsidian cape",
+            "neck": "Amulet of fury",
+            "weapon": "Bone mace",
+            "shield": "Dragon defender",
+            "body": "Rune platebody",
+            "hands": "Barrows gloves",
+            "legs": "Rune platelegs",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / lobsters", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Kill the rat spawns before they swarm you — Scurrius heals while they're alive. Bone weaponry (mace/shortbow/staff) shreds him."
+        }
+      ],
+      "notes": "The Bone mace/shortbow/staff he drops are BiS against him — swap them in as you get them. This is the fastest early combat XP."
+    },
+    {
+      "key": "corporeal-beast",
+      "name": "Corporeal Beast",
+      "tier": "Hard",
+      "tagline": "The 2,000 HP spirit shield machine — a true group boss.",
+      "members": true,
+      "wiki": "Corporeal Beast",
+      "location": "Corporeal Beast Lair, deep Wilderness (no quest needed)",
+      "duration": "team-based · spear/hasta required",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 85, "note": "Only spears and hastas can damage him" },
+        { "skill": "Strength", "level": 85, "note": "" },
+        { "skill": "Defence", "level": 85, "note": "He hits through prayer constantly" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic reduces, never removes, the damage" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee (spear)",
+          "description": "Zamorakian spear is the weapon — anything else hits for nearly nothing.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Zamorakian spear",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "12–20", "note": "He's a damage sponge" }
+          ],
+          "notes": "The spear isn't optional — it's the only weapon type that bypasses his defence. Groups of 4+ with one spec-teleporter (Dragon warhammer) make it manageable."
+        }
+      ],
+      "notes": "Spirit shields (elysian sigil) are the jackpot. Solo him by standing under to dodge the core. You must use a spear or hasta to deal meaningful damage."
+    },
+    {
+      "key": "kraken",
+      "name": "Kraken",
+      "tier": "Medium",
+      "tagline": "The Cave Kraken boss — AFK magic money.",
+      "members": true,
+      "wiki": "Kraken",
+      "location": "Kraken Cove (Kraken Slayer task required)",
+      "duration": "1–2 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 87, "note": "Cannot be boosted — need an active Kraken task too" },
+          { "skill": "Magic", "level": 50, "note": "Minimum to damage it" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Magic", "level": 75, "note": "Trident territory — 87 is ideal" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+      ],
+      "styles": ["Magic"],
+      "presets": [
+        {
+          "name": "Magic",
+          "description": "Trident + mystic/Ahrim's. The occult and seers ring you already own slot straight in.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "The tentacles hurt if you let them stack" }
+          ],
+          "notes": "The four tentacles heal it — either ignore them with high defence or kill the whirlpools. It's a very AFK-friendly boss once set up."
+        }
+      ],
+      "notes": "Drops the Kraken tentacle (barbarian fishing XP) and the Trident of the Seas itself. Gated by 87 Slayer, so it's a long-term goal — but nearly zero-risk money."
+    },
+    {
+      "key": "grotesque-guardians",
+      "name": "Grotesque Guardians",
+      "tier": "Medium",
+      "tagline": "Dusk and Dawn — the gargoyle duo atop the Slayer Tower.",
+      "members": true,
+      "wiki": "Grotesque Guardians",
+      "location": "Slayer Tower rooftop (gargoyle Slayer task + brittle key to first enter)",
+      "duration": "2–4 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [
+          { "skill": "Slayer", "level": 75, "note": "Gargoyle task + a brittle key from gargoyle kills" }
+        ]
+      },
+      "recommended": [
+        { "skill": "Attack", "level": 75, "note": "Whip territory" },
+        { "skill": "Ranged", "level": 75, "note": "Dawn's flying phase" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee on Dusk, Missiles on Dawn" }
+      ],
+      "styles": ["Melee", "Ranged"],
+      "presets": [
+        {
+          "name": "Melee + ranged switch",
+          "description": "Whip for Dusk (ground), crossbow for Dawn's flying phase.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "ammo": "Adamant bolts",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Rune crossbow + bolts", "qty": "—", "note": "Switch for Dawn's flight" },
+            { "name": "Prayer potion(4)", "qty": "2–4", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+          ],
+          "notes": "Two bosses, two overheads — Melee on Dusk, Ranged on Dawn. Don't stand in the purple lightning. The brittle key is a one-time unlock."
+        }
+      ],
+      "notes": "Drops the granite dust and the gargoyle pet. Dusk is weak to melee, Dawn to ranged — the switch is the whole fight."
+    },
+    {
+      "key": "chaos-fanatic",
+      "name": "Chaos Fanatic",
+      "tier": "Easy",
+      "tagline": "The lava-wreathed mage — Wildy demi-boss with pet potential.",
+      "members": true,
+      "wiki": "Chaos Fanatic",
+      "location": "West of the Lava Maze, level 42 Wilderness",
+      "duration": "1–2 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Ranged", "level": 70, "note": "Or 70 Magic — he's squishy either way" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+      ],
+      "styles": ["Magic", "Ranged"],
+      "presets": [
+        {
+          "name": "Magic",
+          "description": "Mystic + trident. His magic attack is the thing to pray against.",
+          "slots": {
+            "head": "Mystic hat",
+            "cape": "Saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Mystic robe top",
+            "hands": "Mystic gloves",
+            "legs": "Mystic robe bottom",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Wilderness boss — keep a one-click teleport ready and stay mobile. He spawns a chaos elemental helper."
+        }
+      ],
+      "notes": "Drops the Chaos pet and shards for the Odium/Malediction wards. Easy to camp, PKers are the real boss."
+    },
+    {
+      "key": "crazy-archaeologist",
+      "name": "Crazy Archaeologist",
+      "tier": "Easy",
+      "tagline": "The mad mage of the Ruins — Wildy demi-boss.",
+      "members": true,
+      "wiki": "Crazy archaeologist",
+      "location": "Ruins (west), level 25 Wilderness",
+      "duration": "1 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Ranged", "level": 60, "note": "Crossbow + bolts" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic against his blasts" }
+      ],
+      "styles": ["Ranged", "Melee"],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Crossbow + d'hide from out of his book-blast range.",
+          "slots": {
+            "head": "Coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of glory",
+            "ammo": "Ruby bolts (e)",
+            "weapon": "Rune crossbow",
+            "body": "Black d'hide body",
+            "hands": "Black d'hide vambraces",
+            "legs": "Black d'hide chaps",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / lobsters", "qty": "6–10", "note": "" }
+          ],
+          "notes": "His special hurls three books in a spread — step out of the tiles. Level 25 Wildy, so teleport works unless you're teleblocked."
+        }
+      ],
+      "notes": "Drops the Odium shard 2 and the fedora. A quick, low-risk Wildy kill."
+    },
+    {
+      "key": "scorpia",
+      "name": "Scorpia",
+      "tier": "Easy",
+      "tagline": "The giant scorpion — Wildy demi-boss.",
+      "members": true,
+      "wiki": "Scorpia",
+      "location": "Scorpion Pit, level 53 Wilderness (deep — bring a teleport)",
+      "duration": "1–2 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Magic", "level": 70, "note": "Her melee hits hard through prayer" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic against the scorpion spawns" }
+      ],
+      "styles": ["Magic"],
+      "presets": [
+        {
+          "name": "Magic",
+          "description": "Mystic + trident. Hug the wall so the scorpion spawns can't stack.",
+          "slots": {
+            "head": "Mystic hat",
+            "cape": "Saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Mystic robe top",
+            "hands": "Mystic gloves",
+            "legs": "Mystic robe bottom",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            { "name": "Trident charges + runes", "qty": "—", "note": "" },
+            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+          ],
+          "notes": "Level 53 Wildy — PKers will find you. She spawns two scorpion guardians that range you; hugging the wall minimises them."
+        }
+      ],
+      "notes": "Drops the Malediction shard 3 and the Scorpia's offspring pet."
+    },
+    {
+      "key": "callisto",
+      "name": "Callisto",
+      "tier": "Medium",
+      "tagline": "The bear of the Frozen Waste — Wildy boss with the Tyrannical ring.",
+      "members": true,
+      "wiki": "Callisto",
+      "location": "Callisto's Den, level 45 Wilderness",
+      "duration": "2–3 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Ranged", "level": 75, "note": "Or melee — he hits hard either way" },
+        { "skill": "Defence", "level": 75, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic stops his roar" }
+      ],
+      "styles": ["Ranged", "Melee"],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Crossbow + d'hide. His roar is a magic attack — pray Magic.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of fury",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Armadyl crossbow",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
+            { "name": "Ranging potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+          ],
+          "notes": "His roar knocks you back and drains prayer — step behind him to avoid it. The singles variant Calvar'ion has the same loot table in a safer arena."
+        }
+      ],
+      "notes": "Drops the Tyrannical ring and dragon pickaxe. Deep-ish Wildy — the singles variants (Calvar'ion) are the safer grind."
+    },
+    {
+      "key": "venenatis",
+      "name": "Venenatis",
+      "tier": "Medium",
+      "tagline": "The spider queen of the Wildy — drops the Treasonous ring.",
+      "members": true,
+      "wiki": "Venenatis",
+      "location": "Spider's Den, level 44 Wilderness",
+      "duration": "2–3 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 75, "note": "" },
+        { "skill": "Defence", "level": 75, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Whip + defender. Stand under her to force her into melee range.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+          ],
+          "notes": "Her magic webs drag you in — stand under her to stop the ranged/magic cycle. The singles variant Spindel shares the drop table."
+        }
+      ],
+      "notes": "Drops the Treasonous ring and dragon pickaxe."
+    },
+    {
+      "key": "vetion",
+      "name": "Vet'ion",
+      "tier": "Medium",
+      "tagline": "The skeletal undead — Salve amulet melts him.",
+      "members": true,
+      "wiki": "Vet'ion",
+      "location": "Vet'ion's Rest, level 40 Wilderness",
+      "duration": "2–3 min per kill",
+      "requirements": { "quests": [], "skills": [] },
+      "recommended": [
+        { "skill": "Attack", "level": 75, "note": "" },
+        { "skill": "Defence", "level": 75, "note": "" },
+        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+      ],
+      "styles": ["Melee"],
+      "presets": [
+        {
+          "name": "Melee (salve)",
+          "description": "Vet'ion is undead — a Salve amulet (e) gives a big damage boost over any other neck slot.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            { "name": "Salve amulet (e)", "qty": "1", "note": "BiS here — undead bonus beats any fury" },
+            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
+            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
+            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+          ],
+          "notes": "Vet'ion summons two hellhound guardians — kill them first or they'll drain your supplies. Calvar'ion is the singles version with the same loot."
+        }
+      ],
+      "notes": "Drops the Ring of the gods and dragon pickaxe. Salve amulet (e) is the single biggest upgrade for this fight."
     }
   ]
 }

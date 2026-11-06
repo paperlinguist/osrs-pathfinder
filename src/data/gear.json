@@ -6,8 +6,8 @@
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-06T22:51:36.726Z",
-  "items": 76
+  "priceSnapshot": "2026-11-06T23:06:00.618Z",
+  "items": 78
  },
  "items": [
   {
@@ -2225,6 +2225,64 @@
    "reqQuests": [],
    "override": "wiki: dragon bolts require 64 Ranged (cache has none)",
    "price": 2698
+  },
+  {
+   "id": 28792,
+   "name": "Bone mace",
+   "rawName": "Bone mace",
+   "slot": "Weapon",
+   "members": true,
+   "stats": {
+    "stabAttack": 40,
+    "slashAttack": -2,
+    "crushAttack": 60,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 55,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 4,
+   "reqLevels": {},
+   "reqQuests": [],
+   "override": null,
+   "price": null
+  },
+  {
+   "id": 11824,
+   "name": "Zamorakian spear",
+   "rawName": "Zamorakian spear",
+   "slot": "Two-handed",
+   "members": true,
+   "stats": {
+    "stabAttack": 85,
+    "slashAttack": 65,
+    "crushAttack": 65,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 13,
+    "slashDefence": 13,
+    "crushDefence": 12,
+    "magicDefence": 0,
+    "rangedDefence": 13,
+    "strengthBonus": 75,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 2
+   },
+   "speed": 4,
+   "reqLevels": {
+    "Attack": 70
+   },
+   "reqQuests": [],
+   "override": null,
+   "price": 675700
   }
  ]
 }
