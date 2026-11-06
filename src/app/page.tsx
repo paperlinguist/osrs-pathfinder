@@ -102,17 +102,26 @@ const DEFAULT_PLAYER: PlayerSkills = {
   levels: {}, xp: {}, combatLevel: 3, source: "manual",
 };
 
+/** Recipe for Disaster as the full subquest journey — tracking the umbrella
+ *  quest alone only pulls Another Cook's Quest + the classic prereqs into the
+ *  plan, so this preset adds every subquest as its own tracked target */
+const RFD_ALL_KEYS: string[] = [
+  "recipe for disaster",
+  ...QUESTS.filter((q) => q.key.startsWith("recipe for disaster ")).map((q) => q.key),
+];
+
 /** one-click classic endgame goals — chips under the target picker */
-const GOAL_PRESETS: { label: string; key: string }[] = [
-  { label: "Quest Cape", key: QUEST_CAPE_KEY },
-  { label: "Barrows Gloves", key: "recipe for disaster" },
-  { label: "Desert Treasure II", key: "desert treasure ii fallen empire" },
-  { label: "Dragon Slayer II", key: "dragon slayer ii" },
-  { label: "Monkey Madness II", key: "monkey madness ii" },
-  { label: "Song of the Elves", key: "song of elves" },
-  { label: "While Guthix Sleeps", key: "while guthix sleeps" },
-  { label: "Desert Treasure", key: "desert treasure i" },
-  { label: "Lunar Diplomacy", key: "lunar diplomacy" },
+const GOAL_PRESETS: { label: string; keys: string[] }[] = [
+  { label: "Quest Cape", keys: [QUEST_CAPE_KEY] },
+  { label: "Recipe for Disaster", keys: RFD_ALL_KEYS },
+  { label: "Barrows Gloves", keys: ["recipe for disaster"] },
+  { label: "Desert Treasure II", keys: ["desert treasure ii fallen empire"] },
+  { label: "Dragon Slayer II", keys: ["dragon slayer ii"] },
+  { label: "Monkey Madness II", keys: ["monkey madness ii"] },
+  { label: "Song of the Elves", keys: ["song of elves"] },
+  { label: "While Guthix Sleeps", keys: ["while guthix sleeps"] },
+  { label: "Desert Treasure", keys: ["desert treasure i"] },
+  { label: "Lunar Diplomacy", keys: ["lunar diplomacy"] },
 ];
 
 /** locally stored character slot — skills + quest progress, no WOM round-trip to load */
@@ -1772,20 +1781,36 @@ export default function Home() {
                     className="flex flex-wrap gap-1.5"
                   >
                     {GOAL_PRESETS.map((p) => {
-                      const q = p.key === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[p.key];
-                      if (!q) return null;
-                      const active = targetKeys.includes(p.key);
-                      const done = completed.has(p.key);
+                      const isCape =
+                        p.keys.length === 1 && p.keys[0] === QUEST_CAPE_KEY;
+                      const q = isCape
+                        ? QUEST_CAPE_QUEST
+                        : p.keys.length === 1
+                          ? QUEST_BY_KEY[p.keys[0]]
+                          : null;
+                      if (p.keys.length === 1 && !q) return null;
+                      const active = p.keys.every((k) => targetKeys.includes(k));
+                      const partial =
+                        !active && p.keys.some((k) => targetKeys.includes(k));
+                      const done = p.keys.every((k) => completed.has(k));
+                      const toggle = () =>
+                        setTargetKeys((prev) =>
+                          active
+                            ? prev.filter((k) => !p.keys.includes(k))
+                            : [...new Set([...prev, ...p.keys])],
+                        );
                       return (
                         <button
-                          key={p.key}
+                          key={p.label}
                           type="button"
-                          onClick={() => addTargetKey(p.key)}
+                          onClick={toggle}
                           aria-pressed={active}
                           title={
-                            p.key === QUEST_CAPE_KEY
+                            isCape
                               ? `Every quest & miniquest (${QUESTS.length} entries) — one click adds it to your tracked targets`
-                              : `${q.name} · ${q.difficulty}${q.qp ? ` · ${q.qp} QP required` : ""}${done ? " · already completed" : ""}`
+                              : q
+                                ? `${q.name} · ${q.difficulty}${q.qp ? ` · ${q.qp} QP required` : ""}${done ? " · already completed" : ""}`
+                                : `${p.keys.length} quests — the full Recipe for Disaster chain tracked step by step${done ? " · already completed" : ""}`
                           }
                           className={`shrink-0 inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap transition-all active:scale-[0.97] ${
                             active
@@ -1794,6 +1819,13 @@ export default function Home() {
                           }`}
                         >
                           {done && <Check className="h-3 w-3 text-emerald-400" aria-hidden />}
+                          {partial && !done && (
+                            <span
+                              className="h-1.5 w-1.5 rounded-full bg-amber-400"
+                              aria-hidden
+                              title={`${p.keys.filter((k) => targetKeys.includes(k)).length}/${p.keys.length} already tracked`}
+                            />
+                          )}
                           {p.label}
                         </button>
                       );
