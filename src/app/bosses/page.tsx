@@ -6,6 +6,14 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   EMPTY_OWNED,
   buildOwnedIndex,
@@ -46,6 +54,7 @@ import {
   ExternalLink,
   ListChecks,
   PackageOpen,
+  Search,
   Shirt,
   Swords,
   Upload,
@@ -137,6 +146,9 @@ export default function BossesPage() {
   const [selectedKey, setSelectedKey] = useState<string>(BOSSES[0]?.key ?? "");
   /** advisor open state lives here so the header shortcut can open it */
   const [advisorOpen, setAdvisorOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [readyFilter, setReadyFilter] = useState<"all" | "ready" | "gated">("all");
+  const [tierFilter, setTierFilter] = useState<string>("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* ------------------------------------------------- localStorage hydration */
@@ -283,6 +295,21 @@ export default function BossesPage() {
       advisor.saveUp.length > 0 ||
       advisor.earn.length > 0 ||
       advisor.locked.length > 0);
+
+  /** boss list filtered by search, readiness and tier */
+  const filteredBosses = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return BOSSES.filter((b) => {
+      if (q && !b.name.toLowerCase().includes(q) && !b.tagline.toLowerCase().includes(q)) {
+        return false;
+      }
+      const status = verdicts.get(b.key)?.status ?? "unknown";
+      if (readyFilter === "ready" && status !== "ready") return false;
+      if (readyFilter === "gated" && status !== "gated") return false;
+      if (tierFilter !== "all" && b.tier !== tierFilter) return false;
+      return true;
+    });
+  }, [query, readyFilter, tierFilter, verdicts]);
 
   /** header shortcut: expand the advisor and bring it into view */
   const jumpToAdvisor = useCallback(() => {
@@ -490,11 +517,75 @@ export default function BossesPage() {
             the boss flow comes first; the summary line keeps it discoverable */}
 
         {/* boss cards */}
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {BOSSES.map((b) => {
-            const v = verdicts.get(b.key)!;
-            const active = b.key === selectedKey;
-            return (
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-[12rem] flex-1">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-500" aria-hidden />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search bosses…"
+              aria-label="Search bosses"
+              className="bg-stone-950 border-stone-700 pl-8 focus-visible:ring-amber-600"
+            />
+          </div>
+          <div
+            role="group"
+            aria-label="Filter by readiness"
+            className="inline-flex rounded-md border border-stone-700 bg-stone-950/80 p-0.5"
+          >
+            {(
+              [
+                ["all", "All"],
+                ["ready", "Ready"],
+                ["gated", "Not yet"],
+              ] as const
+            ).map(([val, label]) => (
+              <button
+                key={val}
+                type="button"
+                onClick={() => setReadyFilter(val)}
+                aria-pressed={readyFilter === val}
+                className={`rounded px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                  readyFilter === val
+                    ? "bg-amber-500/20 text-amber-200"
+                    : "text-stone-400 hover:text-stone-200"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <Select value={tierFilter} onValueChange={setTierFilter}>
+            <SelectTrigger className="w-36 h-8 border-stone-700 bg-stone-950 text-xs">
+              <SelectValue placeholder="All tiers" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All tiers</SelectItem>
+              {Object.keys(TIER_COLORS)
+                .filter((t) => t !== "Unknown")
+                .map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+          <span className="text-[11px] text-stone-500 tabular-nums">
+            {filteredBosses.length} / {BOSSES.length}
+          </span>
+        </div>
+
+        {filteredBosses.length === 0 ? (
+          <p className="rounded-lg border border-stone-800 bg-stone-900/40 px-3 py-6 text-center text-xs text-stone-500">
+            No bosses match{query.trim() ? ` “${query.trim()}”` : " these filters"}
+            {!hasAnyData && readyFilter !== "all" ? " — import a character to use the ready filter" : ""}.
+          </p>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredBosses.map((b) => {
+              const v = verdicts.get(b.key)!;
+              const active = b.key === selectedKey;
+              return (
               <button
                 key={b.key}
                 onClick={() => setSelectedKey(b.key)}
@@ -523,7 +614,8 @@ export default function BossesPage() {
               </button>
             );
           })}
-        </div>
+          </div>
+        )}
 
         {/* selected boss detail */}
         {selected && selectedVerdict && (
