@@ -113,8 +113,8 @@ const RFD_ALL_KEYS: string[] = [
 /** one-click classic endgame goals — chips under the target picker */
 const GOAL_PRESETS: { label: string; keys: string[] }[] = [
   { label: "Quest Cape", keys: [QUEST_CAPE_KEY] },
-  { label: "Recipe for Disaster", keys: RFD_ALL_KEYS },
-  { label: "Barrows Gloves", keys: ["recipe for disaster"] },
+  // Barrows gloves ARE RfD's reward — one chip, the complete subquest chain
+  { label: "Barrows Gloves (RfD)", keys: RFD_ALL_KEYS },
   { label: "Desert Treasure II", keys: ["desert treasure ii fallen empire"] },
   { label: "Dragon Slayer II", keys: ["dragon slayer ii"] },
   { label: "Monkey Madness II", keys: ["monkey madness ii"] },

@@ -32,6 +32,7 @@ import {
   type PresetCheck,
 } from "@/lib/boss-readiness";
 import { suggestUpgrades, type UpgradeReport, type UpgradeSuggestion } from "@/lib/upgrade-advisor";
+import { resolveChain } from "@/lib/resolver";
 import { useToast } from "@/hooks/use-toast";
 import { APP_BUILD, APP_VERSION } from "@/lib/version";
 import {
@@ -77,8 +78,9 @@ const QUEST_MENTIONS: { name: string; key: string }[] = (() => {
   return out.sort((a, b) => b.name.length - a.name.length);
 })();
 
-/** render free text with every mentioned quest as a "plan it" deep-link */
-function linkifyQuests(text: string): React.ReactNode {
+/** render free text with every mentioned quest as a "plan it" deep-link —
+ *  quests already on the plan turn emerald with a ✓ */
+function linkifyQuests(text: string, planned: Set<string>): React.ReactNode {
   const matches: { start: number; end: number; key: string }[] = [];
   for (const q of QUEST_MENTIONS) {
     let idx = text.indexOf(q.name);
@@ -95,14 +97,20 @@ function linkifyQuests(text: string): React.ReactNode {
   let pos = 0;
   for (const m of matches) {
     if (m.start > pos) out.push(text.slice(pos, m.start));
+    const isPlanned = planned.has(m.key);
     out.push(
       <Link
         key={m.start}
-        href={planUrl(m.key)}
-        title="Track this quest in the planner"
-        className="font-medium text-amber-300/90 underline decoration-dotted underline-offset-2 hover:text-amber-200"
+        href={isPlanned ? "/" : planUrl(m.key)}
+        title={isPlanned ? "Already on your plan — view it" : "Track this quest in the planner"}
+        className={
+          isPlanned
+            ? "font-medium text-emerald-400 underline decoration-dotted underline-offset-2 hover:text-emerald-300"
+            : "font-medium text-amber-300/90 underline decoration-dotted underline-offset-2 hover:text-amber-200"
+        }
       >
         {text.slice(m.start, m.end)}
+        {isPlanned ? " ✓" : ""}
       </Link>,
     );
     pos = m.end;
@@ -124,6 +132,8 @@ export default function BossesPage() {
   const [player, setPlayer] = useState<PlayerSkills | null>(null);
   const [completed, setCompleted] = useState<Set<string> | null>(null);
   const [owned, setOwned] = useState<OwnedItems>(EMPTY_OWNED);
+  const [targets, setTargets] = useState<string[]>([]);
+  const [added, setAdded] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>(BOSSES[0]?.key ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -138,6 +148,16 @@ export default function BossesPage() {
       if (c !== null) setCompleted(new Set(JSON.parse(c) as string[]));
       const o = localStorage.getItem("osrs-qp-owned");
       if (o) setOwned(normalizeOwned(JSON.parse(o)));
+      const t = localStorage.getItem("osrs-qp-targets");
+      if (t) {
+        const arr = JSON.parse(t);
+        if (Array.isArray(arr)) setTargets(arr.filter((k): k is string => typeof k === "string"));
+      }
+      const a = localStorage.getItem("osrs-qp-added");
+      if (a) {
+        const arr = JSON.parse(a);
+        if (Array.isArray(arr)) setAdded(arr.filter((k): k is string => typeof k === "string"));
+      }
     } catch {
       /* corrupt saves — start fresh */
     }
@@ -155,6 +175,19 @@ export default function BossesPage() {
       if (e.key === "osrs-qp-owned") {
         try {
           setOwned(e.newValue ? normalizeOwned(JSON.parse(e.newValue)) : EMPTY_OWNED);
+        } catch { /* ignore */ }
+      }
+      // plan tracking changes on the planner update "planned" badges live
+      if (e.key === "osrs-qp-targets" && e.newValue !== null) {
+        try {
+          const arr = JSON.parse(e.newValue);
+          setTargets(Array.isArray(arr) ? arr.filter((k): k is string => typeof k === "string") : []);
+        } catch { /* ignore */ }
+      }
+      if (e.key === "osrs-qp-added" && e.newValue !== null) {
+        try {
+          const arr = JSON.parse(e.newValue);
+          setAdded(Array.isArray(arr) ? arr.filter((k): k is string => typeof k === "string") : []);
         } catch { /* ignore */ }
       }
     };
@@ -241,6 +274,29 @@ export default function BossesPage() {
     () => (ownedIndex ? suggestUpgrades({ player, completed, ownedIndex, coins: owned.coins }) : null),
     [player, completed, ownedIndex, owned.coins],
   );
+
+  /** every quest already on the resolved plan (tracked target OR prereq step) —
+   *  same resolver the planner runs, over the same saved targets/extras */
+  const plannedKeys = useMemo(() => {
+    const set = new Set<string>();
+    if (targets.length === 0) return set;
+    try {
+      const r = resolveChain(
+        targets,
+        player ?? { levels: {}, xp: {}, source: "manual" },
+        completed ?? new Set<string>(),
+        { allowBoosts: true, includeQuestXp: true },
+        added,
+      );
+      if (r) {
+        for (const s of r.steps) set.add(s.quest.key);
+        for (const t of r.targets) set.add(t.quest.key);
+      }
+    } catch {
+      /* unresolvable targets — treat as nothing planned */
+    }
+    return set;
+  }, [targets, added, player, completed]);
 
   const selected: Boss | undefined = BOSSES.find((b) => b.key === selectedKey);
   const selectedVerdict = selected ? verdicts.get(selected.key) : undefined;
@@ -441,11 +497,12 @@ export default function BossesPage() {
             boss={selected}
             verdict={selectedVerdict}
             coins={owned.coins}
+            planned={plannedKeys}
           />
         )}
 
         {/* upgrade advisor — end-of-page summary: what to buy next across all bosses */}
-        {advisor && <AdvisorCard advisor={advisor} coins={owned.coins} />}
+        {advisor && <AdvisorCard advisor={advisor} coins={owned.coins} planned={plannedKeys} />}
 
         <footer className="pt-4 pb-2 text-center text-[11px] text-stone-600 space-y-1">
           <p>
@@ -482,9 +539,11 @@ export default function BossesPage() {
 function AdvisorCard({
   advisor,
   coins,
+  planned,
 }: {
   advisor: UpgradeReport;
   coins: number | null;
+  planned: Set<string>;
 }) {
   const [open, setOpen] = useState(false);
   const empty =
@@ -559,6 +618,7 @@ function AdvisorCard({
                   accent="emerald"
                   suggestions={advisor.buyNow}
                   coins={coins}
+                  planned={planned}
                   total={advisor.buyNowTotal}
                 />
               )}
@@ -568,6 +628,7 @@ function AdvisorCard({
                   accent="amber"
                   suggestions={advisor.saveUp}
                   coins={coins}
+                  planned={planned}
                 />
               )}
               {advisor.earn.length > 0 && (
@@ -576,6 +637,7 @@ function AdvisorCard({
                   accent="stone"
                   suggestions={advisor.earn}
                   coins={coins}
+                  planned={planned}
                 />
               )}
               {advisor.locked.length > 0 && (
@@ -584,6 +646,7 @@ function AdvisorCard({
                   accent="stone"
                   suggestions={advisor.locked}
                   coins={coins}
+                  planned={planned}
                 />
               )}
             </>
@@ -599,12 +662,14 @@ function AdvisorSection({
   accent,
   suggestions,
   coins,
+  planned,
   total,
 }: {
   title: string;
   accent: "emerald" | "amber" | "stone";
   suggestions: UpgradeSuggestion[];
   coins: number | null;
+  planned: Set<string>;
   /** buy-now only: cost of buying the whole section */
   total?: number;
 }) {
@@ -623,14 +688,14 @@ function AdvisorSection({
       </div>
       <div className="divide-y divide-stone-800/70 rounded-md border border-stone-800 bg-stone-950/40">
         {suggestions.map((s) => (
-          <AdvisorRow key={s.item.id} s={s} />
+          <AdvisorRow key={s.item.id} s={s} planned={planned} />
         ))}
       </div>
     </div>
   );
 }
 
-function AdvisorRow({ s }: { s: UpgradeSuggestion }) {
+function AdvisorRow({ s, planned }: { s: UpgradeSuggestion; planned: Set<string> }) {
   const style = s.styles[0] ?? "Melee";
   return (
     <div className="px-3 py-2 flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -677,6 +742,26 @@ function AdvisorRow({ s }: { s: UpgradeSuggestion }) {
               <AlertTriangle className="h-3 w-3 mr-0.5" aria-hidden />
               {l.skill} {l.current ?? "?"} → {l.required}
             </Badge>
+          ) : planned.has(l.key) ? (
+            <Link
+              key={i}
+              href="/"
+              title={`${questName(l.key)} is already on your plan — view it`}
+              className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+            >
+              <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+              planned: {questName(l.key)}
+            </Link>
+          ) : planned.has(l.key) ? (
+            <Link
+              key={i}
+              href="/"
+              title={`${questName(l.key)} is already on your plan — view it`}
+              className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+            >
+              <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+              planned: {questName(l.key)}
+            </Link>
           ) : (
             <Link
               key={i}
@@ -697,10 +782,12 @@ function BossDetail({
   boss,
   verdict,
   coins,
+  planned,
 }: {
   boss: Boss;
   verdict: BossVerdict;
   coins: number | null;
+  planned: Set<string>;
 }) {
   return (
     <div className="space-y-4">
@@ -746,14 +833,24 @@ function BossDetail({
                   <span className={q.done ? "text-emerald-400" : "text-amber-300"}>
                     {q.done ? "✓" : q.done === false ? "✗" : "•"} quest: {questName(q.key)}
                   </span>
-                  {!q.done && (
-                    <Link
-                      href={planUrl(q.key)}
-                      className="text-xs text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
-                    >
-                      plan it →
-                    </Link>
-                  )}
+                  {!q.done &&
+                    (planned.has(q.key) ? (
+                      <Link
+                        href="/"
+                        title="Already on your plan — view it"
+                        className="inline-flex items-center gap-0.5 text-xs text-emerald-400 underline underline-offset-2 hover:text-emerald-300"
+                      >
+                        <CheckCircle2 className="h-3 w-3" aria-hidden />
+                        planned
+                      </Link>
+                    ) : (
+                      <Link
+                        href={planUrl(q.key)}
+                        className="text-xs text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
+                      >
+                        plan it →
+                      </Link>
+                    ))}
                 </div>
               ))}
             </div>
@@ -792,14 +889,16 @@ function BossDetail({
             </div>
           )}
           {boss.notes && (
-            <p className="text-xs leading-relaxed text-stone-400">{linkifyQuests(boss.notes)}</p>
+            <p className="text-xs leading-relaxed text-stone-400">
+              {linkifyQuests(boss.notes, planned)}
+            </p>
           )}
         </CardContent>
       </Card>
 
       {/* presets */}
       {verdict.presets.map((p) => (
-        <PresetCard key={p.preset.name} presetCheck={p} coins={coins} />
+        <PresetCard key={p.preset.name} presetCheck={p} coins={coins} planned={planned} />
       ))}
     </div>
   );
@@ -810,9 +909,11 @@ function BossDetail({
 function PresetCard({
   presetCheck,
   coins,
+  planned,
 }: {
   presetCheck: PresetCheck;
   coins: number | null;
+  planned: Set<string>;
 }) {
   const { preset, style, items, ownedCount, knownOwned, missingCost, affordableCount, overBudgetCount } =
     presetCheck;
@@ -835,7 +936,9 @@ function PresetCard({
         <CardTitle className="text-base text-stone-200">
           {preset.name} <span className="text-xs font-normal text-stone-500">· {style}</span>
         </CardTitle>
-        <CardDescription className="text-xs">{linkifyQuests(preset.description)}</CardDescription>
+        <CardDescription className="text-xs">
+          {linkifyQuests(preset.description, planned)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         {/* rollup */}
@@ -906,7 +1009,15 @@ function PresetCard({
           {SLOT_KEYS.filter((k) => preset.slots[k]).map((k) => {
             const check = bySlot.get(k);
             if (!check) return null;
-            return <SlotRow key={k} slotLabel={SLOT_LABELS[k]} check={check} style={style} />;
+            return (
+              <SlotRow
+                key={k}
+                slotLabel={SLOT_LABELS[k]}
+                check={check}
+                style={style}
+                planned={planned}
+              />
+            );
           })}
         </div>
 
@@ -932,7 +1043,7 @@ function PresetCard({
 
         {preset.notes && (
           <p className="text-xs leading-relaxed text-stone-500 border-t border-stone-800/70 pt-2">
-            {linkifyQuests(preset.notes)}
+            {linkifyQuests(preset.notes, planned)}
           </p>
         )}
       </CardContent>
@@ -946,10 +1057,12 @@ function SlotRow({
   slotLabel,
   check,
   style,
+  planned,
 }: {
   slotLabel: string;
   check: ItemCheck;
   style: string;
+  planned: Set<string>;
 }) {
   const { item, owned, locks, price, affordable } = check;
   return (
@@ -1015,6 +1128,16 @@ function SlotRow({
                   {l.skill} {l.required}
                   {l.current !== null ? ` (${l.current})` : ""}
                 </Badge>
+              ) : planned.has(l.key) ? (
+                <Link
+                  key={i}
+                  href="/"
+                  title={`${questName(l.key)} is already on your plan — view it`}
+                  className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 transition-colors hover:border-emerald-600 hover:text-emerald-200"
+                >
+                  <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                  planned: {questName(l.key)}
+                </Link>
               ) : (
                 <Link
                   key={i}
@@ -1036,6 +1159,16 @@ function SlotRow({
                 <Badge key={i} className="border-stone-700 bg-stone-900 text-stone-500">
                   {l.skill} {l.required}
                 </Badge>
+              ) : planned.has(l.key) ? (
+                <Link
+                  key={i}
+                  href="/"
+                  title={`${questName(l.key)} is already on your plan — view it`}
+                  className="inline-flex items-center rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 underline decoration-dotted underline-offset-2 hover:border-emerald-600 hover:text-emerald-200"
+                >
+                  <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                  planned: {questName(l.key)}
+                </Link>
               ) : (
                 <Link
                   key={i}
