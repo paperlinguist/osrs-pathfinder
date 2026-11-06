@@ -6,8 +6,8 @@
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-06T20:45:13.533Z",
-  "items": 71
+  "priceSnapshot": "2026-11-06T22:51:36.726Z",
+  "items": 76
  },
  "items": [
   {
@@ -380,9 +380,11 @@
     "magicDamage": 0,
     "prayerBonus": 0
    },
-   "reqLevels": {},
+   "reqLevels": {
+    "Ranged": 64
+   },
    "reqQuests": [],
-   "override": null,
+   "override": "wiki: dragon bolts require 64 Ranged (cache has none)",
    "price": 2870
   },
   {
@@ -2079,6 +2081,150 @@
    "reqQuests": [],
    "override": null,
    "price": 190
+  },
+  {
+   "id": 21012,
+   "name": "Dragon hunter crossbow",
+   "rawName": "Dragon hunter crossbow",
+   "slot": "Weapon",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 0,
+    "rangedAttack": 95,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 6,
+   "reqLevels": {},
+   "reqQuests": [],
+   "override": null,
+   "price": 26800000
+  },
+  {
+   "id": 11283,
+   "name": "Dragonfire shield",
+   "rawName": "Dragonfire shield#Charged",
+   "slot": "Shield",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": -10,
+    "rangedAttack": -5,
+    "stabDefence": 70,
+    "slashDefence": 75,
+    "crushDefence": 72,
+    "magicDefence": 10,
+    "rangedDefence": 72,
+    "strengthBonus": 7,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "reqLevels": {
+    "Defence": 75
+   },
+   "reqQuests": [
+    "dragon slayer i"
+   ],
+   "override": null,
+   "price": null
+  },
+  {
+   "id": 21791,
+   "name": "Imbued Saradomin cape",
+   "rawName": "Imbued Saradomin cape#Normal",
+   "slot": "Cape",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 15,
+    "rangedAttack": 0,
+    "stabDefence": 3,
+    "slashDefence": 3,
+    "crushDefence": 3,
+    "magicDefence": 15,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 2,
+    "prayerBonus": 0
+   },
+   "reqLevels": {},
+   "reqQuests": [],
+   "override": null,
+   "price": null
+  },
+  {
+   "id": 1540,
+   "name": "Anti-dragon shield",
+   "rawName": "Anti-dragon shield",
+   "slot": "Shield",
+   "members": false,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 7,
+    "slashDefence": 9,
+    "crushDefence": 8,
+    "magicDefence": 2,
+    "rangedDefence": 8,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "reqLevels": {},
+   "reqQuests": [
+    "dragon slayer i"
+   ],
+   "override": null,
+   "price": 87
+  },
+  {
+   "id": 21946,
+   "name": "Diamond dragon bolts (e)",
+   "rawName": "Diamond dragon bolts (e)",
+   "slot": "Ammunition",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 122,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "reqLevels": {
+    "Ranged": 64
+   },
+   "reqQuests": [],
+   "override": "wiki: dragon bolts require 64 Ranged (cache has none)",
+   "price": 2698
   }
  ]
 }

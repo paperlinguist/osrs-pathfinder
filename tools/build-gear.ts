@@ -38,6 +38,8 @@ const REQ_OVERRIDES: Record<string, { levels: Record<string, number>; quests?: s
   "obsidian platebody": { levels: { Defence: 60 }, why: "wiki: obsidian armour requires 60 Defence (cape excepted)" },
   "obsidian platelegs": { levels: { Defence: 60 }, why: "wiki: obsidian armour requires 60 Defence (cape excepted)" },
   "iban's staff (u)": { levels: { Magic: 50, Attack: 50 }, quests: ["underground pass"], why: "wiki: same wield reqs as base staff; cache has none for the upgraded variant" },
+  "ruby dragon bolts (e)": { levels: { Ranged: 64 }, why: "wiki: dragon bolts require 64 Ranged (cache has none)" },
+  "diamond dragon bolts (e)": { levels: { Ranged: 64 }, why: "wiki: dragon bolts require 64 Ranged (cache has none)" },
 };
 
 /** variant suffix preference when several osrs-db entries share a base name */
