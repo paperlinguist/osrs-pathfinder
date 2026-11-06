@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, it, expect } from "vitest";
 import bossesJson from "@/data/bosses.json";
 import gearJson from "@/data/gear.json";
@@ -124,5 +126,24 @@ describe("quests.json integrity", () => {
   it("quest enum names are unique where present", () => {
     const enums = QUESTS.filter((q) => q.enum).map((q) => q.enum);
     expect(new Set(enums).size).toBe(enums.length);
+  });
+});
+
+describe("README consistency", () => {
+  // The README's counts ("215 quests · 41 bosses") must match the datasets —
+  // this is the mechanical backstop for the "update the README every release"
+  // rule, so a stale count fails CI instead of relying on someone remembering.
+  const readme = readFileSync(path.resolve(process.cwd(), "README.md"), "utf8");
+
+  it("quest count matches the dataset", () => {
+    const m = readme.match(/(\d+)\s+quests\s*·/);
+    expect(m, "README quest count not found").toBeTruthy();
+    expect(Number(m![1])).toBe(QUESTS.length);
+  });
+
+  it("boss count matches the dataset", () => {
+    const m = readme.match(/·\s*(\d+)\s+bosses/);
+    expect(m, "README boss count not found").toBeTruthy();
+    expect(Number(m![1])).toBe(bosses.length);
   });
 });
