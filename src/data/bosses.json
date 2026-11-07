@@ -233,7 +233,7 @@
             { "name": "Spade", "qty": "1", "note": "" },
             { "name": "Teleport out", "qty": "1", "note": "" }
           ],
-          "notes": "Morytania legs 3 (In Aid of the Myreque reward) give unlimited Burgh de Rott teleports — a short run from Barrows. Huge for trip speed."
+          "notes": "Morytania legs 3 (Morytania Achievement Diary reward) give unlimited Burgh de Rott teleports — a short run from Barrows. Huge for trip speed."
         }
       ],
       "notes": "The reward roll scales with kill count and potential — always loot the chest after all six brothers. Unwanted sets are a steady prayer-experience income."
@@ -432,7 +432,7 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Runes / scales", "qty": "—", "note": "Trident charges: 1 chaos + 5 fire + 10 water per cast" },
+            { "name": "Runes / scales", "qty": "—", "note": "Trident charges (fire + water + chaos runes per cast)" },
             { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
             { "name": "Antivenom+(4)", "qty": "1–2", "note": "Snakeling poison stacks" },
             { "name": "Monkfish / sharks", "qty": "4–8", "note": "" }
@@ -838,7 +838,7 @@
       "duration": "3–5 min per kill",
       "requirements": { "quests": [], "skills": [] },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "Crush is her weakness in phase two" },
+        { "skill": "Attack", "level": 75, "note": "Crush hits hard in phase two" },
         { "skill": "Defence", "level": 75, "note": "Her attacks are 100% accurate — prayer is mandatory" },
         { "skill": "Prayer", "level": 43, "note": "Protect from Magic phase 1, Protect from Missiles phase 2" }
       ],
@@ -994,7 +994,7 @@
             { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
             { "name": "Monkfish / sharks", "qty": "6–10", "note": "The tentacles hurt if you let them stack" }
           ],
-          "notes": "The four tentacles heal it — either ignore them with high defence or kill the whirlpools. It's a very AFK-friendly boss once set up."
+          "notes": "The surrounding tentacles hit you — either tank them with high defence or clear the whirlpools. It's a very AFK-friendly boss once set up."
         }
       ],
       "notes": "Drops the Kraken tentacle (barbarian fishing XP) and the Trident of the Seas itself. Gated by 87 Slayer, so it's a long-term goal — but nearly zero-risk money."
@@ -1542,7 +1542,7 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Crush is her weakness" },
+        { "skill": "Attack", "level": 90, "note": "Crush is the meta" },
         { "skill": "Defence", "level": 90, "note": "" },
         { "skill": "Prayer", "level": 43, "note": "Overheads through the parasite phases" }
       ],
@@ -1631,7 +1631,7 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Crush is his weakness" },
+        { "skill": "Attack", "level": 90, "note": "Crush is the style of choice" },
         { "skill": "Strength", "level": 90, "note": "" },
         { "skill": "Prayer", "level": 43, "note": "Protect from Magic against the ice barrage" }
       ],
@@ -1879,7 +1879,7 @@
             { "name": "Super combat potion(4)", "qty": "1", "note": "" },
             { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
           ],
-          "notes": "Hit the four glowing dark altars to stop him healing — Arclight's demon bonus makes this quick. Sporadic: you fight him when you have a totem."
+          "notes": "Destroy the glowing dark altars he summons — Arclight's demon bonus makes this quick. Sporadic: you fight him when you have a totem."
         }
       ],
       "notes": "Drops the Skotizo pet and guaranteed elite clue scrolls. Ancient shards (for Arclight) are his real value."
@@ -1888,7 +1888,7 @@
       "key": "inferno",
       "name": "Inferno",
       "tier": "Hard",
-      "tagline": "TzKal-Zuk and 68 waves — the hardest solo PvM in the game.",
+      "tagline": "TzKal-Zuk and 69 waves — the hardest solo PvM in the game.",
       "members": true,
       "wiki": "Inferno",
       "location": "TzHaar city, Karamja (the Inferno)",
@@ -1922,7 +1922,7 @@
             { "name": "Ranging potion(4)", "qty": "2", "note": "" },
             { "name": "Emergency teleport", "qty": "1", "note": "Death is a safe-reward wipe — be ready to bail" }
           ],
-          "notes": "68 waves, then triple Jads, then Zuk. The shield is the point — this is a 1.5–3h execution test, not a gear check."
+          "notes": "69 waves — 66 regular, then the Jad waves, then TzKal-Zuk. The shield is the point — this is a 1.5–3h execution test, not a gear check."
         }
       ],
       "notes": "The Infernal cape is the BiS melee cape. Learning wave safespots matters more than any single item."
