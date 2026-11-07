@@ -42,7 +42,7 @@ import {
 import { suggestUpgrades, type UpgradeReport, type UpgradeSuggestion } from "@/lib/upgrade-advisor";
 import { resolveChain } from "@/lib/resolver";
 import { useToast } from "@/hooks/use-toast";
-import { APP_BUILD, APP_VERSION } from "@/lib/version";
+import { APP_BUILD, APP_VERSION, REPO_URL } from "@/lib/version";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -753,7 +753,16 @@ export default function BossesPage() {
             .
           </p>
           <p>
-            v{APP_VERSION} · {APP_BUILD}
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-stone-400"
+            >
+              source
+            </a>
+            {" · "}
+            {APP_VERSION} · build {APP_BUILD}
           </p>
         </footer>
       </main>

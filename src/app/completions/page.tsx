@@ -36,7 +36,7 @@ import {
   parseQuestStateExport,
   type ParsedQuestState,
 } from "@/lib/quest-state-import";
-import { APP_BUILD, APP_VERSION } from "@/lib/version";
+import { APP_BUILD, APP_VERSION, REPO_URL } from "@/lib/version";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import {
@@ -45,6 +45,7 @@ import {
   FileJson,
   RefreshCw,
   Search,
+  Swords,
   Upload,
   X,
 } from "lucide-react";
@@ -249,6 +250,14 @@ export default function CompletionsPage() {
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Planner</span>
+          </Link>
+          <Link
+            href="/bosses"
+            aria-label="Boss gear planner"
+            className="inline-flex items-center gap-1.5 rounded-md border border-stone-700 px-2.5 py-1.5 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
+          >
+            <Swords className="h-3.5 w-3.5" aria-hidden />
+            <span className="hidden sm:inline">Bosses</span>
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Manage quests</h1>
@@ -634,8 +643,17 @@ export default function CompletionsPage() {
           Miniquests and activities award no quest points, matching the in-game tally.
         </p>
 
-        <p className="pb-4 text-[10px] tabular-nums text-stone-700" title="Deployed build — matches the GHCR image tag">
-          {APP_VERSION} · build {APP_BUILD}
+        <p className="pb-4 text-[10px] text-stone-700" title="Deployed build — matches the GHCR image tag">
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-2 hover:text-stone-500"
+          >
+            source
+          </a>
+          {" · "}
+          <span className="tabular-nums">{APP_VERSION} · build {APP_BUILD}</span>
         </p>
       </main>
 

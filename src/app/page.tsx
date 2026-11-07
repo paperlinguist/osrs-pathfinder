@@ -88,7 +88,7 @@ import {
 } from "@/lib/quest-data";
 import { ResolveResult, SkillGap, TargetResult, missingPrereqClosure, questSkillGaps, resolveChain } from "@/lib/resolver";
 import { EMPTY_OWNED, mergeOwned, normalizeOwned, readCharacterExportFiles, type OwnedItems } from "@/lib/character-export";
-import { APP_BUILD, APP_VERSION } from "@/lib/version";
+import { APP_BUILD, APP_VERSION, REPO_URL } from "@/lib/version";
 
 /* ------------------------------------------------------------------ utils */
 
@@ -2220,6 +2220,14 @@ export default function Home() {
             <span className="tabular-nums" title="Deployed build — matches the GHCR image tag">
               {APP_VERSION} · build {APP_BUILD}
             </span>
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-stone-400"
+            >
+              source
+            </a>
           </div>
         </footer>
       </div>
