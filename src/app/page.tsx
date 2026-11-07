@@ -1480,8 +1480,8 @@ export default function Home() {
                       </span>
                     </span>
                     <span className="block truncate text-xs text-stone-400">
-                      Tick finished quests in bulk — or import them all from RuneLite&apos;s Quest
-                      State Exporter file.
+                      Tick finished quests in bulk — or import them from your Character Export
+                      quests.json (the older Quest State Exporter file works too).
                     </span>
                   </span>
                 </Link>
@@ -1499,7 +1499,7 @@ export default function Home() {
                     </span>
                     <span className="block truncate text-xs text-stone-400">
                       Am I ready for the Fight Caves? Readiness checks, budget loadouts and buy
-                      lists from your imported bank.
+                      lists from your imported bank and equipment.
                     </span>
                   </span>
                 </Link>
