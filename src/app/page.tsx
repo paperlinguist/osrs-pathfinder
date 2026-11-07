@@ -88,7 +88,7 @@ import {
 } from "@/lib/quest-data";
 import { ResolveResult, SkillGap, TargetResult, missingPrereqClosure, questSkillGaps, resolveChain } from "@/lib/resolver";
 import { EMPTY_OWNED, mergeOwned, normalizeOwned, readCharacterExportFiles, type OwnedItems } from "@/lib/character-export";
-import { APP_BUILD, APP_VERSION } from "@/lib/version";
+import { APP_BUILD, APP_VERSION, REPO_URL } from "@/lib/version";
 
 /* ------------------------------------------------------------------ utils */
 
@@ -1480,8 +1480,8 @@ export default function Home() {
                       </span>
                     </span>
                     <span className="block truncate text-xs text-stone-400">
-                      Tick finished quests in bulk — or import them all from RuneLite&apos;s Quest
-                      State Exporter file.
+                      Tick finished quests in bulk — or import them from your Character Export
+                      quests.json (the older Quest State Exporter file works too).
                     </span>
                   </span>
                 </Link>
@@ -1496,11 +1496,10 @@ export default function Home() {
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
                       Boss gear planner
-                      <span className="text-[10px] font-medium text-stone-500">new</span>
                     </span>
                     <span className="block truncate text-xs text-stone-400">
                       Am I ready for the Fight Caves? Readiness checks, budget loadouts and buy
-                      lists from your imported bank.
+                      lists from your imported bank and equipment.
                     </span>
                   </span>
                 </Link>
@@ -2221,6 +2220,14 @@ export default function Home() {
             <span className="tabular-nums" title="Deployed build — matches the GHCR image tag">
               {APP_VERSION} · build {APP_BUILD}
             </span>
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-stone-400"
+            >
+              source
+            </a>
           </div>
         </footer>
       </div>

@@ -7,10 +7,10 @@ OSRS progress planner — two tools in one, sharing one imported character:
   XP and playtime estimates, quest-XP cascades (visual XP-flow edges), and a
   dedicated page for bulk-setting your quest completions.
 - **Boss gear planner** (`/bosses`) — readiness verdicts and budget-tier
-  loadouts for **29 bosses**, checked against your imported character, bank and
+  loadouts for **41 bosses**, checked against your imported character, bank and
   worn equipment, with an upgrade advisor for what to buy next.
 
-215 quests · 29 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
+215 quests · 41 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
 Fully stateless: no database, no accounts — all player progress lives in each
 visitor's browser (with export/import character backups in-app).
@@ -54,8 +54,8 @@ visitor's browser (with export/import character backups in-app).
   your imported character. Each item shows equip/quest locks (`Defence 65 → 70`,
   `quest: Underground Pass`), an owned badge (bank **and worn** equipment), its
   GE price, and a cheapest-first shopping list against your imported coin pile.
-  Search, a ready / not-yet filter, and a tier filter keep the roster navigable;
-  clicking a boss scrolls to its loadouts.
+  Search, a ready / not-yet filter, a tier filter and 12-per-page pagination
+  keep the roster navigable; clicking a boss scrolls to its loadouts.
 - **Upgrade advisor** — a cross-boss "what should I buy next" view: every
   preset item you don't own is scored (attack + damage bonus, compared against
   your best owned item per slot/style) and grouped into buy-now / save-up /
