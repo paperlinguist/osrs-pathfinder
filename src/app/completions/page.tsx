@@ -29,6 +29,7 @@ import {
   DIFF_COLORS,
   QUESTS,
   QUEST_BY_KEY,
+  TARGET_BY_KEY,
   questPointsAwarded,
   totalQuestPoints,
 } from "@/lib/quest-data";
@@ -96,7 +97,9 @@ export default function CompletionsPage() {
         const arr = JSON.parse(c);
         if (Array.isArray(arr)) {
           setCompleted(
-            new Set(arr.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k])),
+            // quests + diary tiers are both markable complete (diary keys are
+            // stored by the planner's plan checkboxes; this page only lists quests)
+            new Set(arr.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k])),
           );
         }
       }
@@ -121,7 +124,7 @@ export default function CompletionsPage() {
         const c = localStorage.getItem("osrs-qp-completed");
         const arr = c ? JSON.parse(c) : [];
         if (Array.isArray(arr))
-          setCompleted(new Set(arr.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k])));
+          setCompleted(new Set(arr.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k])));
       } catch {
         /* ignore */
       }

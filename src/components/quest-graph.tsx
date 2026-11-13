@@ -82,6 +82,11 @@ const DIFF_DOT: Record<string, string> = {
   Miniquest: "bg-teal-500",
   Activity: "bg-stone-500",
   Unknown: "bg-stone-500",
+  // diary tiers (diary pseudo-quests carry their tier as difficulty)
+  Easy: "bg-emerald-500",
+  Medium: "bg-amber-500",
+  Hard: "bg-orange-500",
+  Elite: "bg-red-500",
 };
 
 function wikiUrl(name: string) {
@@ -143,7 +148,7 @@ function QuestNode({ data, selected }: NodeProps<QuestFlowNode>) {
       <Handle type="target" position={Position.Top} className="!opacity-0" />
       <div className="flex items-start justify-between gap-1.5">
         <a
-          href={wikiUrl(quest.name)}
+          href={wikiUrl(quest.wikiName ?? quest.name)}
           target="_blank"
           rel="noreferrer"
           onClick={(e) => e.stopPropagation()}

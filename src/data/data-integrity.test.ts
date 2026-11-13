@@ -3,7 +3,15 @@ import path from "node:path";
 import { describe, it, expect } from "vitest";
 import bossesJson from "@/data/bosses.json";
 import gearJson from "@/data/gear.json";
-import { QUESTS, SKILL_NAMES } from "@/lib/quest-data";
+import diariesJson from "@/data/diaries.json";
+import {
+  DIARIES,
+  DIARY_BY_KEY,
+  QUESTS,
+  SKILL_NAMES,
+  TARGET_BY_KEY,
+  isValidTargetKey,
+} from "@/lib/quest-data";
 import { ownedKey } from "@/lib/character-export";
 
 /**
@@ -129,6 +137,70 @@ describe("quests.json integrity", () => {
   });
 });
 
+describe("diaries.json integrity", () => {
+  const TIERS = ["Easy", "Medium", "Hard", "Elite"];
+  const questKeys = new Set<string>(QUESTS.map((q) => q.key));
+
+  it("covers every area with all four tiers (12 × 4)", () => {
+    expect(DIARIES).toHaveLength(48);
+    const byArea = new Map<string, string[]>();
+    for (const d of DIARIES) {
+      if (!byArea.has(d.area)) byArea.set(d.area, []);
+      byArea.get(d.area)!.push(d.tier);
+    }
+    expect(byArea.size).toBe(12);
+    for (const tiers of byArea.values()) expect(tiers.sort()).toEqual([...TIERS].sort());
+  });
+
+  it("diary keys are unique and never collide with quest keys", () => {
+    const keys = DIARIES.map((d) => d.key);
+    expect(new Set(keys).size).toBe(keys.length);
+    const clashes = keys.filter((k) => questKeys.has(k));
+    expect(clashes).toEqual([]);
+  });
+
+  it("every diary quest prerequisite resolves to a real quest", () => {
+    const bad: string[] = [];
+    for (const d of DIARIES) {
+      for (const q of d.quests) {
+        if (!questKeys.has(q)) bad.push(`${d.key}: ${q}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it("every diary skill is a real skill name or the virtual Combat", () => {
+    const bad: string[] = [];
+    for (const d of DIARIES) {
+      for (const s of Object.keys(d.skills)) {
+        if (!skillNames.has(s) && s !== "Combat") bad.push(`${d.key}: ${s}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it("tier chains point at the next-lower tier of the same area", () => {
+    for (const d of DIARIES) {
+      const q = TARGET_BY_KEY[d.key];
+      if (d.tier === "Easy") {
+        expect(q.diaryPrereq, `${d.key}: Easy must not chain to a lower tier`).toBeUndefined();
+      } else {
+        const lower = DIARY_BY_KEY[q.diaryPrereq!];
+        expect(lower, `${d.key}: missing diaryPrereq`).toBeTruthy();
+        expect(lower.area).toBe(d.area);
+        expect(TIERS.indexOf(lower.tier)).toBe(TIERS.indexOf(d.tier) - 1);
+      }
+    }
+  });
+
+  it("diaries are valid targets and the all-quests flag survived generation", () => {
+    for (const d of DIARIES) expect(isValidTargetKey(d.key)).toBe(true);
+    // the Lumbridge & Draynor Elite "complete every quest" task
+    expect(DIARY_BY_KEY["lumbridge-and-draynor elite"].allQuests).toBe(true);
+    expect(diariesJson.meta.sources.length).toBeGreaterThan(0);
+  });
+});
+
 describe("README consistency", () => {
   // The README's counts ("215 quests · 41 bosses") must match the datasets —
   // this is the mechanical backstop for the "update the README every release"
@@ -145,5 +217,11 @@ describe("README consistency", () => {
     const m = readme.match(/·\s*(\d+)\s+bosses/);
     expect(m, "README boss count not found").toBeTruthy();
     expect(Number(m![1])).toBe(bosses.length);
+  });
+
+  it("diary count matches the dataset", () => {
+    const m = readme.match(/(\d+)\s+diaries/);
+    expect(m, "README diary count not found").toBeTruthy();
+    expect(Number(m![1])).toBe(DIARIES.length);
   });
 });

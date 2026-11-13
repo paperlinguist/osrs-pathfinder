@@ -5,12 +5,14 @@ OSRS progress planner — two tools in one, sharing one imported character:
 - **Quest planner** — track one or more target quests and get the optimal
   prerequisite chain: quest order, skill gaps with training gates, boost flags,
   XP and playtime estimates, quest-XP cascades (visual XP-flow edges), and a
-  dedicated page for bulk-setting your quest completions.
+  dedicated page for bulk-setting your quest completions. **Achievement Diary
+  tiers** track too — pick a tier (e.g. Karamja Elite) and the plan pulls in
+  every lower tier, quest and skill level it needs.
 - **Boss gear planner** (`/bosses`) — readiness verdicts and budget-tier
   loadouts for **41 bosses**, checked against your imported character, bank and
   worn equipment, with an upgrade advisor for what to buy next.
 
-215 quests · 41 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
+215 quests · 48 diaries · 41 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
 Fully stateless: no database, no accounts — all player progress lives in each
 visitor's browser (with export/import character backups in-app).
@@ -24,6 +26,14 @@ visitor's browser (with export/import character backups in-app).
   resolves one merged, topologically-ordered prerequisite tree for all of them
   (Quest Cape mixes fine with regular quests). "Barrows Gloves (RfD)" tracks
   the full Recipe for Disaster subquest chain in one click.
+- **Achievement Diary tracking** — every diary tier (12 areas × Easy→Elite) is
+  a trackable target. The wiki requires previous tiers complete to claim a
+  tier's reward, so tracking e.g. Karamja Elite plans the Easy/Medium/Hard
+  tiers as steps alongside the quests and skill gates — and Lumbridge & Draynor
+  Elite (its "complete every quest" task) plans the whole quest list. Diary
+  requirements are generated from the wiki's per-area diary pages by
+  `tools/build-diaries.ts`; tiers show their extra task requirements
+  ("defeat Zulrah", favour, …) in a tooltip.
 - **Completions page** (`/completions`) — search/filter all 215 quests and
   bulk-set or unset what you've already finished (with a live quest-points
   tally). The planner reads the same saved progress; the old reset-everything
@@ -217,7 +227,8 @@ implementation, documentation, and for drafting the curated content:
   generated `gear.json` for audit.
 - **Generated files come from committed scripts.** `src/data/gear.json` is the
   output of `tools/build-gear.ts` over the MIT-licensed osrs-db dataset and the
-  Jagex item DB — never hand-edited.
+  Jagex item DB — never hand-edited. `src/data/diaries.json` is the output of
+  `tools/build-diaries.ts`, which parses the OSRS Wiki's per-area diary pages.
 - **PRs are labelled AI-generated** (the Claude Code attribution in their
   descriptions), and every page footer shows the exact build SHA for provenance.
 

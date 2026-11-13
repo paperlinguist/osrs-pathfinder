@@ -1,4 +1,5 @@
 import registryJson from "@/data/quests.json";
+import diariesJson from "@/data/diaries.json";
 
 export interface SkillReq {
   level: number;
@@ -22,6 +23,13 @@ export interface Quest {
   length: string | null;
   release: string | null;
   noReqData?: boolean;
+  /** diary pseudo-quests only: link text differs from the display name */
+  wikiName?: string;
+  /** diary pseudo-quests only: the next-lower tier of the same area (reward
+   *  claiming requires every previous tier complete) */
+  diaryPrereq?: string;
+  /** diary pseudo-quests only: a task needs EVERY quest complete */
+  allQuests?: boolean;
 }
 
 const raw = registryJson as { meta: unknown; quests: Quest[] };
@@ -180,7 +188,9 @@ export function totalQuestPoints(completed: Iterable<string>): number {
 
 /* ------------------------------------------------- shared UI color tokens */
 
-/** Badge color classes per difficulty — shared by the list rows and the graph nodes. */
+/** Badge color classes per difficulty — shared by the list rows and the graph
+ *  nodes. Easy…Elite are the diary tiers (diary pseudo-quests carry their tier
+ *  as `difficulty`). */
 export const DIFF_COLORS: Record<string, string> = {
   Novice: "bg-emerald-900/60 text-emerald-300 border-emerald-700/50",
   Intermediate: "bg-amber-900/50 text-amber-300 border-amber-700/50",
@@ -191,6 +201,10 @@ export const DIFF_COLORS: Record<string, string> = {
   Miniquest: "bg-teal-900/50 text-teal-300 border-teal-700/50",
   Activity: "bg-stone-800 text-stone-300 border-stone-600",
   Unknown: "bg-stone-800 text-stone-300 border-stone-600",
+  Easy: "bg-emerald-900/60 text-emerald-300 border-emerald-700/50",
+  Medium: "bg-amber-900/50 text-amber-300 border-amber-700/50",
+  Hard: "bg-orange-900/50 text-orange-300 border-orange-700/50",
+  Elite: "bg-red-900/60 text-red-300 border-red-700/60",
 };
 
 /* -------------------------------------------------- quest cape pseudo-target */
@@ -218,9 +232,78 @@ export const QUEST_CAPE_QUEST: Quest = {
   release: null,
 };
 
-/** True for real quest keys and the synthetic Quest Cape target. */
+/* ------------------------------------------------------ achievement diaries */
+
+export const DIARY_TIERS = ["Easy", "Medium", "Hard", "Elite"] as const;
+export type DiaryTier = (typeof DIARY_TIERS)[number];
+
+/** one tier of one area's diary, as generated from the wiki by tools/build-diaries.ts */
+export interface Diary {
+  key: string;
+  name: string;
+  area: string;
+  tier: DiaryTier;
+  enum: string;
+  wikiName: string; // the area's wiki page ("Karamja Diary")
+  members: boolean;
+  qp: number | null;
+  skills: Record<string, SkillReq>;
+  quests: string[]; // prerequisite quest keys
+  allQuests?: boolean; // a task needs every quest complete
+  notes?: string | null; // additional (non-skill, non-quest) requirements
+}
+
+const diaryRaw = diariesJson as { meta: unknown; diaries: Diary[] };
+export const DIARIES: Diary[] = diaryRaw.diaries;
+
+export const DIARY_BY_KEY: Record<string, Diary> = Object.fromEntries(
+  DIARIES.map((d) => [d.key, d]),
+);
+
+export function isDiaryKey(key: string): boolean {
+  return !!DIARY_BY_KEY[key];
+}
+
+/**
+ * Diaries as Quest-shaped entries so the resolver, chain UI and graph treat
+ * them exactly like tracked quests. Difficulty carries the tier (Easy…Elite
+ * get DIFF_COLORS entries); diaryPrereq chains the next-lower tier of the
+ * same area — the wiki requires previous tiers complete to claim rewards.
+ */
+export const DIARY_QUESTS: Quest[] = DIARIES.map((d) => {
+  const ti = DIARY_TIERS.indexOf(d.tier);
+  const lower = DIARIES.find(
+    (x) => x.area === d.area && DIARY_TIERS.indexOf(x.tier) === ti - 1,
+  );
+  return {
+    key: d.key,
+    name: d.name,
+    registryName: null,
+    enum: d.enum,
+    cacheId: null,
+    difficulty: d.tier,
+    qp: d.qp,
+    f2p: false,
+    members: d.members,
+    skills: d.skills,
+    quests: d.quests,
+    xp: {},
+    length: null,
+    release: null,
+    wikiName: d.wikiName,
+    diaryPrereq: lower?.key,
+    allQuests: d.allQuests,
+  };
+});
+
+/** every key the planner accepts as a tracked target: quests, diaries, cape */
+export const TARGET_BY_KEY: Record<string, Quest> = Object.fromEntries(
+  [QUEST_CAPE_QUEST, ...DIARY_QUESTS, ...QUESTS].map((q) => [q.key, q]),
+);
+
+/** True for real quest keys, diary tiers and the synthetic Quest Cape target. */
 export function isValidTargetKey(key: string): boolean {
-  return key === QUEST_CAPE_KEY || !!QUEST_BY_KEY[key];
+  return !!TARGET_BY_KEY[key];
 }
 
 /* ------------------------------------------------------- time estimates */

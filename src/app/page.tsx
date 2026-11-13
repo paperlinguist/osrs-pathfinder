@@ -72,10 +72,15 @@ import {
 
 import {
   DIFF_COLORS,
+  DIARIES,
+  DIARY_BY_KEY,
+  isDiaryKey,
   QUESTS,
   QUEST_BY_KEY,
   QUEST_CAPE_KEY,
   QUEST_CAPE_QUEST,
+  TARGET_BY_KEY,
+  Diary,
   PlayerSkills,
   formatHours,
   formatMinutes,
@@ -102,6 +107,14 @@ const DEFAULT_PLAYER: PlayerSkills = {
   levels: {}, xp: {}, combatLevel: 3, source: "manual",
 };
 
+/** tier dots for the diary picker items (matches the graph node dots) */
+const DIARY_DOT: Record<string, string> = {
+  Easy: "bg-emerald-500",
+  Medium: "bg-amber-500",
+  Hard: "bg-orange-500",
+  Elite: "bg-red-500",
+};
+
 /** Recipe for Disaster as the full subquest journey — tracking the umbrella
  *  quest alone only pulls Another Cook's Quest + the classic prereqs into the
  *  plan, so this preset adds every subquest as its own tracked target */
@@ -122,6 +135,10 @@ const GOAL_PRESETS: { label: string; keys: string[] }[] = [
   { label: "While Guthix Sleeps", keys: ["while guthix sleeps"] },
   { label: "Desert Treasure", keys: ["desert treasure i"] },
   { label: "Lunar Diplomacy", keys: ["lunar diplomacy"] },
+  // iconic diary rewards — the planner pulls the lower tiers automatically
+  { label: "Karamja Elite", keys: ["karamja elite"] },
+  { label: "Ardougne Hard (cloak 3)", keys: ["ardougne hard"] },
+  { label: "Western Provinces Elite", keys: ["western provinces elite"] },
 ];
 
 /** locally stored character slot — skills + quest progress, no WOM round-trip to load */
@@ -168,9 +185,10 @@ function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false;
     return { ok: false, text: "This doesn't look like a Quest Pathfinder backup file." };
   }
   const d = root.data;
+  // quests + diary tiers are both markable complete (the cape target isn't)
   const cleanKeys = (v: unknown): string[] =>
     Array.isArray(v)
-      ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k]))]
+      ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k] && k !== QUEST_CAPE_KEY))]
       : [];
   const rawTargets = Array.isArray(d.targets)
     ? d.targets
@@ -907,7 +925,7 @@ export default function Home() {
             : null;
         const cleanKeys = (v: unknown): string[] =>
           Array.isArray(v)
-            ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!QUEST_BY_KEY[k]))]
+            ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k] && k !== QUEST_CAPE_KEY))]
             : [];
         const rawTargets = Array.isArray(d.targets)
           ? d.targets
@@ -1264,15 +1282,22 @@ export default function Home() {
     return DIFF_ORDER.filter((d) => byDiff.has(d)).map((d) => [d, byDiff.get(d)!] as const);
   }, []);
 
-  // single-target view of the picker trigger
-  const firstTarget =
-    targetKeys.length === 1
-      ? targetKeys[0] === QUEST_CAPE_KEY
-        ? QUEST_CAPE_QUEST
-        : QUEST_BY_KEY[targetKeys[0]] ?? null
-      : null;
+  // diaries in the picker, grouped by area (tiers within, Easy → Elite)
+  const diaryAreas = useMemo(() => {
+    const byArea = new Map<string, Diary[]>();
+    for (const d of DIARIES) {
+      if (!byArea.has(d.area)) byArea.set(d.area, []);
+      byArea.get(d.area)!.push(d);
+    }
+    return [...byArea.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, []);
 
-  // animated stat numbers
+  // single-target view of the picker trigger (cape + diaries included)
+  const firstTarget =
+    targetKeys.length === 1 ? TARGET_BY_KEY[targetKeys[0]] ?? null : null;
+
+  // animated stat numbers (the path-count label mentions diaries when one is tracked)
+  const planHasDiaries = useMemo(() => [...planQuests].some(isDiaryKey), [planQuests]);
   const cTotal = useCountUp(planQuests.size);
   const cGated = useCountUp(stepsNeedingTraining + targetsNeedingTraining);
   const cXp = useCountUp(result ? totalXpNeeded : 0, 800);
@@ -1294,7 +1319,7 @@ export default function Home() {
                 <span className="qa-shimmer">Quest Pathfinder</span>
               </h1>
               <p className="text-xs text-stone-400">
-                OSRS prerequisite planner — {QUESTS.length} quests · data: osrs-db (MIT) + OSRS Wiki
+                OSRS prerequisite planner — {QUESTS.length} quests · {DIARIES.length} diaries · data: osrs-db (MIT) + OSRS Wiki
               </p>
             </div>
             {player && (
@@ -1664,7 +1689,9 @@ export default function Home() {
                       className="w-full justify-between bg-stone-950 border-stone-700 hover:bg-stone-800 h-auto py-2.5 text-left"
                     >
                       {targetKeys.length === 0 ? (
-                        <span className="text-stone-500">Search {QUESTS.length} quests…</span>
+                        <span className="text-stone-500">
+                          Search {QUESTS.length} quests &amp; {DIARIES.length} diaries…
+                        </span>
                       ) : targetKeys.length === 1 && firstTarget ? (
                         <span className="flex items-center gap-2 min-w-0">
                           <span className="truncate font-medium text-stone-100">{firstTarget.name}</span>
@@ -1676,9 +1703,7 @@ export default function Home() {
                           <span className="truncate text-[11px] text-stone-500">
                             {targetKeys
                               .slice(0, 2)
-                              .map((k) =>
-                                k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST.name : QUEST_BY_KEY[k]?.name,
-                              )
+                              .map((k) => TARGET_BY_KEY[k]?.name)
                               .filter(Boolean)
                               .join(", ")}…
                           </span>
@@ -1688,7 +1713,7 @@ export default function Home() {
                   </PopoverTrigger>
                   <PopoverContent className="w-[min(28rem,80vw)] p-0 bg-stone-900 border-stone-700" align="start">
                     <Command>
-                      <CommandInput placeholder="Search quests…" className="text-stone-100" />
+                      <CommandInput placeholder="Search quests & diaries…" className="text-stone-100" />
                       <CommandList className="max-h-72">
                         <CommandEmpty>No quest found.</CommandEmpty>
                         <CommandGroup heading="Goals">
@@ -1706,6 +1731,25 @@ export default function Home() {
                             </span>
                           </CommandItem>
                         </CommandGroup>
+                        {diaryAreas.map(([area, tiers]) => (
+                          <CommandGroup key={area} heading={`${area} Diary`} className="text-stone-400">
+                            {tiers.map((d) => (
+                              <CommandItem
+                                key={d.key}
+                                value={`${d.name} ${area} diary ${d.tier}`}
+                                onSelect={() => addTargetKey(d.key)}
+                                className="text-stone-200 aria-selected:bg-amber-900/40"
+                                title={`${d.name} — track every prerequisite: lower tiers, quests and skill levels`}
+                              >
+                                {targetKeys.includes(d.key) && (
+                                  <Check className="mr-1.5 h-3.5 w-3.5 shrink-0 text-emerald-400" aria-hidden />
+                                )}
+                                <span className="truncate flex-1">{d.tier}</span>
+                                <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DIARY_DOT[d.tier]}`} aria-hidden />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        ))}
                         {grouped.map(([diff, quests]) => (
                           <CommandGroup key={diff} heading={diff} className="text-stone-400">
                             {quests.map((q) => (
@@ -1733,7 +1777,7 @@ export default function Home() {
                 {targetKeys.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="Tracked target quests">
                     {targetKeys.map((k) => {
-                      const q = k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[k];
+                      const q = TARGET_BY_KEY[k];
                       if (!q) return null;
                       const done = completed.has(k);
                       return (
@@ -1782,11 +1826,7 @@ export default function Home() {
                     {GOAL_PRESETS.map((p) => {
                       const isCape =
                         p.keys.length === 1 && p.keys[0] === QUEST_CAPE_KEY;
-                      const q = isCape
-                        ? QUEST_CAPE_QUEST
-                        : p.keys.length === 1
-                          ? QUEST_BY_KEY[p.keys[0]]
-                          : null;
+                      const q = p.keys.length === 1 ? TARGET_BY_KEY[p.keys[0]] : null;
                       if (p.keys.length === 1 && !q) return null;
                       const active = p.keys.every((k) => targetKeys.includes(k));
                       const partial =
@@ -1859,8 +1899,9 @@ export default function Home() {
               <CardContent className="py-14 text-center space-y-2">
                 <p className="text-stone-300 font-medium">No targets tracked yet</p>
                 <p className="text-xs text-stone-500 max-w-md mx-auto">
-                  Add one or more quests above — e.g. <button className="underline hover:text-amber-300" onClick={() => addTargetKey("monkey madness ii")}>Monkey Madness II</button> or{" "}
-                  <button className="underline hover:text-amber-300" onClick={() => addTargetKey("recipe for disaster")}>Recipe for Disaster</button> — and you&apos;ll get the full ordered prerequisite chain.
+                  Add one or more quests or diaries above — e.g. <button className="underline hover:text-amber-300" onClick={() => addTargetKey("monkey madness ii")}>Monkey Madness II</button>,{" "}
+                  <button className="underline hover:text-amber-300" onClick={() => addTargetKey("recipe for disaster")}>Recipe for Disaster</button> or the{" "}
+                  <button className="underline hover:text-amber-300" onClick={() => addTargetKey("karamja elite")}>Karamja Elite diary</button> — and you&apos;ll get the full ordered prerequisite chain.
                 </p>
               </CardContent>
             </Card>
@@ -1871,7 +1912,7 @@ export default function Home() {
               {/* summary strip */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                 {[
-                  { v: cTotal, label: "quests in your path", cls: "text-amber-300", xp: false, time: false },
+                  { v: cTotal, label: planHasDiaries ? "steps in your path" : "quests in your path", cls: "text-amber-300", xp: false, time: false },
                   { v: cGated, label: "gated by training", cls: "text-red-400", xp: false, time: false },
                   { v: cXp, label: "XP to train (est.)", cls: "text-emerald-400", xp: true, time: false },
                   { v: cTime, label: "est. playtime (quests)", cls: "text-sky-300", xp: false, time: true },
@@ -2030,7 +2071,7 @@ export default function Home() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                   <a
-                                    href={wikiUrl(q.name)}
+                                    href={wikiUrl(q.wikiName ?? q.name)}
                                     target="_blank"
                                     rel="noreferrer"
                                     className={`text-sm font-medium hover:text-amber-300 hover:underline ${done ? "line-through text-stone-500" : "text-stone-100"}`}
@@ -2038,7 +2079,22 @@ export default function Home() {
                                     {q.name}
                                   </a>
                                   <Badge className={`text-[9px] px-1.5 border ${DIFF_COLORS[q.difficulty]}`}>{q.difficulty}</Badge>
-                                  {!q.f2p && <Badge variant="secondary" className="text-[9px] px-1.5 bg-stone-800 text-stone-400">P2P</Badge>}
+                                  {isDiaryKey(q.key) && (
+                                    <Badge variant="secondary" className="text-[9px] px-1.5 bg-sky-950/60 text-sky-300 border border-sky-800/50">diary</Badge>
+                                  )}
+                                  {isDiaryKey(q.key) && DIARY_BY_KEY[q.key]?.notes && (
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Badge variant="secondary" className="text-[9px] px-1.5 bg-stone-800 text-stone-300 cursor-help">
+                                          ⚠ extra reqs
+                                        </Badge>
+                                      </TooltipTrigger>
+                                      <TooltipContent sideOffset={6} arrowClassName={TOOLTIP_ARROW} className={`text-xs max-w-sm px-3 py-2.5 leading-relaxed ${TOOLTIP_BOX}`}>
+                                        Beyond skill &amp; quest requirements, the wiki lists: {DIARY_BY_KEY[q.key]?.notes}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )}
+                                  {!q.f2p && !isDiaryKey(q.key) && <Badge variant="secondary" className="text-[9px] px-1.5 bg-stone-800 text-stone-400">P2P</Badge>}
                                   {questMinutes(q) !== null && (
                                     <span
                                       className="inline-flex items-center gap-0.5 text-[9px] text-stone-500"
@@ -2061,7 +2117,7 @@ export default function Home() {
                                         </Badge>
                                       </TooltipTrigger>
                                       <TooltipContent sideOffset={6} arrowClassName={TOOLTIP_ARROW} className={`text-xs px-3 py-2 leading-relaxed ${TOOLTIP_BOX}`}>
-                                        {step.unlocks === 1 ? "1 more quest" : `${step.unlocks} more quests`} in your path depend on this
+                                        {step.unlocks === 1 ? "1 more step" : `${step.unlocks} more steps`} in your path (quests or diary tiers) depend on this
                                       </TooltipContent>
                                     </Tooltip>
                                   )}
@@ -2149,10 +2205,13 @@ export default function Home() {
                               aria-label={`Mark ${t.quest.name} complete`}
                               className="border-amber-600 data-[state=checked]:bg-amber-600"
                             />
-                            <a href={wikiUrl(t.quest.name)} target="_blank" rel="noreferrer" className="text-sm font-bold text-amber-200 hover:underline">
+                            <a href={wikiUrl(t.quest.wikiName ?? t.quest.name)} target="_blank" rel="noreferrer" className="text-sm font-bold text-amber-200 hover:underline">
                               {t.quest.name}
                             </a>
                             <Badge className={`text-[9px] px-1.5 border ${DIFF_COLORS[t.quest.difficulty]}`}>{t.quest.difficulty}</Badge>
+                            {isDiaryKey(t.quest.key) && (
+                              <Badge variant="secondary" className="text-[9px] px-1.5 bg-sky-950/60 text-sky-300 border border-sky-800/50">diary</Badge>
+                            )}
                             {questMinutes(t.quest) !== null && (
                               <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-500/80">
                                 <Clock className="h-2.5 w-2.5" aria-hidden />
