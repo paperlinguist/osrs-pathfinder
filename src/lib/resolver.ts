@@ -3,6 +3,7 @@ import {
   QUEST_BY_KEY,
   QUEST_CAPE_KEY,
   QUEST_CAPE_QUEST,
+  TARGET_BY_KEY,
   PlayerSkills,
   Quest,
   SkillReq,
@@ -80,14 +81,22 @@ export interface ResolveResult {
 const difficultyRank: Record<string, number> = {
   Novice: 1, Intermediate: 2, Experienced: 3, Master: 4, Grandmaster: 5,
   Special: 3, Miniquest: 1, Activity: 1, Unknown: 3,
+  // diary tiers (diary pseudo-quests carry their tier as difficulty)
+  Easy: 1, Medium: 2, Hard: 3, Elite: 4,
 };
+
+/** prerequisite keys of a plan entry: its quests plus, for diaries, the
+ *  next-lower tier of the same area (reward claiming requires it complete) */
+function prereqKeysOf(q: Quest): string[] {
+  return q.diaryPrereq ? [...q.quests, q.diaryPrereq] : q.quests;
+}
 
 function buildUnlockMap(needed: Set<string>): Map<string, string[]> {
   const m = new Map<string, string[]>();
   for (const key of needed) {
-    const q = QUEST_BY_KEY[key];
+    const q = TARGET_BY_KEY[key];
     if (!q) continue;
-    for (const p of q.quests) {
+    for (const p of prereqKeysOf(q)) {
       if (needed.has(p)) {
         if (!m.has(p)) m.set(p, []);
         m.get(p)!.push(key);
@@ -192,11 +201,13 @@ export function resolveChain(
   // Quest Cape: synthetic "plan everything" target — every non-completed quest
   // becomes the prerequisite set, ordered by the same greedy as a normal run.
   // Multiple targets (tracked together) share one merged prerequisite plan.
+  // Diary targets work the same way: their quests, plus the next-lower tier of
+  // the same area (reward claiming requires it), enter the plan as steps.
   const isCape = targetKeys.includes(QUEST_CAPE_KEY);
   const targets: TargetResult[] = [];
   const targetKeysClean: string[] = [];
   for (const k of targetKeys) {
-    const q = k === QUEST_CAPE_KEY ? QUEST_CAPE_QUEST : QUEST_BY_KEY[k];
+    const q = TARGET_BY_KEY[k];
     if (q && !targetKeysClean.includes(k)) {
       targets.push({ quest: q, requirements: [], gaps: [] }); // filled in after the XP walk
       targetKeysClean.push(k);
@@ -211,7 +222,7 @@ export function resolveChain(
   const prereqClosure = new Set<string>();
   const collect = (key: string) => {
     if (completed.has(key) || prereqClosure.has(key)) return;
-    const q = QUEST_BY_KEY[key];
+    const q = TARGET_BY_KEY[key];
     if (!q) return;
     prereqClosure.add(key);
     for (const p of q.quests) collect(p);
@@ -222,7 +233,20 @@ export function resolveChain(
     }
   } else {
     for (const tk of targetKeysClean) {
-      for (const p of QUEST_BY_KEY[tk]?.quests ?? []) collect(p);
+      const t = TARGET_BY_KEY[tk];
+      // a diary's "all quests" task makes it a quest-cape-sized plan
+      if (t.allQuests) {
+        for (const q of QUESTS) {
+          if (!completed.has(q.key)) prereqClosure.add(q.key);
+        }
+      }
+      // diary tier chain: pull every not-yet-complete lower tier into the plan
+      let cur: Quest | undefined = t;
+      while (cur?.diaryPrereq && !completed.has(cur.diaryPrereq)) {
+        collect(cur.diaryPrereq);
+        cur = TARGET_BY_KEY[cur.diaryPrereq];
+      }
+      for (const p of t.quests) collect(p);
     }
   }
 
@@ -259,7 +283,7 @@ export function resolveChain(
   };
 
   const isReady = (key: string): boolean =>
-    QUEST_BY_KEY[key].quests.every((p) => !remaining.has(p) || placed.has(p));
+    prereqKeysOf(TARGET_BY_KEY[key]).every((p) => !remaining.has(p) || placed.has(p));
 
   while (remaining.size > 0) {
     let best: string | null = null;
@@ -268,7 +292,7 @@ export function resolveChain(
     let bestDiff = 99;
     for (const key of remaining) {
       if (!isReady(key)) continue;
-      const q = QUEST_BY_KEY[key];
+      const q = TARGET_BY_KEY[key];
       const unlocks = transitiveUnlocks(key);
       const xpSum = Object.values(q.xp).reduce((a, b) => a + b, 0);
       const diff = difficultyRank[q.difficulty] ?? 3;
@@ -294,10 +318,10 @@ export function resolveChain(
   // right after its last in-plan prerequisite (or at the front) so its XP counts
   // toward as many later skill gates as possible
   const xpSumOf = (key: string) =>
-    Object.values(QUEST_BY_KEY[key].xp).reduce((a, b) => a + b, 0);
+    Object.values(TARGET_BY_KEY[key].xp).reduce((a, b) => a + b, 0);
   for (const k of [...extraKeys].sort((a, b) => xpSumOf(b) - xpSumOf(a))) {
     let pos = 0;
-    for (const p of QUEST_BY_KEY[k].quests) {
+    for (const p of TARGET_BY_KEY[k].quests) {
       const idx = ordered.indexOf(p);
       if (idx >= 0) pos = Math.max(pos, idx + 1);
     }
@@ -312,7 +336,7 @@ export function resolveChain(
   const steps: ChainStep[] = [];
 
   for (const key of ordered) {
-    const q = QUEST_BY_KEY[key];
+    const q = TARGET_BY_KEY[key];
     preBonus.push({ ...bonusXp });
     const requirements = computeReqGaps(q, player, bonusXp, opts);
     const gaps = requirements.filter((g) => g.status !== "met");

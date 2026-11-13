@@ -8,7 +8,7 @@
  * (tools/verify-graph-layout.ts).
  */
 
-import { QUEST_BY_KEY, QUEST_CAPE_QUEST, type Quest } from "./quest-data";
+import { QUEST_CAPE_QUEST, TARGET_BY_KEY, type Quest } from "./quest-data";
 import type { ChainStep, SkillGap, TargetResult, XpCascade } from "./resolver";
 
 /* -------------------------------------------------------------- constants */
@@ -166,11 +166,14 @@ export function computeLayout(
   const inPlan = new Set(order.keys());
   const targetKeySet = new Set(targets.map((t) => t.quest.key));
 
-  // prerequisite edges confined to the plan (both endpoints present, deduped)
+  // prerequisite edges confined to the plan (both endpoints present, deduped).
+  // Diary entries also chain to the next-lower tier of their area.
   const parentsOf = new Map<string, string[]>();
   for (const key of inPlan) {
-    const q = QUEST_BY_KEY[key];
-    const ps = (q?.quests ?? []).filter((p) => inPlan.has(p) && p !== key);
+    const q = TARGET_BY_KEY[key];
+    const ps = (q ? [...q.quests, ...(q.diaryPrereq ? [q.diaryPrereq] : [])] : []).filter(
+      (p) => inPlan.has(p) && p !== key,
+    );
     parentsOf.set(key, [...new Set(ps)]);
   }
 
@@ -323,7 +326,7 @@ export function computeLayout(
       y: p.y,
       // cape target is a synthetic quest with no dataset entry — fall back or
       // the node crashes the board reading `quest.name`
-      quest: stepByKey.get(key)?.quest ?? QUEST_BY_KEY[key] ?? QUEST_CAPE_QUEST,
+      quest: stepByKey.get(key)?.quest ?? TARGET_BY_KEY[key] ?? QUEST_CAPE_QUEST,
       isTarget: targetKeySet.has(key),
       isExtra: stepByKey.get(key)?.isExtra ?? false,
     });
@@ -337,7 +340,7 @@ export function computeLayout(
       y: p.y,
       skill: g.skill,
       level: g.level,
-      quest: QUEST_BY_KEY[g.gapQuest]?.name ?? g.gapQuest,
+      quest: TARGET_BY_KEY[g.gapQuest]?.name ?? g.gapQuest,
       toStart: g.gap.requiredToStart,
       deficit: g.gap.deficit,
       xp: g.gap.xpNeeded,
