@@ -1,0 +1,4203 @@
+{
+ "meta": {
+  "sources": [
+   "oldschool.runescape.wiki <Area> Diary pages (DiarySkillStats + quest tables)",
+   "tier chain: wiki states previous tiers must be completed to claim a tier's reward"
+  ],
+  "generated": "2026-11-13"
+ },
+ "diaries": [
+  {
+   "key": "ardougne easy",
+   "name": "Ardougne Easy",
+   "area": "Ardougne",
+   "tier": "Easy",
+   "enum": "ARDOUGNE_EASY",
+   "wikiName": "Ardougne Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Thieving": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "biohazard",
+    "rune mysteries"
+   ],
+   "notes": null
+  },
+  {
+   "key": "ardougne medium",
+   "name": "Ardougne Medium",
+   "area": "Ardougne",
+   "tier": "Medium",
+   "enum": "ARDOUGNE_MEDIUM",
+   "wikiName": "Ardougne Diary",
+   "members": true,
+   "qp": 20,
+   "skills": {
+    "Strength": {
+     "level": 38,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 39,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 38,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 51,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "enlightened journey",
+    "hand in sand",
+    "rune mysteries",
+    "tower of life",
+    "underground pass"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started Sea Slug · Partial completion of Watchtower"
+  },
+  {
+   "key": "ardougne hard",
+   "name": "Ardougne Hard",
+   "area": "Ardougne",
+   "tier": "Hard",
+   "enum": "ARDOUGNE_HARD",
+   "wikiName": "Ardougne Diary",
+   "members": true,
+   "qp": 107,
+   "skills": {
+    "Mining": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "enlightened journey",
+    "hand in sand",
+    "legends quest",
+    "monkey madness i",
+    "mournings end part ii",
+    "rune mysteries",
+    "tower of life",
+    "watchtower"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started Sea Slug"
+  },
+  {
+   "key": "ardougne elite",
+   "name": "Ardougne Elite",
+   "area": "Ardougne",
+   "tier": "Elite",
+   "enum": "ARDOUGNE_ELITE",
+   "wikiName": "Ardougne Diary",
+   "members": true,
+   "qp": 107,
+   "skills": {
+    "Mining": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 91,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 81,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 82,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 91,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 94,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 69,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "desert treasure i",
+    "enlightened journey",
+    "hand in sand",
+    "haunted mine",
+    "legends quest",
+    "monkey madness i",
+    "mournings end part ii",
+    "rune mysteries",
+    "tower of life",
+    "watchtower"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started Sea Slug · Reach 800,000 Nightmare Zone points (or 400,000 with the hard tier of the Combat Achievements)"
+  },
+  {
+   "key": "desert easy",
+   "name": "Desert Easy",
+   "area": "Desert",
+   "tier": "Easy",
+   "enum": "DESERT_EASY",
+   "wikiName": "Desert Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Thieving": {
+     "level": 21,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "notes": "Started Icthlarin's Little Helper"
+  },
+  {
+   "key": "desert medium",
+   "name": "Desert Medium",
+   "area": "Desert",
+   "tier": "Medium",
+   "enum": "DESERT_MEDIUM",
+   "wikiName": "Desert Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 39,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "eagles peak",
+    "enakhras lament",
+    "golem",
+    "spirits of elid"
+   ],
+   "notes": "Started Icthlarin's Little Helper"
+  },
+  {
+   "key": "desert hard",
+   "name": "Desert Hard",
+   "area": "Desert",
+   "tier": "Hard",
+   "enum": "DESERT_HARD",
+   "wikiName": "Desert Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Attack": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "contact",
+    "desert treasure i",
+    "dream mentor",
+    "eagles peak",
+    "enakhras lament",
+    "feud",
+    "golem",
+    "spirits of elid"
+   ],
+   "notes": "Defeat the Kalphite Queen"
+  },
+  {
+   "key": "desert elite",
+   "name": "Desert Elite",
+   "area": "Desert",
+   "tier": "Elite",
+   "enum": "DESERT_ELITE",
+   "wikiName": "Desert Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Attack": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 91,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 94,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 95,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 78,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "contact",
+    "desert treasure i",
+    "dream mentor",
+    "eagles peak",
+    "enakhras lament",
+    "feud",
+    "golem",
+    "spirits of elid"
+   ],
+   "notes": "Defeat the Kalphite Queen and obtain her (tattered) head · Open the Grand Gold Chest in the final room of Pyramid Plunder"
+  },
+  {
+   "key": "falador easy",
+   "name": "Falador Easy",
+   "area": "Falador",
+   "tier": "Easy",
+   "enum": "FALADOR_EASY",
+   "wikiName": "Falador Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dorics quest",
+    "knights sword"
+   ],
+   "notes": null
+  },
+  {
+   "key": "falador medium",
+   "name": "Falador Medium",
+   "area": "Falador",
+   "tier": "Medium",
+   "enum": "FALADOR_MEDIUM",
+   "wikiName": "Falador Diary",
+   "members": true,
+   "qp": 12,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 19,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 32,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dorics quest",
+    "knights sword",
+    "recruitment drive",
+    "skippy and mogres"
+   ],
+   "notes": "Partial completion of Ratcatchers"
+  },
+  {
+   "key": "falador hard",
+   "name": "Falador Hard",
+   "area": "Falador",
+   "tier": "Hard",
+   "enum": "FALADOR_HARD",
+   "wikiName": "Falador Diary",
+   "members": true,
+   "qp": 55,
+   "skills": {
+    "Attack": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 19,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 58,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 71,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dorics quest",
+    "grim tales",
+    "heroes quest",
+    "knights sword",
+    "skippy and mogres",
+    "slug menace"
+   ],
+   "notes": "Access to the Warriors' Guild · Partial completion of Ratcatchers · Defeat the Giant Mole · Acquire a prospector helmet from the Motherlode Mine"
+  },
+  {
+   "key": "falador elite",
+   "name": "Falador Elite",
+   "area": "Falador",
+   "tier": "Elite",
+   "enum": "FALADOR_ELITE",
+   "wikiName": "Falador Diary",
+   "members": true,
+   "qp": 55,
+   "skills": {
+    "Attack": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 80,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 19,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 81,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 58,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 88,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 91,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "dorics quest",
+    "grim tales",
+    "heroes quest",
+    "knights sword",
+    "skippy and mogres",
+    "slug menace"
+   ],
+   "notes": "Access to the Warriors' Guild · Partial completion of Ratcatchers · Defeat the Giant Mole · Reach the rank of White Knight Master · Acquire a prospector helmet from the Motherlode Mine · Completion of all quests, discovery of all music tracks, or level 99 in any skill"
+  },
+  {
+   "key": "fremennik easy",
+   "name": "Fremennik Easy",
+   "area": "Fremennik",
+   "tier": "Easy",
+   "enum": "FREMENNIK_EASY",
+   "wikiName": "Fremennik Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 11,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "fremennik trials"
+   ],
+   "notes": "Started The Giant Dwarf · Started Troll Stronghold"
+  },
+  {
+   "key": "fremennik medium",
+   "name": "Fremennik Medium",
+   "area": "Fremennik",
+   "tier": "Medium",
+   "enum": "FREMENNIK_MEDIUM",
+   "wikiName": "Fremennik Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "between a rock",
+    "eagles peak",
+    "horror from deep"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started The Giant Dwarf · Started Troll Stronghold · Partial completion of Olaf's Quest"
+  },
+  {
+   "key": "fremennik hard",
+   "name": "Fremennik Hard",
+   "area": "Fremennik",
+   "tier": "Hard",
+   "enum": "FREMENNIK_HARD",
+   "wikiName": "Fremennik Diary",
+   "members": true,
+   "qp": 55,
+   "skills": {
+    "Mining": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "between a rock",
+    "eadgars ruse",
+    "eagles peak",
+    "horror from deep",
+    "lunar diplomacy",
+    "throne of miscellania"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started The Giant Dwarf · Partial completion of The Fremennik Isles · Partial completion of Olaf's Quest"
+  },
+  {
+   "key": "fremennik elite",
+   "name": "Fremennik Elite",
+   "area": "Fremennik",
+   "tier": "Elite",
+   "enum": "FREMENNIK_ELITE",
+   "wikiName": "Fremennik Diary",
+   "members": true,
+   "qp": 55,
+   "skills": {
+    "Hitpoints": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 80,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 80,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 82,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 83,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "between a rock",
+    "eadgars ruse",
+    "eagles peak",
+    "horror from deep",
+    "lunar diplomacy",
+    "throne of miscellania"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Started The Giant Dwarf · Partial completion of Olaf's Quest · Defeat each of the Dagannoth Kings · Defeat all God Wars Dungeon generals, except Nex"
+  },
+  {
+   "key": "kandarin easy",
+   "name": "Kandarin Easy",
+   "area": "Kandarin",
+   "tier": "Easy",
+   "enum": "KANDARIN_EASY",
+   "wikiName": "Kandarin Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Agility": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "notes": "Started Elemental Workshop I"
+  },
+  {
+   "key": "kandarin medium",
+   "name": "Kandarin Medium",
+   "area": "Kandarin",
+   "tier": "Medium",
+   "enum": "KANDARIN_MEDIUM",
+   "wikiName": "Kandarin Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 48,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 46,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 26,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl",
+    "waterfall quest"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Partial completion of Elemental Workshop II"
+  },
+  {
+   "key": "kandarin hard",
+   "name": "Kandarin Hard",
+   "area": "Kandarin",
+   "tier": "Hard",
+   "enum": "KANDARIN_HARD",
+   "wikiName": "Kandarin Diary",
+   "members": true,
+   "qp": 12,
+   "skills": {
+    "Attack": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 48,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 26,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl"
+   ],
+   "notes": "Access to Barbarian Fishing, Firemaking, and Smithing · Started Desert Treasure I · Started Fairytale II - Cure a Queen · Partial completion of Elemental Workshop II · Completion of the Knight Waves Training Grounds · Defeat the Penance Queen and complete Barbarian Assault"
+  },
+  {
+   "key": "kandarin elite",
+   "name": "Kandarin Elite",
+   "area": "Kandarin",
+   "tier": "Elite",
+   "enum": "KANDARIN_ELITE",
+   "wikiName": "Kandarin Diary",
+   "members": true,
+   "qp": 12,
+   "skills": {
+    "Attack": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 86,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 76,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 80,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 87,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 79,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "alfred grimhands barcrawl",
+    "family crest",
+    "lunar diplomacy"
+   ],
+   "notes": "Access to Barbarian Fishing, Firemaking, Smithing, and Herblore · Started Desert Treasure I · Started Fairytale II - Cure a Queen · Partial completion of Elemental Workshop II · Completion of the Knight Waves Training Grounds · Defeat the Penance Queen and acquire level 5 in all Barbarian Assault roles"
+  },
+  {
+   "key": "karamja easy",
+   "name": "Karamja Easy",
+   "area": "Karamja",
+   "tier": "Easy",
+   "enum": "KARAMJA_EASY",
+   "wikiName": "Karamja Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "notes": null
+  },
+  {
+   "key": "karamja medium",
+   "name": "Karamja Medium",
+   "area": "Karamja",
+   "tier": "Medium",
+   "enum": "KARAMJA_MEDIUM",
+   "wikiName": "Karamja Diary",
+   "members": true,
+   "qp": 32,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 32,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 3,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 27,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 41,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "grand tree",
+    "shilo village"
+   ],
+   "notes": "Partial completion of Dragon Slayer I · Partial completion of Tai Bwo Wannai Trio · Reach 100% Tai Bwo Wannai Cleanup favour"
+  },
+  {
+   "key": "karamja hard",
+   "name": "Karamja Hard",
+   "area": "Karamja",
+   "tier": "Hard",
+   "enum": "KARAMJA_HARD",
+   "wikiName": "Karamja Diary",
+   "members": true,
+   "qp": 107,
+   "skills": {
+    "Mining": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 44,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 27,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 41,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 100,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "grand tree",
+    "tai bwo wannai trio"
+   ],
+   "notes": "Partial completion of Legends' Quest · Defeat a Ket-Zek in the TzHaar Fight Cave on the 31st wave · Reach 100% Tai Bwo Wannai Cleanup favour"
+  },
+  {
+   "key": "karamja elite",
+   "name": "Karamja Elite",
+   "area": "Karamja",
+   "tier": "Elite",
+   "enum": "KARAMJA_ELITE",
+   "wikiName": "Karamja Diary",
+   "members": true,
+   "qp": 107,
+   "skills": {
+    "Mining": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 87,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 91,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 41,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 100,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "grand tree",
+    "tai bwo wannai trio"
+   ],
+   "notes": "Partial completion of Legends' Quest · Completion of the TzHaar Fight Cave · Reach 100% Tai Bwo Wannai Cleanup favour"
+  },
+  {
+   "key": "kourend-and-kebos easy",
+   "name": "Kourend & Kebos Easy",
+   "area": "Kourend & Kebos",
+   "tier": "Easy",
+   "enum": "KOUREND_AND_KEBOS_EASY",
+   "wikiName": "Kourend & Kebos Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 12,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "druidic ritual"
+   ],
+   "notes": null
+  },
+  {
+   "key": "kourend-and-kebos medium",
+   "name": "Kourend & Kebos Medium",
+   "area": "Kourend & Kebos",
+   "tier": "Medium",
+   "enum": "KOUREND_AND_KEBOS_MEDIUM",
+   "wikiName": "Kourend & Kebos Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 12,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "ascent of arceuus",
+    "depths of despair",
+    "forsaken tower",
+    "queen of thieves",
+    "tale of righteous"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Partial completion of Eagles' Peak"
+  },
+  {
+   "key": "kourend-and-kebos hard",
+   "name": "Kourend & Kebos Hard",
+   "area": "Kourend & Kebos",
+   "tier": "Hard",
+   "enum": "KOUREND_AND_KEBOS_HARD",
+   "wikiName": "Kourend & Kebos Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 43,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 74,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "ascent of arceuus",
+    "depths of despair",
+    "dream mentor",
+    "forsaken tower",
+    "queen of thieves",
+    "tale of righteous"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Partial completion of Eagles' Peak · Defeat a Lizardman Shaman in the Lizardman Temple"
+  },
+  {
+   "key": "kourend-and-kebos elite",
+   "name": "Kourend & Kebos Elite",
+   "area": "Kourend & Kebos",
+   "tier": "Elite",
+   "enum": "KOUREND_AND_KEBOS_ELITE",
+   "wikiName": "Kourend & Kebos Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 16,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 82,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 49,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 84,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 77,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 95,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "ascent of arceuus",
+    "depths of despair",
+    "dream mentor",
+    "forsaken tower",
+    "queen of thieves",
+    "tale of righteous"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen · Partial completion of Eagles' Peak · Completion of the Chambers of Xeric · Defeat a Hydra in the Karuulm Slayer Dungeon · Defeat a Lizardman Shaman in the Lizardman Temple · Defeat Skotizo"
+  },
+  {
+   "key": "lumbridge-and-draynor easy",
+   "name": "Lumbridge & Draynor Easy",
+   "area": "Lumbridge & Draynor",
+   "tier": "Easy",
+   "enum": "LUMBRIDGE_AND_DRAYNOR_EASY",
+   "wikiName": "Lumbridge & Draynor Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 7,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "cooks assistant",
+    "rune mysteries"
+   ],
+   "notes": null
+  },
+  {
+   "key": "lumbridge-and-draynor medium",
+   "name": "Lumbridge & Draynor Medium",
+   "area": "Lumbridge & Draynor",
+   "tier": "Medium",
+   "enum": "LUMBRIDGE_AND_DRAYNOR_MEDIUM",
+   "wikiName": "Lumbridge & Draynor Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Strength": {
+     "level": 19,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 38,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 38,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "animal magnetism",
+    "cooks assistant",
+    "rune mysteries"
+   ],
+   "notes": "Started Fairytale II - Cure a Queen"
+  },
+  {
+   "key": "lumbridge-and-draynor hard",
+   "name": "Lumbridge & Draynor Hard",
+   "area": "Lumbridge & Draynor",
+   "tier": "Hard",
+   "enum": "LUMBRIDGE_AND_DRAYNOR_HARD",
+   "wikiName": "Lumbridge & Draynor Diary",
+   "members": true,
+   "qp": 175,
+   "skills": {
+    "Mining": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 19,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 46,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 57,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 59,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 63,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "animal magnetism",
+    "another slice of ham",
+    "recipe for disaster",
+    "rune mysteries",
+    "tears of guthix"
+   ],
+   "notes": "Access to the Bones to Peaches spell from the Mage Training Arena · Started Fairytale II - Cure a Queen"
+  },
+  {
+   "key": "lumbridge-and-draynor elite",
+   "name": "Lumbridge & Draynor Elite",
+   "area": "Lumbridge & Draynor",
+   "tier": "Elite",
+   "enum": "LUMBRIDGE_AND_DRAYNOR_ELITE",
+   "wikiName": "Lumbridge & Draynor Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Attack": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hitpoints": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 88,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 78,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 72,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 76,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 74,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Sailing": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [],
+   "allQuests": true,
+   "notes": "Access to the Bones to Peaches spell from the Mage Training Arena"
+  },
+  {
+   "key": "morytania easy",
+   "name": "Morytania Easy",
+   "area": "Morytania",
+   "tier": "Easy",
+   "enum": "MORYTANIA_EASY",
+   "wikiName": "Morytania Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Cooking": {
+     "level": 12,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 23,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "nature spirit"
+   ],
+   "notes": null
+  },
+  {
+   "key": "morytania medium",
+   "name": "Morytania Medium",
+   "area": "Morytania",
+   "tier": "Medium",
+   "enum": "MORYTANIA_MEDIUM",
+   "wikiName": "Morytania Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 47,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 7,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 29,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "cabin fever",
+    "dwarf cannon",
+    "ghosts ahoy",
+    "lair of tarn razorlor"
+   ],
+   "notes": "Started In Aid of the Myreque"
+  },
+  {
+   "key": "morytania hard",
+   "name": "Morytania Hard",
+   "area": "Morytania",
+   "tier": "Hard",
+   "enum": "MORYTANIA_HARD",
+   "wikiName": "Morytania Diary",
+   "members": true,
+   "qp": 12,
+   "skills": {
+    "Attack": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 71,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 58,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 29,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "desert treasure i",
+    "dwarf cannon",
+    "ghosts ahoy",
+    "in aid of myreque",
+    "lair of tarn razorlor"
+   ],
+   "notes": "Started The Great Brain Robbery · Completion of the Knight Waves Training Grounds"
+  },
+  {
+   "key": "morytania elite",
+   "name": "Morytania Elite",
+   "area": "Morytania",
+   "tier": "Elite",
+   "enum": "MORYTANIA_ELITE",
+   "wikiName": "Morytania Diary",
+   "members": true,
+   "qp": 12,
+   "skills": {
+    "Attack": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 76,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 71,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 96,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 84,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 80,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 83,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 29,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "desert treasure i",
+    "dwarf cannon",
+    "ghosts ahoy",
+    "in aid of myreque",
+    "lair of tarn razorlor",
+    "lunar diplomacy",
+    "shades of mortton"
+   ],
+   "notes": "Access to Barbarian Fishing · Started The Great Brain Robbery · Completion of the Knight Waves Training Grounds · Open the Barrows chest while wearing a full Barrows set"
+  },
+  {
+   "key": "varrock easy",
+   "name": "Varrock Easy",
+   "area": "Varrock",
+   "tier": "Easy",
+   "enum": "VARROCK_EASY",
+   "wikiName": "Varrock Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 13,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 8,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 9,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "rune mysteries"
+   ],
+   "notes": "Reach 50 kudos with the Varrock Museum"
+  },
+  {
+   "key": "varrock medium",
+   "name": "Varrock Medium",
+   "area": "Varrock",
+   "tier": "Medium",
+   "enum": "VARROCK_MEDIUM",
+   "wikiName": "Varrock Diary",
+   "members": true,
+   "qp": 32,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 9,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "a souls bane",
+    "dig site",
+    "enlightened journey",
+    "garden of tranquillity",
+    "gertrudes cat",
+    "rune mysteries",
+    "tree gnome village"
+   ],
+   "notes": "Own a Jagex Account, or set up the older RuneScape Authenticator · Reach 50 kudos with the Varrock Museum"
+  },
+  {
+   "key": "varrock hard",
+   "name": "Varrock Hard",
+   "area": "Varrock",
+   "tier": "Hard",
+   "enum": "VARROCK_HARD",
+   "wikiName": "Varrock Diary",
+   "members": true,
+   "qp": 32,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 51,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 36,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 54,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 9,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "a souls bane",
+    "desert treasure i",
+    "enlightened journey",
+    "garden of tranquillity",
+    "gertrudes cat",
+    "rune mysteries",
+    "tree gnome village"
+   ],
+   "notes": "Own a Jagex Account, or set up the older RuneScape Authenticator · Reach 153 kudos with the Varrock Museum"
+  },
+  {
+   "key": "varrock elite",
+   "name": "Varrock Elite",
+   "area": "Varrock",
+   "tier": "Elite",
+   "enum": "VARROCK_ELITE",
+   "wikiName": "Varrock Diary",
+   "members": true,
+   "qp": 32,
+   "skills": {
+    "Mining": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 51,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 89,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 95,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 86,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 81,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Runecraft": {
+     "level": 78,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "a souls bane",
+    "desert treasure i",
+    "dream mentor",
+    "enlightened journey",
+    "garden of tranquillity",
+    "gertrudes cat",
+    "tree gnome village"
+   ],
+   "notes": "Own a Jagex Account, or set up the older RuneScape Authenticator · Reach 153 kudos with the Varrock Museum"
+  },
+  {
+   "key": "western-provinces easy",
+   "name": "Western Provinces Easy",
+   "area": "Western Provinces",
+   "tier": "Easy",
+   "enum": "WESTERN_PROVINCES_EASY",
+   "wikiName": "Western Provinces Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 9,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "rune mysteries"
+   ],
+   "notes": "Reach 30 chompy or jubbly bird kills"
+  },
+  {
+   "key": "western-provinces medium",
+   "name": "Western Provinces Medium",
+   "area": "Western Provinces",
+   "tier": "Medium",
+   "enum": "WESTERN_PROVINCES_MEDIUM",
+   "wikiName": "Western Provinces Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 37,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 46,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 30,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 25,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 46,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 35,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 5,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 31,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "big chompy bird hunting",
+    "eagles peak",
+    "eyes of glouphrie"
+   ],
+   "notes": "Partial completion of Monkey Madness I · Partial completion of One Small Favour · Reach 125 chompy or jubbly bird kills"
+  },
+  {
+   "key": "western-provinces hard",
+   "name": "Western Provinces Hard",
+   "area": "Western Provinces",
+   "tier": "Hard",
+   "enum": "WESTERN_PROVINCES_HARD",
+   "wikiName": "Western Provinces Diary",
+   "members": true,
+   "qp": 100,
+   "skills": {
+    "Mining": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 56,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 20,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 69,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 100,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "eagles peak",
+    "eyes of glouphrie",
+    "recipe for disaster king awowogei",
+    "swan song"
+   ],
+   "notes": "Started Mourning's End Part I · Defeat Zulrah · Reach 300 chompy or jubbly bird kills"
+  },
+  {
+   "key": "western-provinces elite",
+   "name": "Western Provinces Elite",
+   "area": "Western Provinces",
+   "tier": "Elite",
+   "enum": "WESTERN_PROVINCES_ELITE",
+   "wikiName": "Western Provinces Diary",
+   "members": true,
+   "qp": 100,
+   "skills": {
+    "Attack": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hitpoints": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Mining": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 45,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Defence": {
+     "level": 42,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 18,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 62,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 70,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Prayer": {
+     "level": 22,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Crafting": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 93,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Farming": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Construction": {
+     "level": 65,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 69,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Combat": {
+     "level": 100,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "eagles peak",
+    "eyes of glouphrie",
+    "recipe for disaster king awowogei",
+    "swan song"
+   ],
+   "notes": "Started Mourning's End Part I · Defeat the Thermonuclear smoke devil · Defeat Zulrah · Reach 1,000 chompy or jubbly bird kills · Acquire and wear any complete void set"
+  },
+  {
+   "key": "wilderness easy",
+   "name": "Wilderness Easy",
+   "area": "Wilderness",
+   "tier": "Easy",
+   "enum": "WILDERNESS_EASY",
+   "wikiName": "Wilderness Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 15,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 21,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "enter abyss"
+   ],
+   "notes": null
+  },
+  {
+   "key": "wilderness medium",
+   "name": "Wilderness Medium",
+   "area": "Wilderness",
+   "tier": "Medium",
+   "enum": "WILDERNESS_MEDIUM",
+   "wikiName": "Wilderness Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Strength": {
+     "level": 1,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 52,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 60,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 50,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "enter abyss"
+   ],
+   "notes": "Access to the Wilderness God Wars Dungeon · Partial completion of Between a Rock..."
+  },
+  {
+   "key": "wilderness hard",
+   "name": "Wilderness Hard",
+   "area": "Wilderness",
+   "tier": "Hard",
+   "enum": "WILDERNESS_HARD",
+   "wikiName": "Wilderness Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 55,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 64,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 53,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 66,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 61,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 68,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 67,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "death plateau",
+    "enter abyss",
+    "mage arena i"
+   ],
+   "notes": "Access to at least one of the three god spells · Access to the Wilderness God Wars Dungeon · Partial completion of Between a Rock... · Defeat the Chaos elemental · Defeat the Crazy archaeologist, Chaos fanatic, and Scorpia"
+  },
+  {
+   "key": "wilderness elite",
+   "name": "Wilderness Elite",
+   "area": "Wilderness",
+   "tier": "Elite",
+   "enum": "WILDERNESS_ELITE",
+   "wikiName": "Wilderness Diary",
+   "members": true,
+   "qp": null,
+   "skills": {
+    "Mining": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Agility": {
+     "level": 64,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Smithing": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Herblore": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fishing": {
+     "level": 85,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Ranged": {
+     "level": 40,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Thieving": {
+     "level": 84,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Cooking": {
+     "level": 90,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Firemaking": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Magic": {
+     "level": 96,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Fletching": {
+     "level": 10,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Woodcutting": {
+     "level": 75,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Slayer": {
+     "level": 83,
+     "boostable": true,
+     "requiredToStart": false
+    },
+    "Hunter": {
+     "level": 67,
+     "boostable": true,
+     "requiredToStart": false
+    }
+   },
+   "quests": [
+    "death plateau",
+    "desert treasure i",
+    "enter abyss",
+    "mage arena i"
+   ],
+   "notes": "Access to at least one of the three god spells · Access to the Wilderness God Wars Dungeon · Partial completion of Between a Rock... · Defeat Callisto/Artio, Venenatis/Spindel, and Vet'ion/Calvar'ion · Defeat the Chaos elemental · Defeat the Crazy archaeologist, Chaos fanatic, and Scorpia"
+  }
+ ]
+}
