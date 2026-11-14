@@ -235,6 +235,51 @@ function parseBackup(raw: string): { ok: true; data: BackupData } | { ok: false;
   };
 }
 
+/** Build a saved-character slot from a Quest Pathfinder character file's
+ *  `data` object (v1–v3 tolerant); null when the payload isn't usable. */
+function buildCharSlot(data: unknown): CharSlot | null {
+  if (!data || typeof data !== "object") return null;
+  // `target`/absent `targets`+`questPoints` = v1 character files
+  const d = data as Partial<CharSlot> & { target?: string; questPoints?: number };
+  if (typeof d.name !== "string" || !d.name.trim()) return null;
+  const rp = d.player as (PlayerSkills & Record<string, unknown>) | null | undefined;
+  const player: PlayerSkills | null =
+    rp && typeof rp === "object" && rp.levels && typeof rp.levels === "object"
+      ? {
+          ...rp,
+          levels: (rp.levels as PlayerSkills["levels"]) ?? {},
+          xp: (rp.xp as PlayerSkills["xp"]) ?? {},
+          combatLevel: typeof rp.combatLevel === "number" ? rp.combatLevel : 3,
+          source: typeof rp.source === "string" ? rp.source : "manual",
+        }
+      : null;
+  const cleanKeys = (v: unknown): string[] =>
+    Array.isArray(v)
+      ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k] && k !== QUEST_CAPE_KEY))]
+      : [];
+  const rawTargets = Array.isArray(d.targets) ? d.targets : d.target != null ? [d.target] : [];
+  const completedKeys = cleanKeys(d.completed);
+  // boss-planner items ride along in v3 character files (tolerant of older ones)
+  const owned = d.owned ? normalizeOwned(d.owned) : null;
+  return {
+    name: d.name.trim(),
+    player,
+    completed: completedKeys,
+    questPoints:
+      typeof d.questPoints === "number" && d.questPoints >= 0
+        ? Math.floor(d.questPoints)
+        : totalQuestPoints(completedKeys),
+    added: cleanKeys(d.added),
+    targets: [
+      ...new Set(
+        rawTargets.filter((k): k is string => typeof k === "string" && isValidTargetKey(k)),
+      ),
+    ],
+    owned: owned && owned.updatedAt ? owned : null,
+    savedAt: typeof d.savedAt === "string" ? d.savedAt : new Date().toISOString(),
+  };
+}
+
 function gapBadgeClass(g: SkillGap): string {
   switch (g.status) {
     case "covered-by-quest-xp":
@@ -883,93 +928,6 @@ export default function Home() {
     [toast, username, player, completed, addedQuests, targetKeys, upsertChar, liveOwned],
   );
 
-  const charFileRef = useRef<HTMLInputElement>(null);
-
-  const onCharFile = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const f = e.target.files?.[0];
-      e.target.value = ""; // allow re-importing the same file later
-      if (!f) return;
-      try {
-        const parsed = JSON.parse(await f.text()) as {
-          app?: string;
-          kind?: string;
-          // `target`/absent `targets`+`questPoints` = v1 character files
-          data?: Partial<CharSlot> & { target?: string; questPoints?: number; player?: unknown };
-        };
-        const d = parsed?.data;
-        if (
-          parsed?.app !== "quest-pathfinder" ||
-          parsed?.kind !== "character" ||
-          !d ||
-          typeof d.name !== "string" ||
-          !d.name.trim()
-        ) {
-          toast({
-            title: "Import failed",
-            description: "That file isn't a Quest Pathfinder character export.",
-            variant: "destructive",
-          });
-          return;
-        }
-        const rp = d.player as (PlayerSkills & Record<string, unknown>) | null | undefined;
-        const player: PlayerSkills | null =
-          rp && typeof rp === "object" && rp.levels && typeof rp.levels === "object"
-            ? {
-                ...rp,
-                levels: (rp.levels as PlayerSkills["levels"]) ?? {},
-                xp: (rp.xp as PlayerSkills["xp"]) ?? {},
-                combatLevel: typeof rp.combatLevel === "number" ? rp.combatLevel : 3,
-                source: typeof rp.source === "string" ? rp.source : "manual",
-              }
-            : null;
-        const cleanKeys = (v: unknown): string[] =>
-          Array.isArray(v)
-            ? [...new Set(v.filter((k): k is string => typeof k === "string" && !!TARGET_BY_KEY[k] && k !== QUEST_CAPE_KEY))]
-            : [];
-        const rawTargets = Array.isArray(d.targets)
-          ? d.targets
-          : d.target != null
-            ? [d.target] // v1 character files stored a single target
-            : [];
-        const completedKeys = cleanKeys(d.completed);
-        // boss-planner items ride along in v3 character files (tolerant of older ones)
-        const owned = d.owned ? normalizeOwned(d.owned) : null;
-        const slot: CharSlot = {
-          name: d.name.trim(),
-          player,
-          completed: completedKeys,
-          questPoints:
-            typeof d.questPoints === "number" && d.questPoints >= 0
-              ? Math.floor(d.questPoints)
-              : totalQuestPoints(completedKeys),
-          added: cleanKeys(d.added),
-          targets: [
-            ...new Set(
-              rawTargets.filter(
-                (k): k is string => typeof k === "string" && isValidTargetKey(k),
-              ),
-            ),
-          ],
-          owned: owned && owned.updatedAt ? owned : null,
-          savedAt: typeof d.savedAt === "string" ? d.savedAt : new Date().toISOString(),
-        };
-        upsertChar(slot);
-        toast({
-          title: `Imported ${slot.name}`,
-          description: "Added to your saved characters — click the chip to load it.",
-        });
-      } catch {
-        toast({
-          title: "Import failed",
-          description: "Couldn't read that file as JSON.",
-          variant: "destructive",
-        });
-      }
-    },
-    [toast, upsertChar],
-  );
-
   // ---- actions
   const importPlayer = useCallback(async () => {
     const name = username.trim();
@@ -999,16 +957,20 @@ export default function Home() {
   /**
    * Character Export file upload — the default import flow. One picker takes
    * character.json (skills), quests.json (completions, merged add-only) and
-   * bank/equipment/inventory.json (boss-planner items) in any combination.
+   * bank/equipment/inventory.json (boss-planner items) in any combination —
+   * plus Quest Pathfinder files: a character restore export lands in Saved
+   * characters, a full backup pre-loads the Backup & restore dialog for review.
    */
   const charExportRef = useRef<HTMLInputElement>(null);
   const onCharExportFiles = useCallback(
     async (files: File[]) => {
       const readout = await readCharacterExportFiles(files);
-      if (!readout.player && !readout.questState && readout.containers.length === 0) {
+      const hasExportData =
+        !!readout.player || !!readout.questState || readout.containers.length > 0;
+      if (!hasExportData && readout.backups.length === 0) {
         setImportMsg({
           ok: false,
-          text: "Nothing imported — expected Character Export files (character.json, quests.json, bank.json…) or a Quest State Exporter file.",
+          text: "Nothing imported — expected Character Export files (character.json, quests.json, bank.json…), a Quest State Exporter file, or a Quest Pathfinder backup.",
         });
         return;
       }
@@ -1038,15 +1000,57 @@ export default function Home() {
         } catch { /* keep going without the items */ }
         bits.push(`${readout.containers.length} item file${readout.containers.length === 1 ? "" : "s"} → boss planner`);
       }
+      // Quest Pathfinder files — route by kind, report each
+      const importedChars: string[] = [];
+      let pendingBackupName: string | null = null;
+      for (const bf of readout.backups) {
+        if (bf.kind === "character") {
+          const slot = buildCharSlot(bf.root.data);
+          if (slot) {
+            upsertChar(slot);
+            importedChars.push(slot.name);
+            toast({
+              title: `Imported ${slot.name}`,
+              description: "Added to your saved characters — click the chip to load it.",
+            });
+          } else {
+            toast({
+              title: "Import failed",
+              description: `${bf.name} isn't a valid Quest Pathfinder character export.`,
+              variant: "destructive",
+            });
+          }
+        } else {
+          // full backup: never applied silently — prefill the restore dialog
+          pendingBackupName = bf.name;
+          setImportRaw(JSON.stringify(bf.root, null, 2));
+        }
+      }
+      if (importedChars.length > 0) {
+        bits.push(
+          `${importedChars.length} character file${importedChars.length === 1 ? "" : "s"} → saved characters (${importedChars.join(", ")})`,
+        );
+      }
       if (readout.unrecognized.length > 0) {
         bits.push(`${readout.unrecognized.length} file${readout.unrecognized.length === 1 ? "" : "s"} skipped`);
       }
-      setImportMsg({
-        ok: true,
-        text: `Imported${readout.player?.username ? ` ${readout.player.username}` : ""}: ${bits.join(" · ")}.`,
-      });
+      if (hasExportData || importedChars.length > 0) {
+        setImportMsg({
+          ok: true,
+          text: `Imported${readout.player?.username ? ` ${readout.player.username}` : ""}: ${bits.join(" · ")}.`,
+        });
+      }
+      if (pendingBackupName) {
+        setImportFileName(pendingBackupName);
+        setBackupMsg(null);
+        setBackupOpen(true);
+        toast({
+          title: "Backup loaded",
+          description: "Review it below, then press Restore data to apply it to this browser.",
+        });
+      }
     },
-    [upsertPlayerSkills],
+    [upsertPlayerSkills, upsertChar, toast],
   );
 
   // ---- add-suggestion flow: extras never silently skip prereqs — and never
@@ -1400,7 +1404,8 @@ export default function Home() {
                 <CardTitle className="text-base text-stone-200">1 · Import your character</CardTitle>
                 <CardDescription className="text-xs">
                   Fastest: upload your Character Export files — skills <b>and</b> finished
-                  quests in one go (bank/equipment files feed the boss planner too). Or use a
+                  quests in one go (bank/equipment files feed the boss planner too). Quest
+                  Pathfinder character &amp; backup .json files import here too. Or use a
                   username below.
                 </CardDescription>
               </CardHeader>
@@ -1423,7 +1428,8 @@ export default function Home() {
                     <span className="block text-xs text-stone-400">
                       Pick <code className="rounded bg-stone-900 px-1 text-[10px] text-amber-200">character.json</code>,{" "}
                       <code className="rounded bg-stone-900 px-1 text-[10px] text-amber-200">quests.json</code> and any item
-                      files together — parsed in your browser, never uploaded.
+                      files together — Quest Pathfinder character/backup .json files work too.
+                      Parsed in your browser, never uploaded.
                     </span>
                   </span>
                 </button>
@@ -1567,24 +1573,6 @@ export default function Home() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => charFileRef.current?.click()}
-                        className="h-6 px-2 text-[10px] text-stone-400 hover:text-sky-200 hover:bg-stone-800"
-                        title="Add characters from exported .json restore files"
-                      >
-                        <FileUp className="h-3 w-3" aria-hidden />
-                        Import file
-                      </Button>
-                      <input
-                        ref={charFileRef}
-                        type="file"
-                        accept="application/json,.json"
-                        className="sr-only"
-                        onChange={onCharFile}
-                        aria-label="Import character file"
-                      />
-                      <Button
-                        size="sm"
-                        variant="ghost"
                         onClick={saveCurrentChar}
                         disabled={!username.trim() && !player}
                         className="h-6 px-2 text-[10px] text-amber-300/90 hover:text-amber-200 hover:bg-stone-800 disabled:opacity-40"
@@ -1609,7 +1597,8 @@ export default function Home() {
                   {chars.length === 0 ? (
                     <p className="text-[10px] text-stone-600">
                       Import once, save, then switch characters instantly — hiscores are only hit on
-                      import / refresh. Export a slot with ↧ to keep it safe from cleared cookies.
+                      import / refresh. Export a slot with ↧ to keep it safe from cleared cookies —
+                      re-import the file with the upload button above.
                     </p>
                   ) : (
                     <div className="flex flex-wrap gap-1.5">
