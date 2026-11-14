@@ -120,4 +120,42 @@ describe("readCharacterExportFiles", () => {
     expect(r.questState?.finishedKeys).toContain("animal magnetism");
     expect(r.unrecognized).toEqual(["garbage.json"]);
   });
+
+  it("detects Quest Pathfinder character exports and full backups alongside export files", async () => {
+    const files = [
+      new File(
+        [JSON.stringify({
+          app: "quest-pathfinder", kind: "character", version: 3,
+          data: { name: "Wren", player: null, completed: [], questPoints: 0, added: [], targets: ["cooks assistant"], savedAt: "2026-11-13T00:00:00Z" },
+        })],
+        "quest-pathfinder-character-wren.json",
+      ),
+      new File(
+        [JSON.stringify({
+          app: "quest-pathfinder", version: 3,
+          data: { completed: ["cooks assistant"], targets: [], allowBoosts: true, includeQuestXp: true },
+        })],
+        "quest-pathfinder-backup-2026-11-13.json",
+      ),
+      new File(
+        [JSON.stringify({ account_name: "Wren", stats: { Attack: { real_level: 70 } } })],
+        "character.json",
+      ),
+    ];
+    const r = await readCharacterExportFiles(files);
+    expect(r.backups).toHaveLength(2);
+    expect(r.backups[0].kind).toBe("character");
+    expect((r.backups[0].root.data as { name: string }).name).toBe("Wren");
+    expect(r.backups[1].kind).toBe("backup");
+    // export files still route normally in the same pick
+    expect(r.player?.source).toBe("character-export");
+    expect(r.unrecognized).toEqual([]);
+  });
+
+  it("rejects app-marker files without a data object", async () => {
+    const files = [new File([JSON.stringify({ app: "quest-pathfinder", oops: true })], "broken.json")];
+    const r = await readCharacterExportFiles(files);
+    expect(r.backups).toEqual([]);
+    expect(r.unrecognized).toEqual(["broken.json"]);
+  });
 });

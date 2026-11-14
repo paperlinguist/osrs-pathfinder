@@ -227,6 +227,14 @@ export default function BossesPage() {
         });
         return;
       }
+      // Quest Pathfinder backups belong to the planner — point them there
+      if (readout.backups.length > 0) {
+        toast({
+          title: "Planner backup detected",
+          description:
+            "Quest Pathfinder character/backup files import on the quest planner's upload button — this page only reads Character Export files.",
+        });
+      }
       const parts: string[] = [];
       if (readout.player) {
         setPlayer(readout.player);

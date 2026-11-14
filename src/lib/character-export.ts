@@ -199,6 +199,29 @@ export function normalizeOwned(raw: unknown): OwnedItems {
   };
 }
 
+/* ---------------------------------------------------- quest-pathfinder files */
+
+/** a Quest Pathfinder app file picked alongside Character Export files:
+ *  per-character restore exports (kind "character") or full backups */
+export interface AppBackupFile {
+  name: string;
+  kind: "character" | "backup";
+  /** the whole parsed file root — pages route `root.data` themselves */
+  root: Record<string, unknown>;
+}
+
+/**
+ * Detect a Quest Pathfinder backup/character export by its app marker.
+ * Returns null for anything else (Character Export files, garbage).
+ */
+export function parseAppBackupFile(raw: unknown): Omit<AppBackupFile, "name"> | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const obj = raw as Record<string, unknown>;
+  if (obj.app !== "quest-pathfinder") return null;
+  if (!obj.data || typeof obj.data !== "object" || Array.isArray(obj.data)) return null;
+  return { kind: obj.kind === "character" ? "character" : "backup", root: obj };
+}
+
 /* -------------------------------------------------- one-picker file reading */
 
 export interface CharacterExportReadout {
@@ -208,18 +231,21 @@ export interface CharacterExportReadout {
   questState: ParsedQuestState | null;
   /** bank / equipment / inventory.json */
   containers: ParsedContainer[];
+  /** Quest Pathfinder character exports / full backups, routed by app marker */
+  backups: AppBackupFile[];
   /** file names nothing could parse */
   unrecognized: string[];
 }
 
 /**
  * Read a mixed bag of user-picked files and route each by shape:
- * skills file, quest-state file, or item container. One picker, any
- * combination — pages apply the pieces they care about.
+ * skills file, quest-state file, item container, or Quest Pathfinder
+ * backup. One picker, any combination — pages apply the pieces they
+ * care about.
  */
 export async function readCharacterExportFiles(files: File[]): Promise<CharacterExportReadout> {
   const out: CharacterExportReadout = {
-    player: null, questState: null, containers: [], unrecognized: [],
+    player: null, questState: null, containers: [], backups: [], unrecognized: [],
   };
   for (const f of files) {
     let json: unknown;
@@ -227,6 +253,11 @@ export async function readCharacterExportFiles(files: File[]): Promise<Character
       json = JSON.parse(await f.text());
     } catch {
       out.unrecognized.push(f.name);
+      continue;
+    }
+    const backup = parseAppBackupFile(json);
+    if (backup) {
+      out.backups.push({ name: f.name, ...backup });
       continue;
     }
     const player = parseCharacterFile(json);

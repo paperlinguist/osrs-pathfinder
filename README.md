@@ -42,7 +42,10 @@ visitor's browser (with export/import character backups in-app).
   Plugin Hub plugin writes JSON files of your character (skills, quests, bank,
   worn equipment, inventory) as you play. Upload them anywhere the app offers a
   file picker — one upload covers skills, quest completions and the boss
-  planner's owned-items pool. Parsed **client-side only**, never uploaded.
+  planner's owned-items pool. The planner's upload button also detects the
+  app's own files: a **Quest Pathfinder character export** lands in Saved
+  characters, and a **full backup** pre-loads the Backup & restore dialog
+  for review. Parsed **client-side only**, never uploaded.
   The older [Quest State Exporter](https://runelite.net/plugin-hub/show/quest-state-exporter)
   quest file is still auto-detected on the completions page (**Add** marks its
   FINISHED quests; **Sync** also unchecks everything it says isn't finished).
