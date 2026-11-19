@@ -42,6 +42,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  BookOpen,
   Check,
   FileJson,
   RefreshCw,
@@ -261,6 +262,14 @@ export default function CompletionsPage() {
           >
             <Swords className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Bosses</span>
+          </Link>
+          <Link
+            href="/skills"
+            aria-label="Skill explorer"
+            className="inline-flex items-center gap-1.5 rounded-md border border-stone-700 px-2.5 py-1.5 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
+          >
+            <BookOpen className="h-3.5 w-3.5" aria-hidden />
+            <span className="hidden sm:inline">Skills</span>
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Manage quests</h1>

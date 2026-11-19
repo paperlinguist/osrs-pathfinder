@@ -47,6 +47,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   Banknote,
+  BookOpen,
   CheckCircle2,
   ChevronDown,
   CircleHelp,
@@ -405,6 +406,14 @@ export default function BossesPage() {
           >
             <ListChecks className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Quests</span>
+          </Link>
+          <Link
+            href="/skills"
+            aria-label="Skill explorer"
+            className="inline-flex items-center gap-1.5 rounded-md border border-stone-700 px-2.5 py-1.5 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
+          >
+            <BookOpen className="h-3.5 w-3.5" aria-hidden />
+            <span className="hidden sm:inline">Skills</span>
           </Link>
           {advisorHasContent && (
             <button

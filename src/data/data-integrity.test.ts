@@ -13,6 +13,7 @@ import {
   isValidTargetKey,
 } from "@/lib/quest-data";
 import { ownedKey } from "@/lib/character-export";
+import { SKILL_INFO } from "@/lib/skill-explorer";
 
 /**
  * Data-integrity regressions — the automated version of the manual audit that
@@ -223,5 +224,26 @@ describe("README consistency", () => {
     const m = readme.match(/(\d+)\s+diaries/);
     expect(m, "README diary count not found").toBeTruthy();
     expect(Number(m![1])).toBe(DIARIES.length);
+  });
+});
+
+describe("skills.json integrity", () => {
+  it("covers every skill and nothing else", () => {
+    expect(Object.keys(SKILL_INFO).sort()).toEqual([...SKILL_NAMES].sort());
+  });
+
+  it("methods have sane ascending level brackets and rates", () => {
+    for (const [skill, info] of Object.entries(SKILL_INFO)) {
+      expect(info.guide, `${skill} guide`).toBeTruthy();
+      expect(info.methods.length, `${skill} methods`).toBeGreaterThan(0);
+      let prev = 0;
+      for (const m of info.methods) {
+        expect(m.level, `${skill}/${m.name} level`).toBeGreaterThanOrEqual(1);
+        expect(m.level, `${skill}/${m.name} level`).toBeLessThanOrEqual(99);
+        expect(m.level, `${skill} ascending`).toBeGreaterThanOrEqual(prev);
+        if (m.xpHour !== null) expect(m.xpHour, `${skill}/${m.name} rate`).toBeGreaterThan(0);
+        prev = m.level;
+      }
+    }
   });
 });

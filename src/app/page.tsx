@@ -55,6 +55,7 @@ import {
   LogOut,
   Network,
   RefreshCw,
+  BookOpen,
   Sparkles,
   Swords,
   Zap,
@@ -1531,6 +1532,24 @@ export default function Home() {
                     <span className="block truncate text-xs text-stone-400">
                       Am I ready for the Fight Caves? Readiness checks, budget loadouts and buy
                       lists from your imported bank and equipment.
+                    </span>
+                  </span>
+                </Link>
+                <Link
+                  href="/skills"
+                  aria-label="Skill explorer: quest XP rewards, level unlocks and training methods"
+                  className="group flex items-center gap-3 rounded-md border border-stone-700 bg-stone-950/60 px-3 py-2.5 transition-colors hover:border-amber-700/60 hover:bg-stone-900"
+                >
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-amber-800/50 bg-amber-950/40 text-amber-300">
+                    <BookOpen className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1.5 text-sm font-semibold text-stone-100 group-hover:text-amber-200">
+                      Skill explorer
+                    </span>
+                    <span className="block truncate text-xs text-stone-400">
+                      Which quests grant Ranged XP? What does 70 Agility unlock? Training methods
+                      and level milestones per skill.
                     </span>
                   </span>
                 </Link>
