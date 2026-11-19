@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "sources": [
+      "oldschool.runescape.wiki skill training guides (method names, level brackets)",
+      "community-accepted XP rates (rough — verify current meta on the wiki)"
+    ],
+    "generated": "2026-11-18",
+    "notes": "xpHour values are deliberately rough averages for orientation only — real rates swing with method variants, boosts and attention. Every skill links to its wiki training guide; treat that as authoritative. Skills without stable published rates (Sailing) carry null xpHour and a wiki pointer."
+  },
+  "skills": {
+    "Attack": {
+      "guide": "Attack_training",
+      "methods": [
+        { "level": 1, "name": "Sand crabs / Ammonite crabs (AFK)", "xpHour": 25000, "note": "Shared melee XP — bring any style; lowest effort" },
+        { "level": 1, "name": "Slayer tasks with melee", "xpHour": 45000, "note": "Trains Slayer alongside — the healthy default" },
+        { "level": 60, "name": "Nightmare Zone / higher-level Slayer", "xpHour": 75000, "note": "AFK points or burst tasks; whip-tier weapons" }
+      ]
+    },
+    "Strength": {
+      "guide": "Strength_training",
+      "methods": [
+        { "level": 1, "name": "Sand crabs / Ammonite crabs (AFK)", "xpHour": 25000, "note": "Shared melee XP — aggressive stance" },
+        { "level": 1, "name": "Slayer tasks with melee", "xpHour": 45000, "note": "Slayer XP alongside" },
+        { "level": 70, "name": "Maniacal monkeys (MM2, barraging)", "xpHour": 250000, "note": "Shared with Magic/HP — the fast lane" }
+      ]
+    },
+    "Defence": {
+      "guide": "Defence_training",
+      "methods": [
+        { "level": 1, "name": "Sand crabs / Ammonite crabs (AFK)", "xpHour": 20000, "note": "Defensive stance; shared melee XP" },
+        { "level": 1, "name": "Slayer tasks (defensive styles)", "xpHour": 40000, "note": "" },
+        { "level": 70, "name": "Ancestral/Ahrim's barraging monkeys", "xpHour": 200000, "note": "Magic defence XP rides the burst XP" }
+      ]
+    },
+    "Hitpoints": {
+      "guide": "Hitpoints_training",
+      "methods": [
+        { "level": 1, "name": "Any combat — HP trains alongside", "xpHour": 15000, "note": "1/3 of damage dealt; passive by design" },
+        { "level": 60, "name": "Burst/barrage tasks", "xpHour": 90000, "note": "Multi-target magic XP splashes onto HP" }
+      ]
+    },
+    "Ranged": {
+      "guide": "Ranged_training",
+      "methods": [
+        { "level": 1, "name": "Sand crabs with knives/shortbow", "xpHour": 25000, "note": "" },
+        { "level": 40, "name": "Cannon on Slayer tasks", "xpHour": 60000, "note": "Cannonballs cost GP — fast task XP" },
+        { "level": 65, "name": "Red chinchompas at Maniacal monkeys", "xpHour": 220000, "note": "MM2 required; multi-target chins" },
+        { "level": 80, "name": "Black chinchompas", "xpHour": 380000, "note": "Wilderness chins — PK risk, highest rates" }
+      ]
+    },
+    "Prayer": {
+      "guide": "Prayer_training",
+      "methods": [
+        { "level": 1, "name": "Bones at a gilded altar (POH)", "xpHour": 300000, "note": "3.5x XP; dragon bones are the standard" },
+        { "level": 1, "name": "Ensouled heads (reanimation)", "xpHour": 350000, "note": "Combats monsters for XP + prayer — self-sufficient" },
+        { "level": 90, "name": "Shades of Mort'ton (higher tiers)", "xpHour": 400000, "note": "Pyre logs + fine cloth" }
+      ]
+    },
+    "Magic": {
+      "guide": "Magic_training",
+      "methods": [
+        { "level": 1, "name": "Low-level spell spam (splashing AFK)", "xpHour": 15000, "note": "Very slow but zero-attention" },
+        { "level": 50, "name": "High Alchemy while doing anything", "xpHour": 50000, "note": "The classic background-training skill" },
+        { "level": 70, "name": "Ice Burst on Maniacal monkeys / tasks", "xpHour": 200000, "note": "Multi-target — the workhorse" },
+        { "level": 94, "name": "Ice Barrage", "xpHour": 350000, "note": "Highest rates; expensive runes" }
+      ]
+    },
+    "Cooking": {
+      "guide": "Cooking_training",
+      "methods": [
+        { "level": 1, "name": "Trout / salmon (fly-fishing your own)", "xpHour": 100000, "note": "Self-feed loop with Fishing" },
+        { "level": 35, "name": "Jugs of wine", "xpHour": 350000, "note": "Cheapest fast XP; no burning, junk product" },
+        { "level": 65, "name": "1-tick karambwans", "xpHour": 800000, "note": "Highest attention requirement in the skill" }
+      ]
+    },
+    "Woodcutting": {
+      "guide": "Woodcutting_training",
+      "methods": [
+        { "level": 1, "name": "Oaks / Willows", "xpHour": 40000, "note": "AFK-friendly baseline" },
+        { "level": 65, "name": "Sulliuscep mushrooms (Fossil Island)", "xpHour": 100000, "note": "Cut + run between spawns" },
+        { "level": 90, "name": "Redwoods", "xpHour": 65000, "note": "Most AFK XP in the game" }
+      ]
+    },
+    "Fletching": {
+      "guide": "Fletching_training",
+      "methods": [
+        { "level": 1, "name": "Headless arrows", "xpHour": 250000, "note": "Cheap buyable, semi-AFK" },
+        { "level": 1, "name": "Metal darts", "xpHour": 1000000, "note": "2-tick bursts — the fastest XP in the game" },
+        { "level": 52, "name": "Broad arrows (Slayer unlock)", "xpHour": 450000, "note": "Needs the Broader Fletching unlock" }
+      ]
+    },
+    "Fishing": {
+      "guide": "Fishing_training",
+      "methods": [
+        { "level": 20, "name": "Fly fishing trout/salmon", "xpHour": 45000, "note": "Banks Barbarian Village; feeds Cooking" },
+        { "level": 48, "name": "Barbarian fishing (heavy rod)", "xpHour": 70000, "note": "Also Strength/Agility XP with roe cutting" },
+        { "level": 62, "name": "Monkfish (Swan Song)", "xpHour": 40000, "note": "AFK + good money" }
+      ]
+    },
+    "Firemaking": {
+      "guide": "Firemaking_training",
+      "methods": [
+        { "level": 1, "name": "Wintertodt", "xpHour": 100000, "note": " Supplies + XP + cheap early levels" },
+        { "level": 60, "name": "Yew logs (line burning)", "xpHour": 220000, "note": "" },
+        { "level": 90, "name": "Redwood logs", "xpHour": 260000, "note": "Highest conventional rates" }
+      ]
+    },
+    "Crafting": {
+      "guide": "Crafting_training",
+      "methods": [
+        { "level": 1, "name": "Leather / gems", "xpHour": 80000, "note": "Cheap low levels" },
+        { "level": 54, "name": "Water battlestaves (orbs + staves)", "xpHour": 150000, "note": "Solid mid-tier buyable" },
+        { "level": 63, "name": "Green d'hide bodies", "xpHour": 300000, "note": "Classic mass-buyable" }
+      ]
+    },
+    "Smithing": {
+      "guide": "Smithing_training",
+      "methods": [
+        { "level": 15, "name": "Iron at the Blast Furnace", "xpHour": 250000, "note": "GP-positive with coal bag" },
+        { "level": 40, "name": "Gold with goldsmith gauntlets (BF)", "xpHour": 350000, "note": "Family Crest gauntlets — fastest XP" },
+        { "level": 88, "name": "Adamant/Rune platebodies", "xpHour": 180000, "note": "High cost per XP" }
+      ]
+    },
+    "Mining": {
+      "guide": "Mining_training",
+      "methods": [
+        { "level": 15, "name": "Iron ore", "xpHour": 40000, "note": "3-tick variants roughly double it" },
+        { "level": 30, "name": "Motherlode Mine", "xpHour": 28000, "note": "AFK + prospector outfit; pays" },
+        { "level": 70, "name": "Volcanic Mine (70+)", "xpHour": 80000, "note": "Group minigame — high rates" }
+      ]
+    },
+    "Herblore": {
+      "guide": "Herblore_training",
+      "methods": [
+        { "level": 1, "name": "Unfinished potions", "xpHour": 300000, "note": "Fastest-ish; losses on inputs" },
+        { "level": 3, "name": "Cleaning herbs (buy on GE)", "xpHour": 200000, "note": "Semi-AFK buyable" },
+        { "level": 38, "name": "Prayer potions / restores", "xpHour": 150000, "note": "Often break-even or profitable" }
+      ]
+    },
+    "Agility": {
+      "guide": "Agility_training",
+      "methods": [
+        { "level": 1, "name": "Gnome Stronghold → Al Kharid rooftops", "xpHour": 9000, "note": "Rooftop courses grant marks of grace" },
+        { "level": 40, "name": "Canifis rooftop", "xpHour": 18000, "note": "Best mid-tier marks" },
+        { "level": 72, "name": "Hallowed Sepulchre", "xpHour": 50000, "note": "Highest rates + big GP; high execution" },
+        { "level": 90, "name": "Ardougne rooftop", "xpHour": 40000, "note": "AFK-ish ceiling for courses" }
+      ]
+    },
+    "Thieving": {
+      "guide": "Thieving_training",
+      "methods": [
+        { "level": 1, "name": "Tea stalls / Fruit stalls", "xpHour": 20000, "note": "No-fail early XP" },
+        { "level": 45, "name": "Blackjacking (The Feud)", "xpHour": 180000, "note": "Highest mid-level rates; tedious" },
+        { "level": 55, "name": "Ardougne Knights", "xpHour": 120000, "note": "AFK with dodgy necklaces" }
+      ]
+    },
+    "Slayer": {
+      "guide": "Slayer_training",
+      "methods": [
+        { "level": 1, "name": "Turael → Chaeldar tasks", "xpHour": 20000, "note": "Chaeldar needs 70 combat, not Slayer levels" },
+        { "level": 1, "name": "Nieve / Konar (85+ combat)", "xpHour": 45000, "note": "Good task variety + brimstone keys" },
+        { "level": 50, "name": "Duradel + cannon/barrage tasks", "xpHour": 80000, "note": "Combat XP explodes alongside" }
+      ]
+    },
+    "Farming": {
+      "guide": "Farming_training",
+      "methods": [
+        { "level": 1, "name": "Tree + fruit tree runs", "xpHour": 150000, "note": "~10 active minutes per run, a few runs/day" },
+        { "level": 15, "name": "Herb runs", "xpHour": null, "note": "The money-maker — XP is a bonus" },
+        { "level": 65, "name": "Hespori + hardwoods", "xpHour": null, "note": "Daily-ish passive chunks" }
+      ]
+    },
+    "Runecraft": {
+      "guide": "Runecraft_training",
+      "methods": [
+        { "level": 1, "name": "Air/elemental tiaras", "xpHour": 10000, "note": "Slow — everyone starts here" },
+        { "level": 23, "name": "Lava runes (ring of dueling loop)", "xpHour": 50000, "note": "Intense but the classic fast lane" },
+        { "level": 77, "name": "Blood runes (ZMI/abyss)", "xpHour": 40000, "note": "Good GP per XP" },
+        { "level": 90, "name": "Soul runes", "xpHour": 45000, "note": "High rates + strong profit" }
+      ]
+    },
+    "Hunter": {
+      "guide": "Hunter_training",
+      "methods": [
+        { "level": 1, "name": "Bird houses (Fossil Island)", "xpHour": null, "note": "Passive ~every 50 min; also seeds/XP" },
+        { "level": 63, "name": "Red chinchompas", "xpHour": 250000, "note": "Banked Ranged XP + profit" },
+        { "level": 73, "name": "Black chinchompas (Wilderness)", "xpHour": 450000, "note": "PK risk, top rates" }
+      ]
+    },
+    "Construction": {
+      "guide": "Construction_training",
+      "methods": [
+        { "level": 33, "name": "Oak larders", "xpHour": 300000, "note": "Cheap plank loop with a demon butler" },
+        { "level": 52, "name": "Mahogany tables", "xpHour": 700000, "note": "Expensive planks, big XP" },
+        { "level": 74, "name": "Oak dungeon doors", "xpHour": 500000, "note": "The efficient mid point" }
+      ]
+    },
+    "Sailing": {
+      "guide": "Sailing_training",
+      "methods": [
+        { "level": 1, "name": "See the wiki guide — the meta is still settling", "xpHour": null, "note": "New skill: routes and rates change with updates" }
+      ]
+    }
+  }
+}
