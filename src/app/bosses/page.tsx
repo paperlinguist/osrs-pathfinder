@@ -216,8 +216,9 @@ export default function BossesPage() {
 
   // overlay live GE prices on the build-time snapshot (async, best-effort —
   // a failed fetch quietly keeps the snapshot; nothing user-specific leaves
-  // the browser beyond a request for public item prices). One fetch per
-  // visit; the server refreshes upstream at most once per 30 minutes.
+  // the browser beyond a request for public item prices). The server waits
+  // out its cold-start crawl before answering, so the first response is
+  // already warm.
   useEffect(() => {
     let cancelled = false;
     fetch("/api/prices", { cache: "no-store" })
