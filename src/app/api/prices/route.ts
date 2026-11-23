@@ -11,21 +11,22 @@ export const dynamic = "force-dynamic";
  * Two sources, best first:
  *  1. Jagex's bulk pricing API — one request covering every item. Some
  *     networks can't resolve it (NXDOMAIN), so it's a try-first, not a given.
- *  2. The per-item item-DB endpoint the build script snapshots from. It
- *     soft-rate-limits by IP (empty 200 bodies after ~30 rapid requests), so
- *     the crawl is incremental: each refresh tops up ~20 missing items.
+ *  2. The per-item item-DB endpoint the build script snapshots from. On a
+ *     cold boot it pulls the WHOLE pool in one polite serial crawl, so the
+ *     first response already carries complete live prices; steady-state
+ *     re-validations top up ~20 missing items at a time.
  *
- * Refresh cadence: at most ONE upstream refresh per 30 minutes per server,
- * however many visitors arrive in between — everyone else is served from the
- * in-memory cache, and an in-flight refresh can't be doubled up on. GET
- * always answers from cache immediately; refreshes never block.
+ * Refresh cadence: at most ONE upstream refresh per 30 minutes once the
+ * cache is warm. A cold instance's first request waits for the boot crawl
+ * rather than returning an empty map — after that, GETs answer from cache
+ * immediately (refreshes run in the background and can't be doubled up).
  */
 
 type PriceMap = Record<string, number>;
 type PriceSource = "bulk" | "crawl"; // which upstream filled the cache
 
 const STALE_AFTER_MS = 30 * 60 * 1000; // one upstream refresh per half hour, max
-const BACKFILL_PER_CALL = 20; // polite crawl cap per refresh
+const BACKFILL_PER_CALL = 20; // polite steady-state top-up cap
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 let cache: { at: number; prices: PriceMap; source: PriceSource } = { at: 0, prices: {}, source: "crawl" };
@@ -82,10 +83,14 @@ async function refresh() {
     cache = { at: Date.now(), prices: bulk, source: "bulk" };
     return;
   }
-  // crawl a slice of what's missing, merging into what we already have
+  // Crawl what's missing, merging into what we already have. A cold boot
+  // (empty cache) pulls the entire pool so the 30-minute cadence only starts
+  // once we're warm; later re-validations stay capped to keep it polite.
   const prices = { ...cache.prices };
-  const missing = GEAR.filter((g) => prices[String(g.id)] === undefined).slice(0, BACKFILL_PER_CALL);
-  for (const g of missing) {
+  const coldBoot = Object.keys(cache.prices).length === 0;
+  const missing = GEAR.filter((g) => prices[String(g.id)] === undefined);
+  const target = coldBoot ? missing : missing.slice(0, BACKFILL_PER_CALL);
+  for (const g of target) {
     const p = await fetchOne(g.id);
     if (p !== null) prices[String(g.id)] = p;
     await sleep(150);
@@ -98,6 +103,11 @@ export async function GET() {
     refreshing = refresh().finally(() => {
       refreshing = null;
     });
+  }
+  // Cold start: wait for the in-flight boot crawl so the first response is
+  // warm instead of an empty map (once warm, GETs answer immediately).
+  if (refreshing && cache.at === 0) {
+    await refreshing;
   }
   return NextResponse.json(
     { fetchedAt: cache.at, prices: cache.prices, source: cache.source },

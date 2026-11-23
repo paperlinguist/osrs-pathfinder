@@ -216,41 +216,32 @@ export default function BossesPage() {
 
   // overlay live GE prices on the build-time snapshot (async, best-effort —
   // a failed fetch quietly keeps the snapshot; nothing user-specific leaves
-  // the browser beyond a request for public item prices). The server serves
-  // its cache instantly and tops up in the background, so a cold server can
-  // answer empty on the first call — check back once so the badge still
-  // appears on a first visit, without re-hammering the API.
+  // the browser beyond a request for public item prices). The server waits
+  // out its cold-start crawl before answering, so the first response is
+  // already warm.
   useEffect(() => {
     let cancelled = false;
-    const load = () =>
-      fetch("/api/prices", { cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : null))
-        .then(
-          (
-            d: {
-              fetchedAt: number;
-              prices: Record<string, number>;
-              source: "bulk" | "crawl";
-            } | null,
-          ) => {
-            if (cancelled || !d) return null;
-            const applied = applyLivePrices(d.prices);
-            if (applied > 0) {
-              setLivePrices({ at: d.fetchedAt, count: applied, source: d.source });
-              setPriceTick((t) => t + 1);
-            }
-            return d;
-          },
-        )
-        .catch(() => null);
-
-    void load().then((d) => {
-      // empty cache (fetchedAt 0) = the background crawl hasn't landed yet
-      if (!cancelled && d && d.fetchedAt === 0) {
-        setTimeout(() => void load(), 20_000);
-      }
-    });
-
+    fetch("/api/prices", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (
+          d: {
+            fetchedAt: number;
+            prices: Record<string, number>;
+            source: "bulk" | "crawl";
+          } | null,
+        ) => {
+          if (cancelled || !d) return;
+          const applied = applyLivePrices(d.prices);
+          if (applied > 0) {
+            setLivePrices({ at: d.fetchedAt, count: applied, source: d.source });
+            setPriceTick((t) => t + 1);
+          }
+        },
+      )
+      .catch(() => {
+        /* offline or rate-limited — snapshot stands */
+      });
     return () => {
       cancelled = true;
     };
