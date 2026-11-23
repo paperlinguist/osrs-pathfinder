@@ -1,7 +1,7 @@
 import bossesJson from "@/data/bosses.json";
 import gearJson from "@/data/gear.json";
 import { ownedKey } from "./character-export";
-import { QUEST_BY_KEY } from "./quest-data";
+import { DIARY_QUESTS, QUEST_BY_KEY } from "./quest-data";
 
 /* -------------------------------------------------------------- boss types */
 
@@ -14,6 +14,9 @@ export interface BossSkillReq {
 export interface BossRequirements {
   quests: string[]; // quest keys (see src/data/quests.json)
   skills: BossSkillReq[]; // hard requirements
+  /** diary-tier keys (see src/data/diaries.json) gating entry — e.g. the
+   *  wilderness singles bosses need "wilderness hard" (or a boss task) */
+  diaries?: string[];
 }
 
 export interface BossInvItem {
@@ -158,9 +161,13 @@ export function formatPrice(gp: number): string {
   return `${gp.toLocaleString("en-US")} gp`;
 }
 
-/** quest display name for a requirement key ("underground pass" → "Underground Pass") */
+/** quest display name for a requirement key ("underground pass" → "Underground Pass");
+ *  diary-tier keys ("wilderness hard" → "Wilderness Hard") resolve too */
+const DIARY_NAME_BY_KEY: Record<string, string> = Object.fromEntries(
+  DIARY_QUESTS.map((d) => [d.key, d.name]),
+);
 export function questName(key: string): string {
-  return QUEST_BY_KEY[key]?.name ?? key;
+  return QUEST_BY_KEY[key]?.name ?? DIARY_NAME_BY_KEY[key] ?? key;
 }
 
 /**

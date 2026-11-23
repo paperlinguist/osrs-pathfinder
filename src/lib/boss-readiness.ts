@@ -65,6 +65,8 @@ export interface BossVerdict {
   blockers: string[]; // human summary of what gates the boss
   skillGaps: BossSkillGap[]; // unmet required skills
   questGates: BossQuestGate[]; // required quests
+  diaryGates: BossQuestGate[]; // required diary tiers (same shape — both live
+  // in the completions set as pseudo-quest keys)
   recGaps: BossSkillGap[]; // unmet recommended levels
   recMet: BossSkillGap[];
   presets: PresetCheck[];
@@ -156,6 +158,10 @@ export function evaluateBoss(boss: Boss, input: ReadinessInput): BossVerdict {
     key,
     done: input.completed === null ? null : input.completed.has(key),
   }));
+  const diaryGates: BossQuestGate[] = (boss.requirements.diaries ?? []).map((key) => ({
+    key,
+    done: input.completed === null ? null : input.completed.has(key),
+  }));
 
   const blockers: string[] = [];
   if (input.player === null && input.completed === null) {
@@ -166,6 +172,9 @@ export function evaluateBoss(boss: Boss, input: ReadinessInput): BossVerdict {
     }
     for (const q of questGates) {
       if (q.done === false) blockers.push(`quest: ${q.key}`);
+    }
+    for (const d of diaryGates) {
+      if (d.done === false) blockers.push(`diary: ${d.key}`);
     }
   }
 
@@ -181,6 +190,7 @@ export function evaluateBoss(boss: Boss, input: ReadinessInput): BossVerdict {
     blockers,
     skillGaps,
     questGates,
+    diaryGates,
     recGaps: recs.filter((r) => !r.met),
     recMet: recs.filter((r) => r.met),
     presets: boss.presets.map((p) => checkPreset(boss, p, input)),
