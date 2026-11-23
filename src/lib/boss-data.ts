@@ -174,3 +174,27 @@ export function styleScore(item: GearItem, style: string): number {
   if (style === "Magic") return s.magicAttack + s.magicDamage;
   return Math.max(s.stabAttack, s.slashAttack, s.crushAttack) + s.strengthBonus;
 }
+
+/** best of the five defence bonuses — the tie-breaker the comfort optimizer
+ *  uses on armour slots (same offence, tanks better → comfier) */
+export function defScore(item: GearItem): number {
+  const s = item.stats;
+  return Math.max(s.stabDefence, s.slashDefence, s.crushDefence, s.magicDefence, s.rangedDefence);
+}
+
+/**
+ * The combat style a preset is built around. Multi-style bosses name the
+ * style per preset ("Rex · Magic", "Ranged", "Melee (lance)") — parse the
+ * first style mentioned; single-style bosses use styles[0].
+ */
+export function presetStyle(boss: Boss, preset: BossPreset): string {
+  const name = preset.name.toLowerCase();
+  const idx = (s: string) => name.indexOf(s.toLowerCase());
+  const hits: [string, number][] = [];
+  for (const style of ["Melee", "Ranged", "Magic"] as const) {
+    const i = idx(style);
+    if (i !== -1) hits.push([style, i]);
+  }
+  if (hits.length > 0) return hits.sort((a, b) => a[1] - b[1])[0][0];
+  return boss.styles[0] ?? "Melee";
+}

@@ -1,4 +1,4 @@
-import { BOSSES, gearFor, itemSlotKey, styleScore, type GearItem, type SlotKey } from "./boss-data";
+import { BOSSES, gearFor, itemSlotKey, presetStyle, styleScore, type GearItem, type SlotKey } from "./boss-data";
 import { ownedKey, type OwnedEntry } from "./character-export";
 import type { PlayerSkills } from "./quest-data";
 import { computeItemLocks, type LockReason } from "./boss-readiness";
@@ -63,7 +63,7 @@ export function suggestUpgrades(input: AdvisorInput): UpgradeReport {
   >();
   for (const boss of BOSSES) {
     for (const preset of boss.presets) {
-      const style = boss.styles[0] ?? "Melee";
+      const style = presetStyle(boss, preset);
       for (const name of Object.values(preset.slots)) {
         const cur = refs.get(name) ?? {
           slotKey: null, styles: new Set<string>(), bossKeys: new Set<string>(), presetLabels: new Set<string>(),
