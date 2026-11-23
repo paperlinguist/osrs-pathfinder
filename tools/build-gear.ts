@@ -16,6 +16,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { parseGePrice } from "../src/lib/ge-price.ts";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CACHE = path.join(ROOT, ".data-cache");
@@ -110,19 +111,6 @@ function resolveItem(target: string): SlotStat | null {
 interface PriceCache { [id: number]: { price: number | null; fetchedAt: string } }
 const priceCachePath = path.join(CACHE, "prices.json");
 const priceCache: PriceCache = fs.existsSync(priceCachePath) ? readJson(priceCachePath) : {};
-
-/** parse GE price values like `1025`, `"2.3k"`, `"1.2m"`, `"-"` → number|null */
-function parseGePrice(v: unknown): number | null {
-  if (typeof v === "number" && Number.isFinite(v)) return v;
-  if (typeof v !== "string") return null;
-  const m = v.trim().match(/^([\d,.]+)\s*([km])?$/i);
-  if (!m) return null;
-  const n = parseFloat(m[1].replace(/,/g, ""));
-  if (!Number.isFinite(n)) return null;
-  if (/k/i.test(m[2] ?? "")) return Math.round(n * 1_000);
-  if (/m/i.test(m[2] ?? "")) return Math.round(n * 1_000_000);
-  return Math.round(n);
-}
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
