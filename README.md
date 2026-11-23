@@ -74,9 +74,10 @@ visitor's browser (with export/import character backups in-app).
   GE price, and a cheapest-first shopping list against your imported coin pile.
   **GE prices refresh live**: on visit the page overlays current prices from
   Jagex's item DB (bulk endpoint when reachable, otherwise a rate-limit-aware
-  crawl that tops up over a few minutes) on top of the build-time snapshot
-  that always stands as fallback — badge next to your coin pile says which
-  you're seeing.
+  crawl that fills coverage gradually) on top of the build-time snapshot that
+  always stands as fallback — the badge next to your coin pile shows coverage,
+  source and last refresh on hover, and upstream is hit at most once every 30
+  minutes no matter how many people visit.
   **Comfort upgrades** sit under each loadout: each slot takes the best item
   from the planner's gear pool that beats the preset pick and that you either
   own or can afford within your coin pile — walking down to mid-tiers when the

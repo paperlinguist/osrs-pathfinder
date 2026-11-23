@@ -13,30 +13,26 @@ export const dynamic = "force-dynamic";
  *     networks can't resolve it (NXDOMAIN), so it's a try-first, not a given.
  *  2. The per-item item-DB endpoint the build script snapshots from. It
  *     soft-rate-limits by IP (empty 200 bodies after ~30 rapid requests), so
- *     the crawl is incremental: each stale cache serves instantly, then tops
- *     up ~20 missing items in the background across calls.
+ *     the crawl is incremental: each refresh tops up ~20 missing items.
  *
- * GET always answers from cache immediately — refreshes never block.
+ * Refresh cadence: at most ONE upstream refresh per 30 minutes per server,
+ * however many visitors arrive in between — everyone else is served from the
+ * in-memory cache, and an in-flight refresh can't be doubled up on. GET
+ * always answers from cache immediately; refreshes never block.
  */
 
 type PriceMap = Record<string, number>;
+type PriceSource = "bulk" | "crawl"; // which upstream filled the cache
 
-const STALE_AFTER_MS = 30 * 60 * 1000; // full refresh at most half-hourly
-const TOPUP_AFTER_MS = 90 * 1000; // incomplete cache may keep topping up
-const BACKFILL_PER_CALL = 20; // polite crawl cap — coverage builds over visits
+const STALE_AFTER_MS = 30 * 60 * 1000; // one upstream refresh per half hour, max
+const BACKFILL_PER_CALL = 20; // polite crawl cap per refresh
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const TRADEABLE_COUNT = GEAR.filter((g) => g.price !== null).length;
 
-let cache: { at: number; prices: PriceMap } = { at: 0, prices: {} };
+let cache: { at: number; prices: PriceMap; source: PriceSource } = { at: 0, prices: {}, source: "crawl" };
 let refreshing: Promise<void> | null = null;
 
-/** full caches go stale hourly; partial ones (bulk endpoint unreachable, crawl
- *  still working) may top up again after a short cooldown */
 function isStale(): boolean {
-  const age = Date.now() - cache.at;
-  const coverage = Object.keys(cache.prices).length;
-  const complete = coverage >= TRADEABLE_COUNT - 4; // some tradeables 404 for real
-  return complete ? age > STALE_AFTER_MS : age > TOPUP_AFTER_MS;
+  return Date.now() - cache.at > STALE_AFTER_MS;
 }
 
 /** one request for everything; null when unreachable/invalid */
@@ -83,7 +79,7 @@ async function fetchOne(id: number): Promise<number | null> {
 async function refresh() {
   const bulk = await tryBulkEndpoint();
   if (bulk) {
-    cache = { at: Date.now(), prices: bulk };
+    cache = { at: Date.now(), prices: bulk, source: "bulk" };
     return;
   }
   // crawl a slice of what's missing, merging into what we already have
@@ -94,7 +90,7 @@ async function refresh() {
     if (p !== null) prices[String(g.id)] = p;
     await sleep(150);
   }
-  cache = { at: Date.now(), prices };
+  cache = { at: Date.now(), prices, source: "crawl" };
 }
 
 export async function GET() {
@@ -104,7 +100,7 @@ export async function GET() {
     });
   }
   return NextResponse.json(
-    { fetchedAt: cache.at, prices: cache.prices },
+    { fetchedAt: cache.at, prices: cache.prices, source: cache.source },
     { headers: { "Cache-Control": "public, max-age=60" } },
   );
 }

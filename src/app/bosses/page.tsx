@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -25,6 +26,8 @@ import {
 import { QUESTS, normalizePlayer, type PlayerSkills } from "@/lib/quest-data";
 import {
   BOSSES,
+  GEAR,
+  PRICE_SNAPSHOT_AT,
   SLOT_KEYS,
   SLOT_LABELS,
   TIER_COLORS,
@@ -70,6 +73,23 @@ import {
 function wikiUrl(name: string) {
   return `https://oldschool.runescape.wiki/w/${encodeURIComponent(name).replace(/%2F/g, "/").replace(/%20/g, "_")}`;
 }
+
+/** "just now" / "4 min ago" / "2 h ago" for the price-refresh pop-out */
+function timeAgo(ms: number): string {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 45) return "just now";
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m} min ago`;
+  return `${Math.round(m / 60)} h ago`;
+}
+
+/** tradeable items in the pool — null price means no GE listing */
+const TRADEABLE_POOL = GEAR.filter((g) => g.price !== null).length;
+
+/** "Nov 23, 2026" from the gear.json snapshot timestamp */
+const SNAPSHOT_DATE = PRICE_SNAPSHOT_AT
+  ? new Date(PRICE_SNAPSHOT_AT).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+  : "the last build";
 
 /** planner deep-link for tracking a quest */
 function planUrl(key: string) {
@@ -157,7 +177,11 @@ export default function BossesPage() {
   const [page, setPage] = useState(1);
   /** bumped when live GE prices overlay the snapshot (memos re-run) */
   const [priceTick, setPriceTick] = useState(0);
-  const [livePrices, setLivePrices] = useState<{ at: number; count: number } | null>(null);
+  const [livePrices, setLivePrices] = useState<{
+    at: number;
+    count: number;
+    source: "bulk" | "crawl";
+  } | null>(null);
   /** set when a card click should scroll to the just-selected boss detail */
   const pendingDetailScroll = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -190,35 +214,31 @@ export default function BossesPage() {
 
   // overlay live GE prices on the build-time snapshot (async, best-effort —
   // a failed fetch quietly keeps the snapshot; nothing user-specific leaves
-  // the browser beyond a request for public item prices). When the server's
-  // cache is still warming (its item-DB crawl is rate-limited and tops up in
-  // slices), poll a few times until coverage stops growing.
+  // the browser beyond a request for public item prices). One fetch per
+  // visit; the server refreshes upstream at most once per 30 minutes.
   useEffect(() => {
     let cancelled = false;
-    const load = () =>
-      fetch("/api/prices", { cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : null))
-        .then((d: { fetchedAt: number; prices: Record<string, number> } | null) => {
-          if (cancelled || !d) return -1;
+    fetch("/api/prices", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (
+          d: {
+            fetchedAt: number;
+            prices: Record<string, number>;
+            source: "bulk" | "crawl";
+          } | null,
+        ) => {
+          if (cancelled || !d) return;
           const applied = applyLivePrices(d.prices);
           if (applied > 0) {
-            setLivePrices({ at: d.fetchedAt, count: applied });
+            setLivePrices({ at: d.fetchedAt, count: applied, source: d.source });
             setPriceTick((t) => t + 1);
           }
-          return applied;
-        })
-        .catch(() => -1);
-    let tries = 0;
-    const poll = (prev: number) => {
-      if (cancelled || tries >= 6 || prev === 0) return;
-      tries++;
-      setTimeout(() => {
-        void load().then((next) => {
-          if (next > prev) poll(next); // still warming — check back once more
-        });
-      }, 45_000);
-    };
-    void load().then(poll);
+        },
+      )
+      .catch(() => {
+        /* offline or rate-limited — snapshot stands */
+      });
     return () => {
       cancelled = true;
     };
@@ -559,12 +579,55 @@ export default function BossesPage() {
                       </Badge>
                     )}
                     {livePrices !== null && (
-                      <Badge
-                        className="border-emerald-800/50 bg-emerald-950/40 text-emerald-300"
-                        title={`Live GE prices for ${livePrices.count} pool items, refreshed ${new Date(livePrices.at || Date.now()).toLocaleTimeString("en-US")} via Jagex's item DB — anything not yet refreshed (or when it's unreachable) uses the build-time snapshot.`}
-                      >
-                        GE prices · live
-                      </Badge>
+                      <HoverCard openDelay={150} closeDelay={200}>
+                        <HoverCardTrigger asChild>
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded-full border border-emerald-800/50 bg-emerald-950/40 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 hover:bg-emerald-950/60"
+                          >
+                            <Coins className="h-3 w-3" aria-hidden />
+                            GE prices · {livePrices.source === "bulk" ? "live" : "daily"}
+                          </button>
+                        </HoverCardTrigger>
+                        <HoverCardContent align="start" className="w-80 text-xs leading-relaxed">
+                          <p className="mb-1 text-sm font-medium text-stone-100">GE price refresh</p>
+                          <ul className="space-y-1 text-stone-400">
+                            <li>
+                              Last refreshed:{" "}
+                              <b className="text-stone-200">
+                                {new Date(livePrices.at || Date.now()).toLocaleTimeString("en-US")}
+                              </b>{" "}
+                              ({timeAgo(Date.now() - (livePrices.at || Date.now()))})
+                            </li>
+                            <li>
+                              Coverage:{" "}
+                              <b className="text-stone-200">
+                                {livePrices.count} of {TRADEABLE_POOL}
+                              </b>{" "}
+                              tradeable pool items
+                            </li>
+                            <li>
+                              Source:{" "}
+                              {livePrices.source === "bulk" ? (
+                                <>Jagex&apos;s bulk pricing API — near-real-time trade prices</>
+                              ) : (
+                                <>
+                                  Jagex&apos;s item-DB crawl — guide prices Jagex updates roughly
+                                  once a day
+                                </>
+                              )}
+                            </li>
+                          </ul>
+                          <p className="mt-2 border-t border-stone-800 pt-2 text-[11px] text-stone-500">
+                            The server refreshes from Jagex at most once every 30 minutes,
+                            however many people visit — everyone in between is served from its
+                            cache, and pages never wait on a refresh. When Jagex&apos;s pricing
+                            API is unreachable the per-item crawl fills coverage gradually (~20
+                            items per refresh). Anything not yet refreshed uses the build-time
+                            snapshot from {SNAPSHOT_DATE}.
+                          </p>
+                        </HoverCardContent>
+                      </HoverCard>
                     )}
                     <button
                       onClick={clearOwned}
