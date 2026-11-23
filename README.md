@@ -79,11 +79,18 @@ visitor's browser (with export/import character backups in-app).
   crossbow long before an Armadyl one is in budget. Armour that ties on
   offence but tanks better counts (Karil's over black d'hide), and slots that
   stay put show the closest option and what's holding it back (equip levels,
-  quests, budget, untradeable). Mechanic gear and set bonuses the score can't
-  value (anti-dragonfire shields, dragon-hunter weapons, Corp's spear, the
-  obsidian set, teleport rings) are deliberately left alone; two-handed
-  weapons never displace an off-hand, and weapons keep firing the ammo the
-  preset already uses (dragon bolts need a dragon-tier crossbow).
+  quests, budget, untradeable — banked-but-locked gear says so). Mechanic gear
+  and set bonuses the score can't value (anti-dragonfire shields,
+  dragon-hunter weapons, Corp's spear, the obsidian set, teleport rings) are
+  deliberately left alone; two-handed weapons never displace an off-hand, and
+  weapons keep firing the ammo the preset already uses (dragon bolts need a
+  dragon-tier crossbow). The pool reaches past the presets where it matters —
+  dragon crossbow, torture/zenyte jewellery, primordial/eternal boots,
+  ferocious gloves, toxic trident.
+  Boss cards carry a **gear ✓** chip when at least one preset is fieldable
+  from your bank and budget today (tooltip names which), and each preset's
+  rollup badges **fieldable today** when everything in it is owned or within
+  the coin pile.
   Search, a ready / not-yet filter, a tier filter and 12-per-page pagination
   keep the roster navigable; clicking a boss scrolls to its loadouts.
 - **Upgrade advisor** — a cross-boss "what should I buy next" view: every

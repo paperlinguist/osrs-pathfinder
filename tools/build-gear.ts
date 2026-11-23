@@ -44,6 +44,10 @@ const REQ_OVERRIDES: Record<string, { levels: Record<string, number>; quests?: s
   "dragon hunter lance": { levels: { Attack: 78 }, quests: ["barbarian training"], why: "wiki: 78 Attack + Barbarian Training (cache has none)" },
   "abyssal bludgeon": { levels: { Attack: 70, Strength: 70 }, why: "wiki: 70 Attack + 70 Strength (cache has none)" },
   "dragon crossbow": { levels: { Ranged: 64 }, why: "wiki: 64 Ranged (cache has none)" },
+  "amulet of torture": { levels: { Hitpoints: 75 }, why: "wiki: 75 Hitpoints (cache has none)" },
+  "primordial boots": { levels: { Strength: 75, Defence: 75 }, why: "wiki: 75 Strength + 75 Defence (cache has none)" },
+  "eternal boots": { levels: { Magic: 75, Defence: 75 }, why: "wiki: 75 Magic + 75 Defence (cache has none)" },
+  "trident of the swamp": { levels: { Magic: 78 }, why: "wiki: raised from 75 to 78 Magic (cache has none)" },
 };
 
 /** variant suffix preference when several osrs-db entries share a base name */
@@ -143,6 +147,12 @@ async function fetchPrice(id: number): Promise<number | null> {
  *  get stats/reqs/price exactly like preset items. */
 const EXTRA_POOL_ITEMS: string[] = [
   "Dragon crossbow", // the mid-tier crossbow between Rune (9k) and Armadyl (31m); fires dragon bolts
+  "Amulet of torture", // no-raids BiS melee neck above fury
+  "Primordial boots", // no-raids BiS melee boots above dragon boots
+  "Eternal boots", // no-raids BiS magic boots above mystic
+  "Tormented bracelet", // no-raids BiS magic hands above barrows gloves
+  "Ferocious gloves", // BiS melee hands (untradeable — hydra leather)
+  "Trident of the swamp", // magic weapon above trident of the seas (untradeable when charged)
 ];
 
 // every item name referenced by any preset (insertion order = boss order)

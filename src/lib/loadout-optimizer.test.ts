@@ -276,6 +276,45 @@ describe("optimizeLoadout", () => {
     expect(r!.upgrades.some((u) => u.slotKey === "body")).toBe(false);
   });
 
+  it("fills the no-raids BiS ladder above the curated tiers", () => {
+    // melee: fury → torture, dragon boots → primordial (rich, Sarachnis)
+    const r = opt("sarachnis", "Melee", { coins: 999_999_999 });
+    expect(r!.upgrades.find((u) => u.slotKey === "neck")!.toItem.name).toBe("Amulet of torture");
+    expect(r!.upgrades.find((u) => u.slotKey === "feet")!.toItem.name).toBe("Primordial boots");
+    // magic: barrows gloves → tormented, mystic boots → eternal (rich, Kraken)
+    const k = opt("kraken", "Magic", { coins: 999_999_999 });
+    expect(k!.upgrades.find((u) => u.slotKey === "hands")!.toItem.name).toBe("Tormented bracelet");
+    expect(k!.upgrades.find((u) => u.slotKey === "feet")!.toItem.name).toBe("Eternal boots");
+    // untradeable BiS never appears unowned, no matter the budget…
+    expect(
+      [...r!.upgrades, ...k!.upgrades].some((u) => u.toItem.name === "Trident of the Swamp"),
+    ).toBe(false);
+    expect(
+      [...r!.upgrades, ...k!.upgrades].some((u) => u.toItem.name === "Ferocious gloves"),
+    ).toBe(false);
+    // …but wins its slot the moment you own it
+    const owned = opt("kraken", "Magic", { owned: ["Trident of the Swamp"], coins: 0 });
+    expect(owned!.upgrades.find((u) => u.slotKey === "weapon")!.toItem.name).toBe("Trident of the Swamp");
+    const m = opt("sarachnis", "Melee", { owned: ["Ferocious gloves"], coins: 999_999_999 });
+    expect(m!.upgrades.find((u) => u.slotKey === "hands")!.toItem.name).toBe("Ferocious gloves");
+  });
+
+  it("flags near-misses you already own — banked, not buyable", () => {
+    const mid: PlayerSkills = {
+      ...maxed,
+      levels: { ...maxed.levels, Hitpoints: 70, Ranged: 65, Defence: 60 },
+    };
+    const r = opt("fight-caves", "Budget", {
+      owned: ["Ava's assembler"],
+      coins: 1_500_000,
+      player: mid,
+    });
+    const capeMiss = r!.nearMisses.find((m) => m.slotKey === "cape");
+    expect(capeMiss).toMatchObject({ item: { name: "Ava's assembler" }, reason: "locked", owned: true });
+    // the neck near-miss (anguish at 70 Hitpoints) is not banked
+    expect(r!.nearMisses.find((m) => m.slotKey === "neck")!.owned).toBe(false);
+  });
+
   it("returns null without an items import and for note-only presets", () => {
     const boss = BOSS_BY_KEY["fight-caves"];
     const preset = boss.presets[0];
