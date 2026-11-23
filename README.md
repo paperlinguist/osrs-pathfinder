@@ -13,7 +13,7 @@ OSRS progress planner — three tools in one, sharing one imported character:
   worn equipment, with per-loadout comfort upgrades from your bank or budget
   and an upgrade advisor for what to buy next. Bosses can also be gated on
   diary tiers (the wilderness singles bosses need the hard Wilderness diary)
-  with their own plan-it links.
+  with their own plan-it links. Every loadout is deep-linkable (`/bosses#zulrah`).
 - **Skill explorer** (`/skills`) — pick a skill and see every quest that
   rewards XP in it (with ready/boost/gated checks), the quests and diary tiers
   your next levels unlock, milestones with training estimates, and rough

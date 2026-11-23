@@ -101,6 +101,15 @@ export function gearFor(name: string): GearItem | null {
   return GEAR_BY_NAME.get(ownedKey(name)) ?? null;
 }
 
+/** boss key from a location hash ("#zulrah" → "zulrah"; "#bad" or "" → null).
+ *  Used for shareable deep-links on the boss page. */
+export function parseBossHash(hash: string): string | null {
+  const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+  if (!raw) return null;
+  const key = decodeURIComponent(raw);
+  return BOSS_BY_KEY[key] ? key : null;
+}
+
 /** the gear.json item's OSRS slot → our preset slot key */
 export function itemSlotKey(item: GearItem): SlotKey | null {
   switch (item.slot) {

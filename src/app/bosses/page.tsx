@@ -33,6 +33,7 @@ import {
   TIER_COLORS,
   applyLivePrices,
   formatPrice,
+  parseBossHash,
   questName,
   statChips,
   type Boss,
@@ -410,6 +411,8 @@ export default function BossesPage() {
   const selectBoss = useCallback((key: string) => {
     pendingDetailScroll.current = true;
     setSelectedKey(key);
+    // keep the URL shareable — replaceState so back-button doesn't fight it
+    history.replaceState(null, "", `#${key}`);
   }, []);
 
   useEffect(() => {
@@ -419,6 +422,16 @@ export default function BossesPage() {
       .getElementById("boss-detail")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [selectedKey]);
+
+  // deep-link: open a boss from the URL hash on first load (shareable links)
+  useEffect(() => {
+    const key = parseBossHash(window.location.hash);
+    if (key && key !== selectedKey) {
+      pendingDetailScroll.current = true;
+      setSelectedKey(key);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /** every quest already on the resolved plan (tracked target OR prereq step) —
    *  same resolver the planner runs, over the same saved targets/extras */
