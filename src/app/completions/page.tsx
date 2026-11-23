@@ -48,6 +48,7 @@ import {
   RefreshCw,
   Search,
   Swords,
+  Trophy,
   Upload,
   X,
 } from "lucide-react";
@@ -270,6 +271,14 @@ export default function CompletionsPage() {
           >
             <BookOpen className="h-3.5 w-3.5" aria-hidden />
             <span className="hidden sm:inline">Skills</span>
+          </Link>
+          <Link
+            href="/diaries"
+            aria-label="Diary explorer"
+            className="inline-flex items-center gap-1.5 rounded-md border border-stone-700 px-2.5 py-1.5 text-sm text-stone-300 hover:bg-stone-800 transition-transform active:scale-[0.97] shrink-0"
+          >
+            <Trophy className="h-3.5 w-3.5" aria-hidden />
+            <span className="hidden sm:inline">Diaries</span>
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Manage quests</h1>

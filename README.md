@@ -1,6 +1,6 @@
 # OSRS Quest Pathfinder
 
-OSRS progress planner — three tools in one, sharing one imported character:
+OSRS progress planner — four tools in one, sharing one imported character:
 
 - **Quest planner** — track one or more target quests and get the optimal
   prerequisite chain: quest order, skill gaps with training gates, boost flags,
@@ -18,6 +18,10 @@ OSRS progress planner — three tools in one, sharing one imported character:
   rewards XP in it (with ready/boost/gated checks), the quests and diary tiers
   your next levels unlock, milestones with training estimates, and rough
   training methods per level bracket.
+- **Diary explorer** (`/diaries`) — every Achievement Diary tier across all 12
+  areas, ranked by how close you are (skill + quest gaps against your imported
+  character and completions), with per-tier requirements and a track-in-planner
+  link.
 
 215 quests · 48 diaries · 52 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
