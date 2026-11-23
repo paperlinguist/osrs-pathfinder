@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "refresh:prices": "node tools/refresh-prices.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

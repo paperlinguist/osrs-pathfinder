@@ -174,6 +174,7 @@ Then open `https://osrs-pathfinder.abifin.org`, import a username, pick a goal.
 | Push to `main` | GH Actions builds image → `ghcr.io/<owner>/osrs-pathfinder:latest` + `:sha-<hash>` |
 | Tag `v1.2.3` | also published as `:1.2.3` and `:1.2` |
 | Pull request | **CI runs** (regression tests + production build → docker image build, no push) |
+| Monthly cron `refresh-prices.yml` | re-fetches GE prices in `gear.json` and opens a `chore:` PR when they moved (merge it to redeploy a fresher snapshot) |
 | Server re-run of `setup.sh` | pulls `latest`, recreates container (zero-downtime-ish; seconds) |
 
 **First publish only:** open the repo → *Packages* → the new `osrs-pathfinder`
@@ -247,6 +248,7 @@ bun install        # CI/Docker use bun (bun.lock)
 bun run dev        # http://localhost:3000
 bun run build      # production build (standalone output)
 bun test           # regression suite (Vitest) — also works via `npm test`
+node tools/refresh-prices.ts   # re-fetch GE prices in gear.json (no dataset needed)
 ```
 
 On a machine without bun, `npm install && npx next dev -p 3000` works; keep
