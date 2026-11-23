@@ -69,6 +69,8 @@ export interface SlotNearMiss {
   price: number | null;
   locks: LockReason[];
   reason: NearMissReason;
+  /** you already own it — it's locked by levels/quests, not money */
+  owned: boolean;
 }
 
 export interface LoadoutOptimization {
@@ -306,7 +308,7 @@ export function optimizeLoadout(
     for (const c of plan.ranked) {
       const near: SlotNearMiss = {
         slotKey: plan.slotKey, item: c.item, gain: c.score - plan.fromScore, defGain: c.defGain,
-        price: c.price, locks: c.locks,
+        price: c.price, locks: c.locks, owned: c.owned,
         reason: c.locks.length > 0 ? "locked" : c.price === null ? "untradeable" : "over-budget",
       };
       if (near.reason === "over-budget" && input.coins === null) continue; // can't blame a budget we don't know

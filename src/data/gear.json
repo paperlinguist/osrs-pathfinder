@@ -6,8 +6,8 @@
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-23T18:38:25.835Z",
-  "items": 82
+  "priceSnapshot": "2026-11-23T18:56:35.304Z",
+  "items": 88
  },
  "items": [
   {
@@ -2407,6 +2407,184 @@
    "reqQuests": [],
    "override": "wiki: 64 Ranged (cache has none)",
    "price": 424500
+  },
+  {
+   "id": 19553,
+   "name": "Amulet of torture",
+   "rawName": "Amulet of torture",
+   "slot": "Neck",
+   "members": true,
+   "stats": {
+    "stabAttack": 15,
+    "slashAttack": 15,
+    "crushAttack": 15,
+    "magicAttack": 0,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 10,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 2
+   },
+   "reqLevels": {
+    "Hitpoints": 75
+   },
+   "reqQuests": [],
+   "override": "wiki: 75 Hitpoints (cache has none)",
+   "price": 15000000
+  },
+  {
+   "id": 13239,
+   "name": "Primordial boots",
+   "rawName": "Primordial boots",
+   "slot": "Feet",
+   "members": true,
+   "stats": {
+    "stabAttack": 2,
+    "slashAttack": 2,
+    "crushAttack": 2,
+    "magicAttack": -4,
+    "rangedAttack": -1,
+    "stabDefence": 22,
+    "slashDefence": 22,
+    "crushDefence": 22,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 5,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "reqLevels": {
+    "Strength": 75,
+    "Defence": 75
+   },
+   "reqQuests": [],
+   "override": "wiki: 75 Strength + 75 Defence (cache has none)",
+   "price": 16200000
+  },
+  {
+   "id": 13235,
+   "name": "Eternal boots",
+   "rawName": "Eternal boots",
+   "slot": "Feet",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 8,
+    "rangedAttack": 0,
+    "stabDefence": 5,
+    "slashDefence": 5,
+    "crushDefence": 5,
+    "magicDefence": 8,
+    "rangedDefence": 5,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 1,
+    "prayerBonus": 0
+   },
+   "reqLevels": {
+    "Magic": 75,
+    "Defence": 75
+   },
+   "reqQuests": [],
+   "override": "wiki: 75 Magic + 75 Defence (cache has none)",
+   "price": 3900000
+  },
+  {
+   "id": 19544,
+   "name": "Tormented bracelet",
+   "rawName": "Tormented bracelet",
+   "slot": "Hands",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 10,
+    "rangedAttack": 0,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 5,
+    "prayerBonus": 2
+   },
+   "reqLevels": {
+    "Hitpoints": 75
+   },
+   "reqQuests": [],
+   "override": null,
+   "price": 15000000
+  },
+  {
+   "id": 22981,
+   "name": "Ferocious gloves",
+   "rawName": "Ferocious gloves",
+   "slot": "Hands",
+   "members": true,
+   "stats": {
+    "stabAttack": 16,
+    "slashAttack": 16,
+    "crushAttack": 16,
+    "magicAttack": -16,
+    "rangedAttack": -16,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 14,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "reqLevels": {
+    "Attack": 80,
+    "Defence": 80
+   },
+   "reqQuests": [],
+   "override": null,
+   "price": null
+  },
+  {
+   "id": 12899,
+   "name": "Trident of the Swamp",
+   "rawName": "Trident of the Swamp#Charged",
+   "slot": "Weapon",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 25,
+    "rangedAttack": 0,
+    "stabDefence": 2,
+    "slashDefence": 3,
+    "crushDefence": 1,
+    "magicDefence": 15,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 4,
+   "reqLevels": {
+    "Magic": 78
+   },
+   "reqQuests": [],
+   "override": "wiki: raised from 75 to 78 Magic (cache has none)",
+   "price": null
   }
  ]
 }

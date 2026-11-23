@@ -186,3 +186,18 @@ export function evaluateBoss(boss: Boss, input: ReadinessInput): BossVerdict {
     presets: boss.presets.map((p) => checkPreset(boss, p, input)),
   };
 }
+
+/**
+ * Can you field this preset today — every item equippable (no locks) and
+ * either already owned or buyable within the imported coin pile? Requires an
+ * items import (guide-only mode can't answer). Unowned untradeables (fire
+ * cape, barrows gloves…) and level/quest gates keep it false.
+ */
+export function fieldablePreset(p: PresetCheck, coins: number | null): boolean {
+  if (!p.knownOwned || p.items.length === 0) return false;
+  const wearable = p.items.every((i) => i.locks.length === 0 && (i.owned === true || i.buyable));
+  if (!wearable) return false;
+  // no coins imported → only a fully-owned preset counts as fieldable
+  if (coins === null) return p.items.every((i) => i.owned === true);
+  return (p.missingCost ?? 0) <= coins;
+}

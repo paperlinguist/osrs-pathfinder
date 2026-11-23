@@ -35,6 +35,7 @@ import {
 } from "@/lib/boss-data";
 import {
   evaluateBoss,
+  fieldablePreset,
   type BossVerdict,
   type ItemCheck,
   type PresetCheck,
@@ -670,6 +671,11 @@ export default function BossesPage() {
             {pageBosses.map((b) => {
               const v = verdicts.get(b.key)!;
               const active = b.key === selectedKey;
+              const fieldable = ownedIndex
+                ? v.presets
+                    .filter((p) => fieldablePreset(p, owned.coins))
+                    .map((p) => p.preset.name)
+                : [];
               return (
               <button
                 key={b.key}
@@ -691,6 +697,15 @@ export default function BossesPage() {
                     {v.status === "gated" && <AlertTriangle className="h-3 w-3" aria-hidden />}
                     {VERDICT_STYLES[v.status].label}
                   </span>
+                  {fieldable.length > 0 && (
+                    <span
+                      title={`You can field: ${fieldable.join(", ")} — from your bank and budget`}
+                      className="inline-flex items-center gap-1 rounded border border-emerald-800/50 bg-emerald-950/40 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-300"
+                    >
+                      <Shirt className="h-3 w-3" aria-hidden />
+                      gear ✓
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-stone-400 line-clamp-2">{b.tagline}</p>
                 <p className="text-[11px] text-stone-500">
@@ -1235,6 +1250,12 @@ function PresetCard({
               </b>{" "}
               items owned
             </span>
+            {fieldablePreset(presetCheck, coins) && (
+              <Badge className="border-emerald-800/50 bg-emerald-950/40 text-emerald-300">
+                <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                fieldable today — everything owned or within budget
+              </Badge>
+            )}
             {missingCost !== null && missingCost > 0 && (
               <span className="text-stone-500">·</span>
             )}
@@ -1390,18 +1411,29 @@ function PresetCard({
                         {m.gain > 0 ? `+${m.gain}` : `+${m.defGain} def`}
                       </span>
                       <span className="ml-auto text-stone-600">
-                        {m.reason === "locked"
-                          ? m.locks
+                        {m.reason === "locked" ? (
+                          <>
+                            {m.owned && (
+                              <span className="mr-1 text-emerald-500/80">in your bank ·</span>
+                            )}
+                            equip at{" "}
+                            {m.locks
                               .slice(0, 3)
                               .map((l) =>
                                 l.type === "level"
                                   ? `${l.skill} ${l.required}`
                                   : `quest: ${questName(l.key)}`,
                               )
-                              .join(" · ")
-                          : m.reason === "over-budget"
-                            ? `${formatPrice(m.price ?? 0)} — over budget`
-                            : "untradeable — earn it"}
+                              .join(" · ")}
+                          </>
+                        ) : m.reason === "over-budget" ? (
+                          <>
+                            {formatPrice(m.price ?? 0)}
+                            {coins !== null && ` — over your ${formatPrice(coins)}`}
+                          </>
+                        ) : (
+                          "untradeable — earn it"
+                        )}
                       </span>
                     </div>
                   ))}
