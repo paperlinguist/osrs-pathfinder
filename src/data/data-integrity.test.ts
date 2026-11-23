@@ -45,6 +45,19 @@ describe("bosses.json integrity", () => {
     expect(bad).toEqual([]);
   });
 
+  it("every requirement diary key resolves to a real diary tier", () => {
+    const diaryKeys = new Set<string>(
+      diariesJson.diaries.map((d: any) => d.key),
+    );
+    const bad: string[] = [];
+    for (const b of bosses) {
+      for (const d of b.requirements?.diaries ?? []) {
+        if (!diaryKeys.has(d)) bad.push(`${b.key}: ${d}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
   it("every requirement/recommended skill is a real skill name", () => {
     const bad: string[] = [];
     for (const b of bosses) {

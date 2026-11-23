@@ -98,3 +98,30 @@ describe("fieldablePreset", () => {
     expect(fieldablePreset(p, 999_999)).toBe(false);
   });
 });
+
+describe("diary gates", () => {
+  it("gates the wilderness singles bosses on the hard Wilderness diary", () => {
+    const artio = BOSS_BY_KEY["artio"];
+    const v = evaluateBoss(artio, { ...emptyInput, completed: new Set() });
+    expect(v.diaryGates).toEqual([{ key: "wilderness hard", done: false }]);
+    expect(v.status).toBe("gated");
+    expect(v.blockers).toContain("diary: wilderness hard");
+
+    const done = evaluateBoss(artio, {
+      ...emptyInput,
+      completed: new Set(["wilderness hard"]),
+    });
+    expect(done.diaryGates[0].done).toBe(true);
+    expect(done.status).toBe("ready"); // no other hard gates on Artio
+  });
+
+  it("treats unknown completion data as unknown, not failed", () => {
+    const v = evaluateBoss(BOSS_BY_KEY["spindel"], emptyInput);
+    expect(v.diaryGates).toEqual([{ key: "wilderness hard", done: null }]);
+  });
+
+  it("bosses without diary requirements expose empty gates", () => {
+    const v = evaluateBoss(BOSS_BY_KEY["fight-caves"], emptyInput);
+    expect(v.diaryGates).toEqual([]);
+  });
+});

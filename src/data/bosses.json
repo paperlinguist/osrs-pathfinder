@@ -20,15 +20,33 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Prayer", "level": 43, "note": "Protect from Magic/Ranged — non-negotiable for Jad" }
+          {
+            "skill": "Prayer",
+            "level": 43,
+            "note": "Protect from Magic/Ranged — non-negotiable for Jad"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Ranged", "level": 70, "note": "61 is possible with patience; higher = faster waves" },
-        { "skill": "Defence", "level": 70, "note": "Below ~65 the wave 60–62 bats and mages hit hard" },
-        { "skill": "Hitpoints", "level": 60, "note": "More HP = more room for prayer-switch mistakes" }
+        {
+          "skill": "Ranged",
+          "level": 70,
+          "note": "61 is possible with patience; higher = faster waves"
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": "Below ~65 the wave 60–62 bats and mages hit hard"
+        },
+        {
+          "skill": "Hitpoints",
+          "level": 60,
+          "note": "More HP = more room for prayer-switch mistakes"
+        }
       ],
-      "styles": ["Ranged"],
+      "styles": [
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Budget",
@@ -46,9 +64,21 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "6–8", "note": "The whole run is prayer-gated — never run dry" },
-            { "name": "Ranging potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Emergency teleport", "qty": "1", "note": "Ring of dueling in the ring slot doubles as this" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "6–8",
+              "note": "The whole run is prayer-gated — never run dry"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Emergency teleport",
+              "qty": "1",
+              "note": "Ring of dueling in the ring slot doubles as this"
+            }
           ],
           "notes": "Broad bolts are the classic cheap ammo (55 Slayer to equip — check yours). Adamant bolts hit the same +100 ranged strength without the Slayer gate. Swap to Ruby bolts (e) for Jad's 250 HP."
         },
@@ -68,10 +98,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "5–7", "note": "Faster kills = fewer waves per sip" },
-            { "name": "Ranging potion(4)", "qty": "2", "note": "" },
-            { "name": "Saradomin brew(4)", "qty": "2–3", "note": "Jad panic-button heals" },
-            { "name": "Super restore(4)", "qty": "1–2", "note": "Restores what the brews drain" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "5–7",
+              "note": "Faster kills = fewer waves per sip"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "2",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "2–3",
+              "note": "Jad panic-button heals"
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "1–2",
+              "note": "Restores what the brews drain"
+            }
           ],
           "notes": "Dragon bolts can only be fired from a rune/dragon/Armadyl crossbow. Barrows gloves need full Recipe for Disaster — black d'hide vambraces are the stand-in until then."
         },
@@ -91,10 +137,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "4–6", "note": "" },
-            { "name": "Ranging potion(4)", "qty": "2", "note": "" },
-            { "name": "Saradomin brew(4)", "qty": "2–3", "note": "" },
-            { "name": "Super restore(4)", "qty": "1–2", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–6",
+              "note": ""
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "2",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "1–2",
+              "note": ""
+            }
           ],
           "notes": "A Toxic blowpipe (75 Ranged) clears waves faster than a crossbow, but most players still kill Jad with bolts. Imbue the archers ring at Nightmare Zone for +50% effect. The true endgame item is the Twisted bow — a raid drop."
         }
@@ -115,12 +177,30 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 60, "note": "" },
-        { "skill": "Strength", "level": 60, "note": "" },
-        { "skill": "Defence", "level": 60, "note": "She's crush-resistant — bring your best non-crush weapon" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee makes her harmless" }
+        {
+          "skill": "Attack",
+          "level": 60,
+          "note": ""
+        },
+        {
+          "skill": "Strength",
+          "level": 60,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 60,
+          "note": "She's crush-resistant — bring your best non-crush weapon"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee makes her harmless"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Budget",
@@ -138,10 +218,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "Only needed if praying" },
-            { "name": "Super combat potion(4)", "qty": "1–2", "note": "Or Attack/Strength potions" },
-            { "name": "Spade", "qty": "1", "note": "To enter the lair" },
-            { "name": "Light source", "qty": "1", "note": "Candle, lantern or Firemaking cape — the lair is pitch dark" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": "Only needed if praying"
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1–2",
+              "note": "Or Attack/Strength potions"
+            },
+            {
+              "name": "Spade",
+              "qty": "1",
+              "note": "To enter the lair"
+            },
+            {
+              "name": "Light source",
+              "qty": "1",
+              "note": "Candle, lantern or Firemaking cape — the lair is pitch dark"
+            }
           ],
           "notes": "The mole digs away at random — watch the dirt direction, or turn RuneLite's mole locator on. Stamina potions help between digs."
         },
@@ -161,10 +257,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Spade", "qty": "1", "note": "" },
-            { "name": "Light source", "qty": "1", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Spade",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Light source",
+              "qty": "1",
+              "note": ""
+            }
           ],
           "notes": "Fighter torso (free, from Barbarian Assault) is nearly as good as Bandos. Primordial boots edge out dragon boots if you're rich. Imbue the berserker ring for the real upgrade."
         }
@@ -181,15 +293,32 @@
       "location": "Morytania, south-east of Canifis",
       "duration": "4–6 min per trip",
       "requirements": {
-        "quests": ["priest in peril"],
+        "quests": [
+          "priest in peril"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Magic", "level": 50, "note": "Iban's Blast shreds the melee brothers through their armour" },
-        { "skill": "Prayer", "level": 43, "note": "Each brother prays against one style — overheads cover their attacks" },
-        { "skill": "Defence", "level": 60, "note": "Ahrim and Karil hit through gaps in melee armour" }
+        {
+          "skill": "Magic",
+          "level": 50,
+          "note": "Iban's Blast shreds the melee brothers through their armour"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Each brother prays against one style — overheads cover their attacks"
+        },
+        {
+          "skill": "Defence",
+          "level": 60,
+          "note": "Ahrim and Karil hit through gaps in melee armour"
+        }
       ],
-      "styles": ["Magic", "Melee"],
+      "styles": [
+        "Magic",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Budget",
@@ -206,10 +335,26 @@
             "ring": "Ring of dueling"
           },
           "inventory": [
-            { "name": "Iban blast runes", "qty": "~500 casts", "note": "Death + fire runes — the staff holds the charges (see the wiki for exact costs)" },
-            { "name": "Prayer potion(4)", "qty": "2–4", "note": "" },
-            { "name": "Spade", "qty": "1", "note": "To open the crypts" },
-            { "name": "Teleport out", "qty": "1", "note": "Ring of dueling (worn) teleports to clan wars to reset" }
+            {
+              "name": "Iban blast runes",
+              "qty": "~500 casts",
+              "note": "Death + fire runes — the staff holds the charges (see the wiki for exact costs)"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–4",
+              "note": ""
+            },
+            {
+              "name": "Spade",
+              "qty": "1",
+              "note": "To open the crypts"
+            },
+            {
+              "name": "Teleport out",
+              "qty": "1",
+              "note": "Ring of dueling (worn) teleports to clan wars to reset"
+            }
           ],
           "notes": "Kill Dharok first with Protect from Melee on — he's the one-shot machine. Ahrim (magic) and Karil (ranged) need their matching prayers switched on quickly."
         },
@@ -228,10 +373,26 @@
             "ring": "Ring of dueling"
           },
           "inventory": [
-            { "name": "Iban blast runes", "qty": "~500 casts", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Spade", "qty": "1", "note": "" },
-            { "name": "Teleport out", "qty": "1", "note": "" }
+            {
+              "name": "Iban blast runes",
+              "qty": "~500 casts",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Spade",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Teleport out",
+              "qty": "1",
+              "note": ""
+            }
           ],
           "notes": "Morytania legs 3 (Morytania Achievement Diary reward) give unlimited Burgh de Rott teleports — a short run from Barrows. Huge for trip speed."
         }
@@ -252,12 +413,30 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 50, "note": "" },
-        { "skill": "Strength", "level": 50, "note": "" },
-        { "skill": "Defence", "level": 50, "note": "With 40 Prayer, Protect from Missiles blanks his ranged slams" },
-        { "skill": "Prayer", "level": 40, "note": "" }
+        {
+          "skill": "Attack",
+          "level": 50,
+          "note": ""
+        },
+        {
+          "skill": "Strength",
+          "level": 50,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 50,
+          "note": "With 40 Prayer, Protect from Missiles blanks his ranged slams"
+        },
+        {
+          "skill": "Prayer",
+          "level": 40,
+          "note": ""
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "F2P melee",
@@ -273,10 +452,26 @@
             "feet": "Leather boots"
           },
           "inventory": [
-            { "name": "Giant key", "qty": "2–3", "note": "One per kill — hill giants drop them" },
-            { "name": "Strength potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Lobsters / swordfish", "qty": "8–12", "note": "" }
+            {
+              "name": "Giant key",
+              "qty": "2–3",
+              "note": "One per kill — hill giants drop them"
+            },
+            {
+              "name": "Strength potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Lobsters / swordfish",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "His ranged shock hits through melee armour — 40+ Prayer keeps it off you entirely (Protect from Missiles)."
         },
@@ -296,9 +491,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Giant key", "qty": "2–3", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Giant key",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Entangle or Ice Rush keeps him still — members' convenience."
         }
@@ -319,11 +526,26 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Ranged", "level": 60, "note": "Wiki strategy: ranging her is the mid-level F2P play" },
-        { "skill": "Defence", "level": 40, "note": "" },
-        { "skill": "Prayer", "level": 37, "note": "Protect from Magic before you open the gate" }
+        {
+          "skill": "Ranged",
+          "level": 60,
+          "note": "Wiki strategy: ranging her is the mid-level F2P play"
+        },
+        {
+          "skill": "Defence",
+          "level": 40,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 37,
+          "note": "Protect from Magic before you open the gate"
+        }
       ],
-      "styles": ["Ranged", "Melee"],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "F2P ranged",
@@ -339,10 +561,26 @@
             "feet": "Leather boots"
           },
           "inventory": [
-            { "name": "Mossy key", "qty": "2–3", "note": "One per kill — moss giants drop them" },
-            { "name": "Ranging potion(4)", "qty": "1", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1", "note": "" },
-            { "name": "Lobsters / swordfish", "qty": "10–14", "note": "" }
+            {
+              "name": "Mossy key",
+              "qty": "2–3",
+              "note": "One per kill — moss giants drop them"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Lobsters / swordfish",
+              "qty": "10–14",
+              "note": ""
+            }
           ],
           "notes": "Below ~75% HP she may summon three growthlings — kill them with an axe or secateurs (magic secateurs work) to resume damaging her. Protection prayers are fully effective here; keep Protect from Magic up."
         }
@@ -363,12 +601,30 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 70, "note": "" },
-        { "skill": "Strength", "level": 70, "note": "" },
-        { "skill": "Defence", "level": 70, "note": "Her melee and ranged hits bounce off 70+ defence" },
-        { "skill": "Prayer", "level": 43, "note": "Tank the melee spawn, pray against the magic one" }
+        {
+          "skill": "Attack",
+          "level": 70,
+          "note": ""
+        },
+        {
+          "skill": "Strength",
+          "level": 70,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": "Her melee and ranged hits bounce off 70+ defence"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Tank the melee spawn, pray against the magic one"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -386,10 +642,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "2–4", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Antivenom+(4)", "qty": "1–2", "note": "Spiderling spawns poison" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–4",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Antivenom+(4)",
+              "qty": "1–2",
+              "note": "Spiderling spawns poison"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Fighter torso + obsidian platelegs is the budget stand-in. She webs the floor — stamp the web tiles to free yourself."
         }
@@ -410,12 +682,31 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Magic", "level": 75, "note": "Trident territory; 80+ makes the rotations comfortable" },
-        { "skill": "Ranged", "level": 75, "note": "Blowpipe for the ranged rotations" },
-        { "skill": "Defence", "level": 70, "note": "Her magic is more accurate than her ranged — plan prayer accordingly" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic through most rotations" }
+        {
+          "skill": "Magic",
+          "level": 75,
+          "note": "Trident territory; 80+ makes the rotations comfortable"
+        },
+        {
+          "skill": "Ranged",
+          "level": 75,
+          "note": "Blowpipe for the ranged rotations"
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": "Her magic is more accurate than her ranged — plan prayer accordingly"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic through most rotations"
+        }
       ],
-      "styles": ["Magic", "Ranged"],
+      "styles": [
+        "Magic",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -432,10 +723,26 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Runes / scales", "qty": "—", "note": "Trident charges (fire + water + chaos runes per cast)" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Antivenom+(4)", "qty": "1–2", "note": "Snakeling poison stacks" },
-            { "name": "Monkfish / sharks", "qty": "4–8", "note": "" }
+            {
+              "name": "Runes / scales",
+              "qty": "—",
+              "note": "Trident charges (fire + water + chaos runes per cast)"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Antivenom+(4)",
+              "qty": "1–2",
+              "note": "Snakeling poison stacks"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "4–8",
+              "note": ""
+            }
           ],
           "notes": "An imbued god cape (Mage Arena II) upgrades the cape slot. Most learners die to the Jad phase — switch prayers on her head bob, not the hit."
         },
@@ -455,10 +762,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Scales + darts", "qty": "—", "note": "Blowpipe burns ~2 scales per 3 shots (Zulrah drops both)" },
-            { "name": "Ranging potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Antivenom+(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "4–8", "note": "" }
+            {
+              "name": "Scales + darts",
+              "qty": "—",
+              "note": "Blowpipe burns ~2 scales per 3 shots (Zulrah drops both)"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Antivenom+(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "4–8",
+              "note": ""
+            }
           ],
           "notes": "Realistically Zulrah is a two-style fight — treat this as the ranged half of a switch setup."
         }
@@ -475,16 +798,38 @@
       "location": "Waterbirth Island Dungeon (boat from Rellekka)",
       "duration": "3–6 min per king cycle",
       "requirements": {
-        "quests": ["fremennik trials"],
+        "quests": [
+          "fremennik trials"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 70, "note": "Supreme (melee-vulnerable) wants a whip" },
-        { "skill": "Magic", "level": 70, "note": "Rex is the magic target — 75 for a trident" },
-        { "skill": "Ranged", "level": 70, "note": "Prime falls to a crossbow" },
-        { "skill": "Prayer", "level": 43, "note": "Each king attacks one style — overheads make you nearly immune" }
+        {
+          "skill": "Attack",
+          "level": 70,
+          "note": "Supreme (melee-vulnerable) wants a whip"
+        },
+        {
+          "skill": "Magic",
+          "level": 70,
+          "note": "Rex is the magic target — 75 for a trident"
+        },
+        {
+          "skill": "Ranged",
+          "level": 70,
+          "note": "Prime falls to a crossbow"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Each king attacks one style — overheads make you nearly immune"
+        }
       ],
-      "styles": ["Magic", "Ranged", "Melee"],
+      "styles": [
+        "Magic",
+        "Ranged",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Rex · Magic",
@@ -501,9 +846,21 @@
             "ring": "Ring of dueling"
           },
           "inventory": [
-            { "name": "Trident charges / runes", "qty": "—", "note": "Or Iban blast runes: 1 fire + 2 death per cast" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "Protect from Magic vs Rex's nothing — it's for the dungeon" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Trident charges / runes",
+              "qty": "—",
+              "note": "Or Iban blast runes: 1 fire + 2 death per cast"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": "Protect from Magic vs Rex's nothing — it's for the dungeon"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Rex only melees and can't reach you behind the rocks — the classic first-soloable-king. Chaos gauntlets (Family Crest) boost fire bolt while you work toward a trident."
         },
@@ -523,9 +880,21 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Bolts (spare)", "qty": "500+", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "3–4", "note": "Prime hits constant magic" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Bolts (spare)",
+              "qty": "500+",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–4",
+              "note": "Prime hits constant magic"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Prime wanders — tag him and drag him to a safe corner before settling in."
         },
@@ -545,9 +914,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "2–4", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–4",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Supreme's ranged attack is the only thing that hurts while you pray — kill the spinolyps between respawns for peace."
         }
@@ -564,15 +945,32 @@
       "location": "Ungael, reachable after Dragon Slayer II",
       "duration": "2–3 min per kill",
       "requirements": {
-        "quests": ["dragon slayer ii"],
+        "quests": [
+          "dragon slayer ii"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Ranged", "level": 80, "note": "Or 80 Magic — pick one style and commit to it" },
-        { "skill": "Defence", "level": 80, "note": "Dragonfire is the real threat, not the melee" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic through the fight" }
+        {
+          "skill": "Ranged",
+          "level": 80,
+          "note": "Or 80 Magic — pick one style and commit to it"
+        },
+        {
+          "skill": "Defence",
+          "level": 80,
+          "note": "Dragonfire is the real threat, not the melee"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic through the fight"
+        }
       ],
-      "styles": ["Ranged", "Magic"],
+      "styles": [
+        "Ranged",
+        "Magic"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -591,10 +989,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "Non-negotiable — his dragonfire is the fight" },
-            { "name": "Ruby → diamond bolt swap", "qty": "—", "note": "Ruby (e) for the first ~65%, Diamond dragon bolts (e) after" },
-            { "name": "Prayer potion(4)", "qty": "3–4", "note": "" },
-            { "name": "Antivenom+ / antidote++", "qty": "1–2", "note": "His ranged spit venoms" }
+            {
+              "name": "Super antifire potion(4)",
+              "qty": "1–2",
+              "note": "Non-negotiable — his dragonfire is the fight"
+            },
+            {
+              "name": "Ruby → diamond bolt swap",
+              "qty": "—",
+              "note": "Ruby (e) for the first ~65%, Diamond dragon bolts (e) after"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–4",
+              "note": ""
+            },
+            {
+              "name": "Antivenom+ / antidote++",
+              "qty": "1–2",
+              "note": "His ranged spit venoms"
+            }
           ],
           "notes": "The Dragonfire shield needs Dragon Slayer I and 75 Defence; an Anti-dragon shield (Dragon Slayer I) works at any Defence while you build toward it. Dodge the acid pools in his last phase."
         },
@@ -614,10 +1028,26 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "3–4", "note": "" },
-            { "name": "Antivenom+ / antidote++", "qty": "1–2", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Super antifire potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–4",
+              "note": ""
+            },
+            {
+              "name": "Antivenom+ / antidote++",
+              "qty": "1–2",
+              "note": ""
+            }
           ],
           "notes": "The imbued god cape is a Mage Arena II reward — the plain god cape (Mage Arena I) is the stand-in."
         }
@@ -634,15 +1064,32 @@
       "location": "Muspah's lair, reachable after Secrets of the North",
       "duration": "3–5 min per kill",
       "requirements": {
-        "quests": ["secrets of north"],
+        "quests": [
+          "secrets of north"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Magic", "level": 80, "note": "Trident territory; 75 is the floor" },
-        { "skill": "Defence", "level": 70, "note": "His ranged phase hits through prayer gaps" },
-        { "skill": "Prayer", "level": 43, "note": "Switch overheads with his attack style" }
+        {
+          "skill": "Magic",
+          "level": 80,
+          "note": "Trident territory; 75 is the floor"
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": "His ranged phase hits through prayer gaps"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Switch overheads with his attack style"
+        }
       ],
-      "styles": ["Magic", "Ranged"],
+      "styles": [
+        "Magic",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -659,10 +1106,26 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "His smite phase drains prayer hard" },
-            { "name": "Stamina potion(4)", "qty": "1–2", "note": "He teleports across the lair constantly" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": "His smite phase drains prayer hard"
+            },
+            {
+              "name": "Stamina potion(4)",
+              "qty": "1–2",
+              "note": "He teleports across the lair constantly"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "He's only 33% susceptible to freezes — keep him in the north-west corner with a step-under lure instead of relying on freeze."
         },
@@ -682,10 +1145,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Scales + darts", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Stamina potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Scales + darts",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Stamina potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Prayer switch is the whole fight — ranged phase hits through Protect from Magic and vice versa. Watch for the smite attack's prayer-drain debuff."
         }
@@ -706,12 +1185,31 @@
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 80, "note": "Graardor tanking wants 80+ melee" },
-        { "skill": "Defence", "level": 80, "note": "The generals hit through prayer gaps" },
-        { "skill": "Ranged", "level": 80, "note": "Kree'arra's ranged team" },
-        { "skill": "Prayer", "level": 43, "note": "One overhead per general's style" }
+        {
+          "skill": "Attack",
+          "level": 80,
+          "note": "Graardor tanking wants 80+ melee"
+        },
+        {
+          "skill": "Defence",
+          "level": 80,
+          "note": "The generals hit through prayer gaps"
+        },
+        {
+          "skill": "Ranged",
+          "level": 80,
+          "note": "Kree'arra's ranged team"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "One overhead per general's style"
+        }
       ],
-      "styles": ["Melee", "Ranged"],
+      "styles": [
+        "Melee",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "General Graardor · Melee",
@@ -729,10 +1227,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Hammer", "qty": "1", "note": "Opens Bandos' Stronghold door" },
-            { "name": "Prayer potion(4)", "qty": "6–10", "note": "Trips live and die on prayer" },
-            { "name": "Super combat potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "12–20", "note": "" }
+            {
+              "name": "Hammer",
+              "qty": "1",
+              "note": "Opens Bandos' Stronghold door"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "6–10",
+              "note": "Trips live and die on prayer"
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "12–20",
+              "note": ""
+            }
           ],
           "notes": "40 kill count (20 with an ecumenical key from Wilderness bosses) before the door opens. Tank prays Melee, teammates Ranged. Godsword shards are the chase drop."
         },
@@ -752,10 +1266,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Mith grapple", "qty": "1", "note": "Crosses the chasm to Armadyl's Eyrie" },
-            { "name": "Prayer potion(4)", "qty": "4–8", "note": "Protect from Ranged against Kree'arra" },
-            { "name": "Ranging potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "12–20", "note": "" }
+            {
+              "name": "Mith grapple",
+              "qty": "1",
+              "note": "Crosses the chasm to Armadyl's Eyrie"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–8",
+              "note": "Protect from Ranged against Kree'arra"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "12–20",
+              "note": ""
+            }
           ],
           "notes": "40 kill count (or ecumenical key). Armadyl crossbow and dragon bolts are the ranged meta here; a rune crossbow with diamond bolts (e) works on a budget."
         }
@@ -771,13 +1301,31 @@
       "wiki": "King Black Dragon",
       "location": "KBD Lair, deep Wilderness (use the Lava Maze entry for a safespot)",
       "duration": "1–2 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 70, "note": "Or 70 Ranged — pick a style" },
-        { "skill": "Defence", "level": 70, "note": "Dragonfire is the only real danger" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee blanks his claw attacks" }
+        {
+          "skill": "Attack",
+          "level": 70,
+          "note": "Or 70 Ranged — pick a style"
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": "Dragonfire is the only real danger"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee blanks his claw attacks"
+        }
       ],
-      "styles": ["Melee", "Ranged"],
+      "styles": [
+        "Melee",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -795,9 +1343,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "Stacks with the shield for full dragonfire protection" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Super antifire potion(4)",
+              "qty": "1–2",
+              "note": "Stacks with the shield for full dragonfire protection"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Wilderness boss — be ready to teleport out at 30 Wilderness if a PKer shows. The Lava Maze entrance gives a safe ladder to hop."
         },
@@ -818,9 +1378,21 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Super antifire potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Super antifire potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "His firebreath hits magic defence — d'hide's high magic defence is why ranged is the safe pick."
         }
@@ -836,13 +1408,30 @@
       "wiki": "Kalphite Queen",
       "location": "Kalphite Lair, west of the Shantay Pass (bring two ropes)",
       "duration": "3–5 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "Crush hits hard in phase two" },
-        { "skill": "Defence", "level": 75, "note": "Her attacks are 100% accurate — prayer is mandatory" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic phase 1, Protect from Missiles phase 2" }
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": "Crush hits hard in phase two"
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": "Her attacks are 100% accurate — prayer is mandatory"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic phase 1, Protect from Missiles phase 2"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -860,10 +1449,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Ropes", "qty": "2", "note": "First time down the lair only" },
-            { "name": "Prayer potion(4)", "qty": "4–6", "note": "Two phases of overheads" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Ropes",
+              "qty": "2",
+              "note": "First time down the lair only"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–6",
+              "note": "Two phases of overheads"
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Phase two drops prayer protection — swap to Protect from Missiles the moment she swaps styles. A Dragon mace or Zamorakian spear (crush) out-hits the whip here."
         }
@@ -879,13 +1484,30 @@
       "wiki": "Scurrius",
       "location": "Varrock Sewers",
       "duration": "1–2 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 40, "note": "Any style works — bone weapons are his drops" },
-        { "skill": "Defence", "level": 40, "note": "" },
-        { "skill": "Prayer", "level": 37, "note": "Protect from Melee stops the rat swarm" }
+        {
+          "skill": "Attack",
+          "level": 40,
+          "note": "Any style works — bone weapons are his drops"
+        },
+        {
+          "skill": "Defence",
+          "level": 40,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 37,
+          "note": "Protect from Melee stops the rat swarm"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -903,8 +1525,16 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / lobsters", "qty": "6–10", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / lobsters",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Kill the rat spawns before they swarm you — Scurrius heals while they're alive. Bone weaponry (mace/shortbow/staff) shreds him."
         }
@@ -920,14 +1550,35 @@
       "wiki": "Corporeal Beast",
       "location": "Corporeal Beast Lair, deep Wilderness (no quest needed)",
       "duration": "team-based · spear/hasta required",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 85, "note": "Only spears and hastas can damage him" },
-        { "skill": "Strength", "level": 85, "note": "" },
-        { "skill": "Defence", "level": 85, "note": "He hits through prayer constantly" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic reduces, never removes, the damage" }
+        {
+          "skill": "Attack",
+          "level": 85,
+          "note": "Only spears and hastas can damage him"
+        },
+        {
+          "skill": "Strength",
+          "level": 85,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 85,
+          "note": "He hits through prayer constantly"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic reduces, never removes, the damage"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee (spear)",
@@ -944,9 +1595,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "12–20", "note": "He's a damage sponge" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "12–20",
+              "note": "He's a damage sponge"
+            }
           ],
           "notes": "The spear isn't optional — it's the only weapon type that bypasses his defence. Groups of 4+ with one spec-teleporter (Dragon warhammer) make it manageable."
         }
@@ -965,15 +1628,33 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 87, "note": "Cannot be boosted — need an active Kraken task too" },
-          { "skill": "Magic", "level": 50, "note": "Minimum to damage it" }
+          {
+            "skill": "Slayer",
+            "level": 87,
+            "note": "Cannot be boosted — need an active Kraken task too"
+          },
+          {
+            "skill": "Magic",
+            "level": 50,
+            "note": "Minimum to damage it"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Magic", "level": 75, "note": "Trident territory — 87 is ideal" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+        {
+          "skill": "Magic",
+          "level": 75,
+          "note": "Trident territory — 87 is ideal"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic"
+        }
       ],
-      "styles": ["Magic"],
+      "styles": [
+        "Magic"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -990,9 +1671,21 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "The tentacles hurt if you let them stack" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": "The tentacles hurt if you let them stack"
+            }
           ],
           "notes": "The surrounding tentacles hit you — either tank them with high defence or clear the whirlpools. It's a very AFK-friendly boss once set up."
         }
@@ -1011,15 +1704,34 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 75, "note": "Gargoyle task + a brittle key from gargoyle kills" }
+          {
+            "skill": "Slayer",
+            "level": 75,
+            "note": "Gargoyle task + a brittle key from gargoyle kills"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "Whip territory" },
-        { "skill": "Ranged", "level": 75, "note": "Dawn's flying phase" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee on Dusk, Missiles on Dawn" }
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": "Whip territory"
+        },
+        {
+          "skill": "Ranged",
+          "level": 75,
+          "note": "Dawn's flying phase"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee on Dusk, Missiles on Dawn"
+        }
       ],
-      "styles": ["Melee", "Ranged"],
+      "styles": [
+        "Melee",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Melee + ranged switch",
@@ -1038,10 +1750,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Rune crossbow + bolts", "qty": "—", "note": "Switch for Dawn's flight" },
-            { "name": "Prayer potion(4)", "qty": "2–4", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Rune crossbow + bolts",
+              "qty": "—",
+              "note": "Switch for Dawn's flight"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–4",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Two bosses, two overheads — Melee on Dusk, Ranged on Dawn. Don't stand in the purple lightning. The brittle key is a one-time unlock."
         }
@@ -1057,12 +1785,26 @@
       "wiki": "Chaos Fanatic",
       "location": "West of the Lava Maze, level 42 Wilderness",
       "duration": "1–2 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Ranged", "level": 70, "note": "Or 70 Magic — he's squishy either way" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+        {
+          "skill": "Ranged",
+          "level": 70,
+          "note": "Or 70 Magic — he's squishy either way"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic"
+        }
       ],
-      "styles": ["Magic", "Ranged"],
+      "styles": [
+        "Magic",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -1079,9 +1821,21 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Wilderness boss — keep a one-click teleport ready and stay mobile. He spawns a chaos elemental helper."
         }
@@ -1097,12 +1851,26 @@
       "wiki": "Crazy archaeologist",
       "location": "Ruins (west), level 25 Wilderness",
       "duration": "1 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Ranged", "level": 60, "note": "Crossbow + bolts" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic against his blasts" }
+        {
+          "skill": "Ranged",
+          "level": 60,
+          "note": "Crossbow + bolts"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic against his blasts"
+        }
       ],
-      "styles": ["Ranged", "Melee"],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -1120,13 +1888,90 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / lobsters", "qty": "6–10", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / lobsters",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "His special hurls three books in a spread — step out of the tiles. Level 25 Wildy, so teleport works unless you're teleblocked."
         }
       ],
       "notes": "Drops the Odium shard 2 and the fedora. A quick, low-risk Wildy kill."
+    },
+    {
+      "key": "deranged-archaeologist",
+      "name": "Deranged Archaeologist",
+      "tier": "Easy",
+      "tagline": "Fossil Island's furious digger — the steel ring and saner Commons than his crazed cousin.",
+      "members": true,
+      "wiki": "Deranged archaeologist",
+      "location": "Tar Swamp (south), Fossil Island",
+      "duration": "1 min per kill",
+      "requirements": {
+        "quests": [
+          "bone voyage"
+        ],
+        "skills": []
+      },
+      "recommended": [
+        {
+          "skill": "Ranged",
+          "level": 60,
+          "note": "Crossbow + bolts"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic against the book barrage"
+        }
+      ],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Same fight as the Crazy Archaeologist: crossbow + d'hide, step off his book spread.",
+          "slots": {
+            "head": "Coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of glory",
+            "ammo": "Ruby bolts (e)",
+            "weapon": "Rune crossbow",
+            "body": "Black d'hide body",
+            "hands": "Black d'hide vambraces",
+            "legs": "Black d'hide chaps",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / lobsters",
+              "qty": "6–10",
+              "note": ""
+            },
+            {
+              "name": "Axe + rake",
+              "qty": "1 each",
+              "note": "Chop the swamp vine and clear the weeds to reach him"
+            }
+          ],
+          "notes": "His special is the same three-book spread as the Crazy Archaeologist — move off the marked tiles. Counts as a Crazy Archaeologist boss task kill unless the task specified the Wilderness."
+        }
+      ],
+      "notes": "Bring a digsite pendant and use the Mycelium Transportation System to the Sticky Swamp; an axe and a rake are needed for the vines. Drops the steel ring — the best-in-slot melee defensive ring."
     },
     {
       "key": "scorpia",
@@ -1137,12 +1982,25 @@
       "wiki": "Scorpia",
       "location": "Scorpion Pit, level 53 Wilderness (deep — bring a teleport)",
       "duration": "1–2 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Magic", "level": 70, "note": "Her melee hits hard through prayer" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic against the scorpion spawns" }
+        {
+          "skill": "Magic",
+          "level": 70,
+          "note": "Her melee hits hard through prayer"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic against the scorpion spawns"
+        }
       ],
-      "styles": ["Magic"],
+      "styles": [
+        "Magic"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -1159,9 +2017,21 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Level 53 Wildy — PKers will find you. She spawns two scorpion guardians that range you; hugging the wall minimises them."
         }
@@ -1177,13 +2047,31 @@
       "wiki": "Callisto",
       "location": "Callisto's Den, level 45 Wilderness",
       "duration": "2–3 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Ranged", "level": 75, "note": "Or melee — he hits hard either way" },
-        { "skill": "Defence", "level": 75, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic stops his roar" }
+        {
+          "skill": "Ranged",
+          "level": 75,
+          "note": "Or melee — he hits hard either way"
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic stops his roar"
+        }
       ],
-      "styles": ["Ranged", "Melee"],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -1201,14 +2089,101 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Ranging potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "His roar knocks you back and drains prayer — step behind him to avoid it. The singles variant Calvar'ion has the same loot table in a safer arena."
         }
       ],
       "notes": "Drops the Tyrannical ring and dragon pickaxe. Deep-ish Wildy — the singles variants (Calvar'ion) are the safer grind."
+    },
+    {
+      "key": "artio",
+      "name": "Artio",
+      "tier": "Easy",
+      "tagline": "Callisto's cub — the Tyrannical ring in singles-plus, without the PKers.",
+      "members": true,
+      "wiki": "Artio",
+      "location": "Hunter's End, level 21 Wilderness (singles-plus)",
+      "duration": "1–2 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [],
+        "diaries": [
+          "wilderness hard"
+        ]
+      },
+      "recommended": [
+        {
+          "skill": "Ranged",
+          "level": 70,
+          "note": "Crossbow + bolts; melee crush also works"
+        },
+        {
+          "skill": "Defence",
+          "level": 70,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic blunts the roar"
+        }
+      ],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Budget crossbow + d'hide. Pray Magic against the roar, keep your distance from the swipes.",
+          "slots": {
+            "head": "Coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of glory",
+            "ammo": "Ruby bolts (e)",
+            "weapon": "Rune crossbow",
+            "body": "Black d'hide body",
+            "hands": "Black d'hide vambraces",
+            "legs": "Black d'hide chaps",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "4–8",
+              "note": ""
+            }
+          ],
+          "notes": "Her melee has a minimum hit of 15 that Protect from Melee only partly blocks — the roar is the bigger threat, so pray Magic. A Callisto boss Slayer task also lets you in without the diary."
+        }
+      ],
+      "notes": "Entering needs the hard Wilderness diary (or a Callisto boss task). Drops the Tyrannical ring and dragon pickaxe at lower quantities than Callisto. The 3-tick teleport delay on entry disappears once the hard diary is done."
     },
     {
       "key": "venenatis",
@@ -1219,13 +2194,30 @@
       "wiki": "Venenatis",
       "location": "Spider's Den, level 44 Wilderness",
       "duration": "2–3 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "" },
-        { "skill": "Defence", "level": 75, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1243,14 +2235,100 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Her magic webs drag you in — stand under her to stop the ranged/magic cycle. The singles variant Spindel shares the drop table."
         }
       ],
       "notes": "Drops the Treasonous ring and dragon pickaxe."
+    },
+    {
+      "key": "spindel",
+      "name": "Spindel",
+      "tier": "Easy",
+      "tagline": "Venenatis' spinner — the Treasonous ring grind without the deep-Wildy walk.",
+      "members": true,
+      "wiki": "Spindel",
+      "location": "Web Chasm, level 29 Wilderness (singles-plus)",
+      "duration": "1–2 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [],
+        "diaries": [
+          "wilderness hard"
+        ]
+      },
+      "recommended": [
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic for the web-spit"
+        }
+      ],
+      "styles": [
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Melee",
+          "description": "Whip + defender, standing on top of her like Venenatis.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "4–8",
+              "note": ""
+            }
+          ],
+          "notes": "She's immune to Vengeance — don't waste runes or sacks on it. A Venenatis boss Slayer task also lets you in without the diary."
+        }
+      ],
+      "notes": "Entering needs the hard Wilderness diary (or a Venenatis boss task). Drops the Treasonous ring and dragon pickaxe at lower quantities than Venenatis."
     },
     {
       "key": "vetion",
@@ -1261,13 +2339,30 @@
       "wiki": "Vet'ion",
       "location": "Vet'ion's Rest, level 40 Wilderness",
       "duration": "2–3 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "" },
-        { "skill": "Defence", "level": 75, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee (salve)",
@@ -1285,15 +2380,109 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Salve amulet (e)", "qty": "1", "note": "BiS here — undead bonus beats any fury" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Salve amulet (e)",
+              "qty": "1",
+              "note": "BiS here — undead bonus beats any fury"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Vet'ion summons two hellhound guardians — kill them first or they'll drain your supplies. Calvar'ion is the singles version with the same loot."
         }
       ],
       "notes": "Drops the Ring of the gods and dragon pickaxe. Salve amulet (e) is the single biggest upgrade for this fight."
+    },
+    {
+      "key": "calvarion",
+      "name": "Calvar'ion",
+      "tier": "Easy",
+      "tagline": "Vet'ion's skeleton in singles-plus — undead, crush-only, salve-friendly.",
+      "members": true,
+      "wiki": "Calvar'ion",
+      "location": "Skeletal Tomb, level 21 Wilderness (singles-plus)",
+      "duration": "2–3 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": [],
+        "diaries": [
+          "wilderness hard"
+        ]
+      },
+      "recommended": [
+        {
+          "skill": "Attack",
+          "level": 70,
+          "note": "Crush weapon — he resists everything else"
+        },
+        {
+          "skill": "Strength",
+          "level": 70,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Salve amulet (e) is the real boost"
+        }
+      ],
+      "styles": [
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Melee (crush)",
+          "description": "Bludgeon crush + bandos. He's undead — a salve amulet beats any neck bonus.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal bludgeon",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            {
+              "name": "Salve amulet (e)",
+              "qty": "1",
+              "note": "Undead — swap in over the fury for accuracy and damage"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "4–8",
+              "note": ""
+            }
+          ],
+          "notes": "He resists every style but crush, and his lightning can't be prayed against — indirect hits (standing at the edge of the blast) hurt less than direct ones. A Vet'ion boss Slayer task also lets you in without the diary."
+        }
+      ],
+      "notes": "Entering needs the hard Wilderness diary (or a Vet'ion boss task). Drops the Voidwaker gem pieces and dragon pickaxe at lower rates than Vet'ion."
     },
     {
       "key": "abyssal-sire",
@@ -1307,15 +2496,33 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 85, "note": "Abyssal demon task; visit the Abyss once first" }
+          {
+            "skill": "Slayer",
+            "level": 85,
+            "note": "Abyssal demon task; visit the Abyss once first"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Attack", "level": 85, "note": "Melee the main body after the tentacles" },
-        { "skill": "Strength", "level": 85, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee on the final phase" }
+        {
+          "skill": "Attack",
+          "level": 85,
+          "note": "Melee the main body after the tentacles"
+        },
+        {
+          "skill": "Strength",
+          "level": 85,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee on the final phase"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1333,10 +2540,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Rune crossbow + bolts", "qty": "—", "note": "Kill the four respiratory systems first" },
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Rune crossbow + bolts",
+              "qty": "—",
+              "note": "Kill the four respiratory systems first"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "The fight is four respiratory systems, then the Sire itself — pray Melee once the body wakes. Arclight (ancient shards) makes the last phase much faster."
         }
@@ -1355,15 +2578,33 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 91, "note": "Hellhound task (wild pies can boost the level)" }
+          {
+            "skill": "Slayer",
+            "level": 91,
+            "note": "Hellhound task (wild pies can boost the level)"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Whip or better" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "The three ghost attacks drain 66% of your prayer each" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Whip or better"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "The three ghost attacks drain 66% of your prayer each"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee + spectral",
@@ -1381,9 +2622,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "4–6", "note": "The ghosts eat your prayer" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–6",
+              "note": "The ghosts eat your prayer"
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Three ghost attacks: A (Melee prayer), B (Ranged prayer), C (Magic prayer) — the wrong overhead means 66% prayer gone. Spectral halves it."
         }
@@ -1402,14 +2655,28 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 93, "note": "Smoke devil task only" }
+          {
+            "skill": "Slayer",
+            "level": 93,
+            "note": "Smoke devil task only"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Magic", "level": 87, "note": "Trident melts him" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+        {
+          "skill": "Magic",
+          "level": 87,
+          "note": "Trident melts him"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic"
+        }
       ],
-      "styles": ["Magic"],
+      "styles": [
+        "Magic"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -1426,9 +2693,21 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Stand just out of melee range and it can't reach you — it only attacks with magic. Pure trident DPS from there."
         }
@@ -1447,15 +2726,33 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Slayer", "level": 95, "note": "Hydra task only" }
+          {
+            "skill": "Slayer",
+            "level": 95,
+            "note": "Hydra task only"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Dragon hunter lance is the meta" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic/Melee as it swaps" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Dragon hunter lance is the meta"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic/Melee as it swaps"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee (lance)",
@@ -1473,9 +2770,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Skip the flame phase by standing on the vents in the corners. Dodge the lightning tiles in phase two. The lance makes this the best consistent Slayer money."
         }
@@ -1494,14 +2803,28 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Farming", "level": 65, "note": "Plant a hespori seed in the patch to spawn it" }
+          {
+            "skill": "Farming",
+            "level": 65,
+            "note": "Plant a hespori seed in the patch to spawn it"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Attack", "level": 75, "note": "Melee works fine" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+        {
+          "skill": "Attack",
+          "level": 75,
+          "note": "Melee works fine"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1519,9 +2842,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "She periodically spawns flowers that heal her — chop or kill them fast. It's a Farming boss, so treat it as a daily-ish profit rather than a camp."
         }
@@ -1538,15 +2873,31 @@
       "location": "Sisterhood Sanctuary, under Slepe (Morytania access)",
       "duration": "5–8 min per kill, team-based",
       "requirements": {
-        "quests": ["priest in peril"],
+        "quests": [
+          "priest in peril"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Crush is the meta" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Overheads through the parasite phases" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Crush is the meta"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Overheads through the parasite phases"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee (crush)",
@@ -1563,9 +2914,21 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Team boss — the parasite phases (grasping claws) and the pillar phase are the mechanics to learn. Phosani's Nightmare is the brutal solo hard mode."
         }
@@ -1582,15 +2945,31 @@
       "location": "The Stranglewood (Desert Treasure II)",
       "duration": "2–3 min per kill",
       "requirements": {
-        "quests": ["desert treasure ii fallen empire"],
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Melee is the meta" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Melee is the meta"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1608,14 +2987,100 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "Dodge the axe-head projectiles he flings and the roots that pin you — step back when he telegraphs them. Fast reactions beat raw gear here."
         }
       ],
       "notes": "Drops the Ultor vestige (the melee BiS ring piece). Desert Treasure II is the long gate."
+    },
+    {
+      "key": "vardorvis-awakened",
+      "name": "Vardorvis (Awakened)",
+      "tier": "Hard",
+      "tagline": "Vardorvis, overgrown — awakened difficulty for much better unique rates.",
+      "members": true,
+      "wiki": "Vardorvis",
+      "location": "The Stranglewood (Desert Treasure II)",
+      "duration": "3–6 min per kill",
+      "requirements": {
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
+        "skills": [],
+        "diaries": []
+      },
+      "recommended": [
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Melee is the meta"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee"
+        }
+      ],
+      "styles": [
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Melee (awakened)",
+          "description": "Same loadout as the standard fight — awakened just punishes sloppiness harder. Whip or better. His vine-and-head specials are the fight, not his raw damage.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
+          ],
+          "notes": "The arena-halving axes and blood-feast checks come faster — margin for error shrinks to near zero."
+        }
+      ],
+      "notes": "Awakened variant of Vardorvis: opted into at the boss, hits much harder and demands cleaner mechanics, in exchange for noticeably better unique drop rates. Same quest gate as the regular fight."
     },
     {
       "key": "duke-sucellus",
@@ -1627,15 +3092,31 @@
       "location": "Ghorrock Prison (Desert Treasure II)",
       "duration": "2–4 min per kill",
       "requirements": {
-        "quests": ["desert treasure ii fallen empire"],
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Crush is the style of choice" },
-        { "skill": "Strength", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic against the ice barrage" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Crush is the style of choice"
+        },
+        {
+          "skill": "Strength",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic against the ice barrage"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee (crush)",
@@ -1652,14 +3133,99 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "10–16", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
           ],
           "notes": "He starts frozen — hit him with crush while he can't fight back, then reset when he thaws and barrages. Crush weapons out-DPS everything else here."
         }
       ],
       "notes": "Drops the Magus vestige. The 'use crush while frozen' loop is the whole rhythm."
+    },
+    {
+      "key": "duke-sucellus-awakened",
+      "name": "Duke Sucellus (Awakened)",
+      "tier": "Hard",
+      "tagline": "The Duke, awake and angry — awakened difficulty for much better unique rates.",
+      "members": true,
+      "wiki": "Duke Sucellus",
+      "location": "Ghorrock Prison (Desert Treasure II)",
+      "duration": "3–6 min per kill",
+      "requirements": {
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
+        "skills": [],
+        "diaries": []
+      },
+      "recommended": [
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Crush is the style of choice"
+        },
+        {
+          "skill": "Strength",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic against the ice barrage"
+        }
+      ],
+      "styles": [
+        "Melee"
+      ],
+      "presets": [
+        {
+          "name": "Melee (awakened)",
+          "description": "Same loadout as the standard fight — awakened just punishes sloppiness harder. The Abyssal bludgeon's crush is ideal — a Zamorakian spear works too.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal bludgeon",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "10–16",
+              "note": ""
+            }
+          ],
+          "notes": "The freeze and boss-positioning punishments bite much harder — bring your cleanest footwork and an emergency teleport."
+        }
+      ],
+      "notes": "Awakened variant of Duke Sucellus: opted into at the boss, hits much harder and demands cleaner mechanics, in exchange for noticeably better unique drop rates. Same quest gate as the regular fight."
     },
     {
       "key": "leviathan",
@@ -1671,15 +3237,31 @@
       "location": "The Scar (Desert Treasure II)",
       "duration": "1–2 min per kill",
       "requirements": {
-        "quests": ["desert treasure ii fallen empire"],
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Ranged", "level": 90, "note": "Blowpipe territory" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Ranged" }
+        {
+          "skill": "Ranged",
+          "level": 90,
+          "note": "Blowpipe territory"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Ranged"
+        }
       ],
-      "styles": ["Ranged"],
+      "styles": [
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -1697,15 +3279,110 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Scales + darts", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Ranging potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Scales + darts",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Stay out of the dark pools that spread across the arena — they hit through everything. Keep moving and keep firing."
         }
       ],
       "notes": "Drops the Venator vestige. One of the fastest DT2 kills once the movement clicks."
+    },
+    {
+      "key": "leviathan-awakened",
+      "name": "The Leviathan (Awakened)",
+      "tier": "Hard",
+      "tagline": "The Leviathan with teeth — awakened difficulty for much better unique rates.",
+      "members": true,
+      "wiki": "The Leviathan",
+      "location": "The Scar (Desert Treasure II)",
+      "duration": "3–6 min per kill",
+      "requirements": {
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
+        "skills": [],
+        "diaries": []
+      },
+      "recommended": [
+        {
+          "skill": "Ranged",
+          "level": 90,
+          "note": "Blowpipe territory"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Ranged"
+        }
+      ],
+      "styles": [
+        "Ranged"
+      ],
+      "presets": [
+        {
+          "name": "Ranged (awakened)",
+          "description": "Same loadout as the standard fight — awakened just punishes sloppiness harder. Blowpipe + Karil's. Speed is the whole fight — the pools punish slow feet.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "weapon": "Toxic blowpipe",
+            "ammo": "Amethyst dart",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Scales + darts",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
+          ],
+          "notes": "The orb juggling and smoke blasts scale up sharply — the heartbeat-phased runback is longer than the standard fight too."
+        }
+      ],
+      "notes": "Awakened variant of The Leviathan: opted into at the boss, hits much harder and demands cleaner mechanics, in exchange for noticeably better unique drop rates. Same quest gate as the regular fight."
     },
     {
       "key": "whisperer",
@@ -1717,15 +3394,31 @@
       "location": "Lassar Undercity (Desert Treasure II)",
       "duration": "2–4 min per kill",
       "requirements": {
-        "quests": ["desert treasure ii fallen empire"],
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Magic", "level": 90, "note": "Trident territory" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Flick between her magic and ranged" }
+        {
+          "skill": "Magic",
+          "level": 90,
+          "note": "Trident territory"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Flick between her magic and ranged"
+        }
       ],
-      "styles": ["Magic"],
+      "styles": [
+        "Magic"
+      ],
       "presets": [
         {
           "name": "Magic",
@@ -1742,14 +3435,99 @@
             "ring": "Seers ring"
           },
           "inventory": [
-            { "name": "Trident charges + runes", "qty": "—", "note": "" },
-            { "name": "Prayer potion(4)", "qty": "3–5", "note": "Flicking burns prayer" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": "Flicking burns prayer"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "She alternates magic and ranged with a tell — flick the matching overhead. Her shadow-clone phase needs you to hit the right one."
         }
       ],
       "notes": "Drops the Bellator vestige. The prayer-flick is the learning curve; magic DPS is straightforward."
+    },
+    {
+      "key": "whisperer-awakened",
+      "name": "The Whisperer (Awakened)",
+      "tier": "Hard",
+      "tagline": "The Whisperer, unhushed — awakened difficulty for much better unique rates.",
+      "members": true,
+      "wiki": "The Whisperer",
+      "location": "Lassar Undercity (Desert Treasure II)",
+      "duration": "3–6 min per kill",
+      "requirements": {
+        "quests": [
+          "desert treasure ii fallen empire"
+        ],
+        "skills": [],
+        "diaries": []
+      },
+      "recommended": [
+        {
+          "skill": "Magic",
+          "level": 90,
+          "note": "Trident territory"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Flick between her magic and ranged"
+        }
+      ],
+      "styles": [
+        "Magic"
+      ],
+      "presets": [
+        {
+          "name": "Magic (awakened)",
+          "description": "Same loadout as the standard fight — awakened just punishes sloppiness harder. Trident + Ahrim's. The occult and seers ring you already own slot straight in.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            {
+              "name": "Trident charges + runes",
+              "qty": "—",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "3–5",
+              "note": "Flicking burns prayer"
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
+          ],
+          "notes": "Screeches and soul-siphon windows get far less forgiving — keep the prayer switches tight."
+        }
+      ],
+      "notes": "Awakened variant of The Whisperer: opted into at the boss, hits much harder and demands cleaner mechanics, in exchange for noticeably better unique drop rates. Same quest gate as the regular fight."
     },
     {
       "key": "nex",
@@ -1763,18 +3541,48 @@
       "requirements": {
         "quests": [],
         "skills": [
-          { "skill": "Hitpoints", "level": 70, "note": "To reach her chamber (boostable)" },
-          { "skill": "Ranged", "level": 70, "note": "Unboostable to reach her" },
-          { "skill": "Strength", "level": 70, "note": "Unboostable to reach her" },
-          { "skill": "Agility", "level": 70, "note": "Unboostable to reach her" }
+          {
+            "skill": "Hitpoints",
+            "level": 70,
+            "note": "To reach her chamber (boostable)"
+          },
+          {
+            "skill": "Ranged",
+            "level": 70,
+            "note": "Unboostable to reach her"
+          },
+          {
+            "skill": "Strength",
+            "level": 70,
+            "note": "Unboostable to reach her"
+          },
+          {
+            "skill": "Agility",
+            "level": 70,
+            "note": "Unboostable to reach her"
+          }
         ]
       },
       "recommended": [
-        { "skill": "Ranged", "level": 90, "note": "Crossbow is the meta" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Overheads per phase" }
+        {
+          "skill": "Ranged",
+          "level": 90,
+          "note": "Crossbow is the meta"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Overheads per phase"
+        }
       ],
-      "styles": ["Ranged"],
+      "styles": [
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -1792,10 +3600,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Diamond dragon bolts (e)", "qty": "—", "note": "Swap from ruby in the last phase" },
-            { "name": "Prayer potion(4)", "qty": "4–8", "note": "Long team fights" },
-            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "Her specials hurt" },
-            { "name": "Super restore(4)", "qty": "2–3", "note": "Restores what the brews drain" }
+            {
+              "name": "Diamond dragon bolts (e)",
+              "qty": "—",
+              "note": "Swap from ruby in the last phase"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–8",
+              "note": "Long team fights"
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "4–6",
+              "note": "Her specials hurt"
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "2–3",
+              "note": "Restores what the brews drain"
+            }
           ],
           "notes": "The frozen key is assembled from four God Wars minion pieces. Four phases with different prayers — teams call the switches. Mass worlds (dozens of players) are the learner path."
         }
@@ -1811,12 +3635,25 @@
       "wiki": "Chaos Elemental",
       "location": "West of the Rogue's Castle, level 50 Wilderness",
       "duration": "1–2 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 60, "note": "Or 60 Ranged — he's squishy" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Magic" }
+        {
+          "skill": "Attack",
+          "level": 60,
+          "note": "Or 60 Ranged — he's squishy"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Magic"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1834,8 +3671,16 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "6–10", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
           ],
           "notes": "Level 50 Wilderness — one-click teleport ready. He teleports you around the area and unequips your items occasionally."
         }
@@ -1851,12 +3696,25 @@
       "wiki": "Skotizo",
       "location": "Catacombs of Kourend (dark totem to enter)",
       "duration": "2–4 min per kill",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Attack", "level": 80, "note": "Arclight is BiS against demons" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from Melee" }
+        {
+          "skill": "Attack",
+          "level": 80,
+          "note": "Arclight is BiS against demons"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from Melee"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee",
@@ -1874,10 +3732,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Dark totem", "qty": "1", "note": "One attempt — assembled from Catacombs slayer drops" },
-            { "name": "Prayer potion(4)", "qty": "2–3", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1", "note": "" },
-            { "name": "Monkfish / sharks", "qty": "8–12", "note": "" }
+            {
+              "name": "Dark totem",
+              "qty": "1",
+              "note": "One attempt — assembled from Catacombs slayer drops"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Monkfish / sharks",
+              "qty": "8–12",
+              "note": ""
+            }
           ],
           "notes": "Destroy the glowing dark altars he summons — Arclight's demon bonus makes this quick. Sporadic: you fight him when you have a totem."
         }
@@ -1893,13 +3767,30 @@
       "wiki": "Inferno",
       "location": "TzHaar city, Karamja (the Inferno)",
       "duration": "1.5–3h per attempt",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Ranged", "level": 90, "note": "Crossbow or Twisted bow" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Higher prayer + Rigour makes the triple-Jad waves far kinder" }
+        {
+          "skill": "Ranged",
+          "level": 90,
+          "note": "Crossbow or Twisted bow"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Higher prayer + Rigour makes the triple-Jad waves far kinder"
+        }
       ],
-      "styles": ["Ranged"],
+      "styles": [
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Ranged",
@@ -1917,10 +3808,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Saradomin brew(4)", "qty": "8–12", "note": "A wave-fight, not a kill" },
-            { "name": "Super restore(4)", "qty": "4–6", "note": "Restores the brews' drain" },
-            { "name": "Ranging potion(4)", "qty": "2", "note": "" },
-            { "name": "Emergency teleport", "qty": "1", "note": "Death is a safe-reward wipe — be ready to bail" }
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "8–12",
+              "note": "A wave-fight, not a kill"
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "4–6",
+              "note": "Restores the brews' drain"
+            },
+            {
+              "name": "Ranging potion(4)",
+              "qty": "2",
+              "note": ""
+            },
+            {
+              "name": "Emergency teleport",
+              "qty": "1",
+              "note": "Death is a safe-reward wipe — be ready to bail"
+            }
           ],
           "notes": "69 waves — 66 regular, then the Jad waves, then TzKal-Zuk. The shield is the point — this is a 1.5–3h execution test, not a gear check."
         }
@@ -1936,13 +3843,31 @@
       "wiki": "Chambers of Xeric",
       "location": "Mount Quidamortem, Kourend (team raid)",
       "duration": "20–40 min per raid",
-      "requirements": { "quests": [], "skills": [] },
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
       "recommended": [
-        { "skill": "Ranged", "level": 85, "note": "Or 85 melee — CoX wants both" },
-        { "skill": "Defence", "level": 85, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Overheads through the rooms" }
+        {
+          "skill": "Ranged",
+          "level": 85,
+          "note": "Or 85 melee — CoX wants both"
+        },
+        {
+          "skill": "Defence",
+          "level": 85,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Overheads through the rooms"
+        }
       ],
-      "styles": ["Ranged", "Melee"],
+      "styles": [
+        "Ranged",
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Ranged entry",
@@ -1960,10 +3885,26 @@
             "ring": "Archers ring"
           },
           "inventory": [
-            { "name": "Melee switch", "qty": "—", "note": "Whip + defender for Tekton and melee hand" },
-            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
-            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
-            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+            {
+              "name": "Melee switch",
+              "qty": "—",
+              "note": "Whip + defender for Tekton and melee hand"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–8",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "4–6",
+              "note": ""
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "2–3",
+              "note": ""
+            }
           ],
           "notes": "Team raid — learn the rooms in a learner clan. Olm's head phase is the mechanic wall."
         }
@@ -1980,15 +3921,31 @@
       "location": "Ver Sinhaza, Morytania (team raid)",
       "duration": "25–45 min per raid",
       "requirements": {
-        "quests": ["priest in peril"],
+        "quests": [
+          "priest in peril"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 90, "note": "Melee is the spine of ToB" },
-        { "skill": "Defence", "level": 90, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Tight prayer switching" }
+        {
+          "skill": "Attack",
+          "level": 90,
+          "note": "Melee is the spine of ToB"
+        },
+        {
+          "skill": "Defence",
+          "level": 90,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Tight prayer switching"
+        }
       ],
-      "styles": ["Melee"],
+      "styles": [
+        "Melee"
+      ],
       "presets": [
         {
           "name": "Melee entry",
@@ -2006,10 +3963,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
-            { "name": "Super combat potion(4)", "qty": "1–2", "note": "" },
-            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
-            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–8",
+              "note": ""
+            },
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "4–6",
+              "note": ""
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "2–3",
+              "note": ""
+            }
           ],
           "notes": "ToB is the hardest raid to learn — Verzik's phases punish mistakes. A Night at the Theatre quest is the solo easy-mode on-ramp."
         }
@@ -2026,15 +3999,32 @@
       "location": "The Necropolis, Kharidian Desert",
       "duration": "20–40 min per raid",
       "requirements": {
-        "quests": ["beneath cursed sands"],
+        "quests": [
+          "beneath cursed sands"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Attack", "level": 85, "note": "Fang territory — melee carries" },
-        { "skill": "Ranged", "level": 85, "note": "Zebak and the ranged sections" },
-        { "skill": "Prayer", "level": 43, "note": "" }
+        {
+          "skill": "Attack",
+          "level": 85,
+          "note": "Fang territory — melee carries"
+        },
+        {
+          "skill": "Ranged",
+          "level": 85,
+          "note": "Zebak and the ranged sections"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": ""
+        }
       ],
-      "styles": ["Melee", "Ranged"],
+      "styles": [
+        "Melee",
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Melee entry",
@@ -2052,10 +4042,26 @@
             "ring": "Berserker ring"
           },
           "inventory": [
-            { "name": "Ranged switch", "qty": "—", "note": "Blowpipe or crossbow for Zebak" },
-            { "name": "Prayer potion(4)", "qty": "4–8", "note": "" },
-            { "name": "Saradomin brew(4)", "qty": "4–6", "note": "" },
-            { "name": "Super restore(4)", "qty": "2–3", "note": "" }
+            {
+              "name": "Ranged switch",
+              "qty": "—",
+              "note": "Blowpipe or crossbow for Zebak"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "4–8",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew(4)",
+              "qty": "4–6",
+              "note": ""
+            },
+            {
+              "name": "Super restore(4)",
+              "qty": "2–3",
+              "note": ""
+            }
           ],
           "notes": "The invocation system scales difficulty — start at 0–150 and climb. It's the most solo-friendly raid."
         }
@@ -2072,29 +4078,135 @@
       "location": "Prifddinas (Song of the Elves)",
       "duration": "10–15 min per run",
       "requirements": {
-        "quests": ["song of elves"],
+        "quests": [
+          "song of elves"
+        ],
         "skills": []
       },
       "recommended": [
-        { "skill": "Ranged", "level": 85, "note": "Or 85 Magic — pick one to craft toward" },
-        { "skill": "Defence", "level": 85, "note": "" },
-        { "skill": "Prayer", "level": 43, "note": "Protect from the Hunllef's style" }
+        {
+          "skill": "Ranged",
+          "level": 85,
+          "note": "Or 85 Magic — pick one to craft toward"
+        },
+        {
+          "skill": "Defence",
+          "level": 85,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Protect from the Hunllef's style"
+        }
       ],
-      "styles": ["Ranged"],
+      "styles": [
+        "Ranged"
+      ],
       "presets": [
         {
           "name": "Crafted in-raid",
           "description": "You enter with nothing — weapons, armour and food are all crafted inside from gathered materials. There is no loadout to wear.",
           "slots": {},
           "inventory": [
-            { "name": "Nothing", "qty": "—", "note": "Every item is made inside from gathered resources" },
-            { "name": "Crystal bow / staff", "qty": "—", "note": "Craft one and armour it up before the Hunllef" },
-            { "name": "Food", "qty": "—", "note": "Cook paddlefish/egnoto inside for the fight" }
+            {
+              "name": "Nothing",
+              "qty": "—",
+              "note": "Every item is made inside from gathered resources"
+            },
+            {
+              "name": "Crystal bow / staff",
+              "qty": "—",
+              "note": "Craft one and armour it up before the Hunllef"
+            },
+            {
+              "name": "Food",
+              "qty": "—",
+              "note": "Cook paddlefish/egnoto inside for the fight"
+            }
           ],
           "notes": "The regular Gauntlet is the trainer; the Corrupted Gauntlet is the profitable, time-pressured version. Prep speed is the real skill."
         }
       ],
       "notes": "Drops the enhanced crystal weapon seed (→ Bow of Faerdhinen / blade of Saeldor). No gear to import — the whole point is crafting under time pressure."
+    },
+    {
+      "key": "royal-titans",
+      "name": "Royal Titans",
+      "tier": "Hard",
+      "tagline": "Eldric the Ice King and Branda the Fire Queen — a duo of gear switches and elemental adds.",
+      "members": true,
+      "wiki": "Royal Titans",
+      "location": "Asgarnian Ice Dungeon, western tunnel (fairy ring AIQ)",
+      "duration": "4–8 min per fight",
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
+      "recommended": [
+        {
+          "skill": "Ranged",
+          "level": 85,
+          "note": "Your main damage on both titans"
+        },
+        {
+          "skill": "Attack",
+          "level": 80,
+          "note": "Melee switch for phase 2"
+        },
+        {
+          "skill": "Magic",
+          "level": 70,
+          "note": "Opposite-element spells clear the rows and adds"
+        }
+      ],
+      "styles": [
+        "Ranged",
+        "Melee",
+        "Magic"
+      ],
+      "presets": [
+        {
+          "name": "Ranged (duo)",
+          "description": "Crossbow + armadyl for phase 1 kiting; carry a melee switch and opposite-element runes.",
+          "slots": {
+            "head": "Armadyl helmet",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Armadyl crossbow",
+            "body": "Armadyl chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Armadyl chainskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Melee switch",
+              "qty": "weapon + gloves",
+              "note": "Whip / lance for phase 2 when both titans go static"
+            },
+            {
+              "name": "Fire + ice runes",
+              "qty": "1 pouch each",
+              "note": "Opposite-element spells kill the elementals and clear flame/ice rows"
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": "Protect from Melee fully blocks the smash"
+            },
+            {
+              "name": "Saradomin brews / restores",
+              "qty": "4–6",
+              "note": ""
+            }
+          ],
+          "notes": "Ranged while out of melee distance; melee once phase 2 pins both titans in place (35% HP). Elementals and the flame/ice rows need opposite-element magic — fire against Eldric's ice, ice against Branda's fire."
+        }
+      ],
+      "notes": "Designed as a two-player fight (combat 90+ each) but solable with patience — a partner can join mid-fight until a titan drops below 75%. Death uses standard gravestone mechanics outside the entrance."
     }
   ]
 }

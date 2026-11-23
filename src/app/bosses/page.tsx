@@ -1215,7 +1215,9 @@ function BossDetail({
         </CardHeader>
         <CardContent className="space-y-3">
           {/* hard requirements */}
-          {(verdict.skillGaps.length > 0 || verdict.questGates.length > 0) && (
+          {(verdict.skillGaps.length > 0 ||
+            verdict.questGates.length > 0 ||
+            verdict.diaryGates.length > 0) && (
             <div className="space-y-1.5">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-stone-500">
                 Required
@@ -1256,6 +1258,31 @@ function BossDetail({
                     ))}
                 </div>
               ))}
+              {verdict.diaryGates.map((d) => (
+                  <div key={`d-${d.key}`} className="flex items-baseline gap-x-2 text-sm">
+                    <span className={d.done ? "text-emerald-400" : "text-amber-300"}>
+                      {d.done ? "✓" : d.done === false ? "✗" : "•"} diary: {questName(d.key)}
+                    </span>
+                    {!d.done &&
+                      (planned.has(d.key) ? (
+                        <Link
+                          href="/"
+                          title="Already on your plan — view it"
+                          className="inline-flex items-center gap-0.5 text-xs text-emerald-400 underline underline-offset-2 hover:text-emerald-300"
+                        >
+                          <CheckCircle2 className="h-3 w-3" aria-hidden />
+                          planned
+                        </Link>
+                      ) : (
+                        <Link
+                          href={planUrl(d.key)}
+                          className="text-xs text-amber-400/80 underline underline-offset-2 hover:text-amber-300"
+                        >
+                          plan it →
+                        </Link>
+                      ))}
+                  </div>
+                ))}
             </div>
           )}
           {/* recommended */}
