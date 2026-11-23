@@ -171,6 +171,9 @@ export default function BossesPage() {
   const [targets, setTargets] = useState<string[]>([]);
   const [added, setAdded] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>(BOSSES[0]?.key ?? "");
+  /** increments on every boss selection so re-selecting the current boss still
+   *  re-triggers the scroll-to-detail effect */
+  const [scrollTick, setScrollTick] = useState(0);
   /** advisor open state lives here so the header shortcut can open it */
   const [advisorOpen, setAdvisorOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -413,6 +416,9 @@ export default function BossesPage() {
   const selectBoss = useCallback((key: string) => {
     pendingDetailScroll.current = true;
     setSelectedKey(key);
+    // bump so the scroll effect fires even when the key is unchanged — clicking
+    // the already-selected boss should still jump back to its detail
+    setScrollTick((t) => t + 1);
     // keep the URL shareable — replaceState so back-button doesn't fight it
     history.replaceState(null, "", `#${key}`);
   }, []);
@@ -423,7 +429,8 @@ export default function BossesPage() {
     document
       .getElementById("boss-detail")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [selectedKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedKey, scrollTick]);
 
   // deep-link: open a boss from the URL hash on first load (shareable links)
   useEffect(() => {
