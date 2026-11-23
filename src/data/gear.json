@@ -6,7 +6,7 @@
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-23T19:10:13.895Z",
+  "priceSnapshot": "2026-11-23T21:15:26.865Z",
   "items": 88
  },
  "items": [
@@ -37,7 +37,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 65
+   "price": 56
   },
   {
    "id": 10499,
@@ -95,7 +95,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 11800
+   "price": 12100
   },
   {
    "id": 9304,
@@ -122,7 +122,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 809
+   "price": 743
   },
   {
    "id": 9185,
@@ -152,7 +152,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 9146
+   "price": 9166
   },
   {
    "id": 2503,
@@ -182,7 +182,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 7363
+   "price": 7353
   },
   {
    "id": 2491,
@@ -211,7 +211,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 2090
+   "price": 2202
   },
   {
    "id": 2497,
@@ -240,7 +240,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 3270
+   "price": 3433
   },
   {
    "id": 6328,
@@ -270,7 +270,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 225
+   "price": 319
   },
   {
    "id": 6733,
@@ -297,7 +297,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 1800000
+   "price": 2000000
   },
   {
    "id": 4732,
@@ -327,7 +327,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 59500
+   "price": 54800
   },
   {
    "id": 19547,
@@ -356,7 +356,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 75 Hitpoints (missing from cache dataset)",
-   "price": 14300000
+   "price": 15100000
   },
   {
    "id": 21944,
@@ -385,7 +385,7 @@
    },
    "reqQuests": [],
    "override": "wiki: dragon bolts require 64 Ranged (cache has none)",
-   "price": 2870
+   "price": 2788
   },
   {
    "id": 11785,
@@ -415,7 +415,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 31200000
+   "price": 26400000
   },
   {
    "id": 4736,
@@ -445,7 +445,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 706600
+   "price": 652100
   },
   {
    "id": 7462,
@@ -504,7 +504,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 234600
+   "price": 258900
   },
   {
    "id": 2577,
@@ -533,7 +533,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 31800000
+   "price": 33100000
   },
   {
    "id": 11826,
@@ -563,7 +563,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 8200000
+   "price": 8300000
   },
   {
    "id": 22109,
@@ -622,7 +622,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 32600000
+   "price": 33100000
   },
   {
    "id": 11830,
@@ -652,7 +652,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 24200000
+   "price": 24500000
   },
   {
    "id": 13237,
@@ -682,7 +682,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 75 Ranged + 75 Defence (missing from cache dataset)",
-   "price": 32000000
+   "price": 33500000
   },
   {
    "id": 21298,
@@ -711,7 +711,7 @@
    },
    "reqQuests": [],
    "override": "wiki: obsidian armour requires 60 Defence (cape excepted)",
-   "price": 520500
+   "price": 614500
   },
   {
    "id": 6568,
@@ -738,7 +738,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 313000
+   "price": 323900
   },
   {
    "id": 11128,
@@ -795,7 +795,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 448100
+   "price": 403400
   },
   {
    "id": 12954,
@@ -853,7 +853,7 @@
    },
    "reqQuests": [],
    "override": "wiki: obsidian armour requires 60 Defence (cape excepted)",
-   "price": 811000
+   "price": 861500
   },
   {
    "id": 11118,
@@ -880,7 +880,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 11900
+   "price": 12300
   },
   {
    "id": 21304,
@@ -909,7 +909,7 @@
    },
    "reqQuests": [],
    "override": "wiki: obsidian armour requires 60 Defence (cape excepted)",
-   "price": 716700
+   "price": 757900
   },
   {
    "id": 11840,
@@ -938,7 +938,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 130700
+   "price": 138900
   },
   {
    "id": 6737,
@@ -965,7 +965,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 2800000
+   "price": 3300000
   },
   {
    "id": 10828,
@@ -996,7 +996,7 @@
     "fremennik isles"
    ],
    "override": null,
-   "price": 34800
+   "price": 35500
   },
   {
    "id": 6570,
@@ -1082,7 +1082,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 667400
+   "price": 653400
   },
   {
    "id": 11832,
@@ -1111,7 +1111,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 17000000
+   "price": 17300000
   },
   {
    "id": 11834,
@@ -1140,7 +1140,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 11100000
+   "price": 11600000
   },
   {
    "id": 4089,
@@ -1170,7 +1170,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 9635
+   "price": 10800
   },
   {
    "id": 2412,
@@ -1228,7 +1228,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 262300
+   "price": 283500
   },
   {
    "id": 1409,
@@ -1321,7 +1321,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 5436
+   "price": 5539
   },
   {
    "id": 4093,
@@ -1351,7 +1351,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 47300
+   "price": 47100
   },
   {
    "id": 4097,
@@ -1381,7 +1381,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 5481
+   "price": 5546
   },
   {
    "id": 2552,
@@ -1408,7 +1408,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 810
+   "price": 821
   },
   {
    "id": 12658,
@@ -1470,7 +1470,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 20300
+   "price": 20600
   },
   {
    "id": 1725,
@@ -1497,7 +1497,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 1309
+   "price": 1348
   },
   {
    "id": 1333,
@@ -1527,7 +1527,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 14900
+   "price": 15100
   },
   {
    "id": 1201,
@@ -1556,7 +1556,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 31700
+   "price": 32000
   },
   {
    "id": 1127,
@@ -1587,7 +1587,7 @@
     "dragon slayer i"
    ],
    "override": null,
-   "price": 38300
+   "price": 38500
   },
   {
    "id": 1065,
@@ -1616,7 +1616,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 1206
+   "price": 1388
   },
   {
    "id": 1079,
@@ -1645,7 +1645,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 37700
+   "price": 37900
   },
   {
    "id": 1061,
@@ -1672,7 +1672,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 72
+   "price": 70
   },
   {
    "id": 1731,
@@ -1699,7 +1699,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 2229
+   "price": 2353
   },
   {
    "id": 890,
@@ -1756,7 +1756,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 120
+   "price": 152
   },
   {
    "id": 1135,
@@ -1788,7 +1788,7 @@
     "dragon slayer i"
    ],
    "override": null,
-   "price": 4280
+   "price": 4413
   },
   {
    "id": 1099,
@@ -1817,7 +1817,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 2133
+   "price": 2266
   },
   {
    "id": 4708,
@@ -1847,7 +1847,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 167400
+   "price": 216400
   },
   {
    "id": 11907,
@@ -1907,7 +1907,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 929700
+   "price": 961600
   },
   {
    "id": 4714,
@@ -1937,7 +1937,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 998800
+   "price": 1000000
   },
   {
    "id": 6731,
@@ -1964,7 +1964,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 573900
+   "price": 601000
   },
   {
    "id": 12926,
@@ -2022,7 +2022,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 174
+   "price": 122
   },
   {
    "id": 777,
@@ -2108,7 +2108,7 @@
    "reqLevels": {},
    "reqQuests": [],
    "override": null,
-   "price": 26800000
+   "price": 28600000
   },
   {
    "id": 11283,
@@ -2195,7 +2195,7 @@
     "dragon slayer i"
    ],
    "override": null,
-   "price": 87
+   "price": 120
   },
   {
    "id": 21946,
@@ -2224,7 +2224,7 @@
    },
    "reqQuests": [],
    "override": "wiki: dragon bolts require 64 Ranged (cache has none)",
-   "price": 2698
+   "price": 2414
   },
   {
    "id": 28792,
@@ -2282,7 +2282,7 @@
    },
    "reqQuests": [],
    "override": null,
-   "price": 675700
+   "price": 682900
   },
   {
    "id": 12821,
@@ -2313,7 +2313,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 75 Defence + 70 Prayer + 65 Magic (cache has none)",
-   "price": 17600000
+   "price": 16100000
   },
   {
    "id": 22978,
@@ -2345,7 +2345,7 @@
     "barbarian training"
    ],
    "override": "wiki: 78 Attack + Barbarian Training (cache has none)",
-   "price": 38300000
+   "price": 39500000
   },
   {
    "id": 13263,
@@ -2376,7 +2376,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 70 Attack + 70 Strength (cache has none)",
-   "price": 11000000
+   "price": 8600000
   },
   {
    "id": 21902,
@@ -2406,7 +2406,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 64 Ranged (cache has none)",
-   "price": 424500
+   "price": 423700
   },
   {
    "id": 19553,
@@ -2465,7 +2465,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 75 Strength + 75 Defence (cache has none)",
-   "price": 16200000
+   "price": 16100000
   },
   {
    "id": 13235,
@@ -2495,7 +2495,7 @@
    },
    "reqQuests": [],
    "override": "wiki: 75 Magic + 75 Defence (cache has none)",
-   "price": 3900000
+   "price": 3800000
   },
   {
    "id": 19544,
