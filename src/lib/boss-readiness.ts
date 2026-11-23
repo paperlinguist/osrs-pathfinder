@@ -2,7 +2,7 @@ import type { OwnedEntry } from "./character-export";
 import { ownedKey } from "./character-export";
 import type { PlayerSkills } from "./quest-data";
 import type { Boss, BossPreset, BossSkillReq, GearItem, SlotKey } from "./boss-data";
-import { gearFor } from "./boss-data";
+import { gearFor, presetStyle } from "./boss-data";
 
 /**
  * Boss readiness engine — the boss-planner counterpart of the quest resolver.
@@ -131,7 +131,7 @@ function checkItem(
 }
 
 function checkPreset(boss: Boss, preset: BossPreset, input: ReadinessInput): PresetCheck {
-  const style = boss.styles[0] ?? "Melee";
+  const style = presetStyle(boss, preset);
   const items: ItemCheck[] = [];
   for (const [slotKey, name] of Object.entries(preset.slots) as [SlotKey, string][]) {
     items.push(checkItem(slotKey, name, input));

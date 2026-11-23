@@ -10,7 +10,8 @@ OSRS progress planner — three tools in one, sharing one imported character:
   every lower tier, quest and skill level it needs.
 - **Boss gear planner** (`/bosses`) — readiness verdicts and budget-tier
   loadouts for **41 bosses**, checked against your imported character, bank and
-  worn equipment, with an upgrade advisor for what to buy next.
+  worn equipment, with per-loadout comfort upgrades from your bank or budget
+  and an upgrade advisor for what to buy next.
 - **Skill explorer** (`/skills`) — pick a skill and see every quest that
   rewards XP in it (with ready/boost/gated checks), the quests and diary tiers
   your next levels unlock, milestones with training estimates, and rough
@@ -71,6 +72,14 @@ visitor's browser (with export/import character backups in-app).
   your imported character. Each item shows equip/quest locks (`Defence 65 → 70`,
   `quest: Underground Pass`), an owned badge (bank **and worn** equipment), its
   GE price, and a cheapest-first shopping list against your imported coin pile.
+  **Comfort upgrades** sit under each loadout: when something in the planner's
+  gear pool scores higher than the preset pick and you either own it or could
+  buy all the upgrades together within your coin pile, the slot is bumped to
+  the pool's best — over-geared players see the comfier loadout they can field
+  today. Mechanic gear the score can't value (anti-dragonfire shields,
+  dragon-hunter weapons, Corp's spear, teleport rings) is deliberately left
+  alone; two-handed weapons never displace an off-hand, and a weapon upgrade
+  must keep firing the ammo the preset already uses.
   Search, a ready / not-yet filter, a tier filter and 12-per-page pagination
   keep the roster navigable; clicking a boss scrolls to its loadouts.
 - **Upgrade advisor** — a cross-boss "what should I buy next" view: every

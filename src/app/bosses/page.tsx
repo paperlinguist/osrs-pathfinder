@@ -40,6 +40,7 @@ import {
   type PresetCheck,
 } from "@/lib/boss-readiness";
 import { suggestUpgrades, type UpgradeReport, type UpgradeSuggestion } from "@/lib/upgrade-advisor";
+import { optimizeLoadout, type LoadoutOptimization } from "@/lib/loadout-optimizer";
 import { resolveChain } from "@/lib/resolver";
 import { useToast } from "@/hooks/use-toast";
 import { APP_BUILD, APP_VERSION, REPO_URL } from "@/lib/version";
@@ -384,6 +385,20 @@ export default function BossesPage() {
   const selected: Boss | undefined = BOSSES.find((b) => b.key === selectedKey);
   const selectedVerdict = selected ? verdicts.get(selected.key) : undefined;
 
+  /** per-preset comfort optimizations for the selected boss (needs an items
+   *  import — the whole point is "what YOU own / could buy today") */
+  const optimizations = useMemo(() => {
+    if (!selected || !ownedIndex) return null;
+    const map = new Map<string, LoadoutOptimization | null>();
+    for (const p of selected.presets) {
+      map.set(
+        p.name,
+        optimizeLoadout(selected, p, { player, completed, ownedIndex, coins: owned.coins }),
+      );
+    }
+    return map;
+  }, [selected, player, completed, ownedIndex, owned.coins]);
+
   const hasAnyData = player !== null || completed !== null;
 
   return (
@@ -434,8 +449,8 @@ export default function BossesPage() {
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold tracking-tight text-amber-200">Boss gear planner</h1>
             <p className="text-xs text-stone-400">
-              Am I ready — and what should I wear? Readiness verdicts and budget-tier loadouts
-              against your imported character.
+              Am I ready — and what should I wear? Readiness verdicts, budget-tier loadouts and
+              comfort upgrades from your bank, against your imported character.
             </p>
           </div>
         </div>
@@ -735,6 +750,7 @@ export default function BossesPage() {
               verdict={selectedVerdict}
               coins={owned.coins}
               planned={plannedKeys}
+              optimizations={optimizations}
             />
           </div>
         )}
@@ -1041,11 +1057,13 @@ function BossDetail({
   verdict,
   coins,
   planned,
+  optimizations,
 }: {
   boss: Boss;
   verdict: BossVerdict;
   coins: number | null;
   planned: Set<string>;
+  optimizations: Map<string, LoadoutOptimization | null> | null;
 }) {
   return (
     <div className="space-y-4">
@@ -1156,7 +1174,13 @@ function BossDetail({
 
       {/* presets */}
       {verdict.presets.map((p) => (
-        <PresetCard key={p.preset.name} presetCheck={p} coins={coins} planned={planned} />
+        <PresetCard
+          key={p.preset.name}
+          presetCheck={p}
+          coins={coins}
+          planned={planned}
+          optimization={optimizations?.get(p.preset.name) ?? null}
+        />
       ))}
     </div>
   );
@@ -1168,10 +1192,13 @@ function PresetCard({
   presetCheck,
   coins,
   planned,
+  optimization,
 }: {
   presetCheck: PresetCheck;
   coins: number | null;
   planned: Set<string>;
+  /** comfort upgrades for this preset (null = no items import / nothing better) */
+  optimization: LoadoutOptimization | null;
 }) {
   const { preset, style, items, ownedCount, knownOwned, missingCost, affordableCount, overBudgetCount } =
     presetCheck;
@@ -1279,6 +1306,63 @@ function PresetCard({
             );
           })}
         </div>
+        )}
+
+        {/* comfort upgrades — better gear you own or could buy within budget */}
+        {optimization && optimization.upgrades.length > 0 && (
+          <details className="rounded-md border border-emerald-800/40 bg-emerald-950/20 px-3 py-2">
+            <summary className="cursor-pointer select-none text-xs font-medium text-emerald-200 marker:text-emerald-800/60 hover:text-emerald-100">
+              Comfort upgrades — {optimization.upgrades.length} slot
+              {optimization.upgrades.length === 1 ? "" : "s"} could be better
+              {optimization.buyCount > 0
+                ? ` (${optimization.buyCount} to buy · ${formatPrice(optimization.totalCost)} total)`
+                : " — all in your bank"}
+            </summary>
+            <div className="mt-2 space-y-1">
+              {optimization.upgrades.map((u) => (
+                <div key={u.slotKey} className="flex flex-wrap items-baseline gap-x-2 text-xs">
+                  <span className="w-16 shrink-0 text-[11px] uppercase tracking-wide text-stone-500">
+                    {SLOT_LABELS[u.slotKey]}
+                  </span>
+                  <span className="text-stone-500">{u.fromName}</span>
+                  <span className="text-emerald-400" aria-hidden>
+                    →
+                  </span>
+                  <a
+                    href={wikiUrl(u.toItem.name)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-stone-200 hover:text-amber-300 hover:underline"
+                  >
+                    {u.toItem.name}
+                  </a>
+                  <span className="text-[11px] tabular-nums text-emerald-400/90">
+                    +{u.gain} score
+                  </span>
+                  <span className="ml-auto">
+                    {u.source === "owned" ? (
+                      <Badge className="border-emerald-800/50 bg-emerald-950/40 text-emerald-300">
+                        <CheckCircle2 className="h-3 w-3 mr-0.5" aria-hidden />
+                        in your bank
+                      </Badge>
+                    ) : (
+                      <Badge className="border-amber-800/50 bg-amber-950/30 text-amber-300">
+                        buy · {formatPrice(u.price ?? 0)}
+                      </Badge>
+                    )}
+                  </span>
+                </div>
+              ))}
+              <p className="pt-1 text-[11px] leading-relaxed text-stone-500">
+                The pool&apos;s best style score per slot (attack + damage, like the upgrade
+                advisor) from items you own or could buy together within your budget — so a
+                higher-tier bank makes the same boss more comfortable. Mechanic picks the score
+                can&apos;t value (anti-dragonfire, dragon-hunter, Corp&apos;s spear, teleport
+                rings) stay put; two-handers never displace an off-hand; weapons keep
+                firing the ammo the preset already uses.
+              </p>
+            </div>
+          </details>
         )}
 
         {/* inventory */}
