@@ -175,6 +175,13 @@ export function styleScore(item: GearItem, style: string): number {
   return Math.max(s.stabAttack, s.slashAttack, s.crushAttack) + s.strengthBonus;
 }
 
+/** best of the five defence bonuses — the tie-breaker the comfort optimizer
+ *  uses on armour slots (same offence, tanks better → comfier) */
+export function defScore(item: GearItem): number {
+  const s = item.stats;
+  return Math.max(s.stabDefence, s.slashDefence, s.crushDefence, s.magicDefence, s.rangedDefence);
+}
+
 /**
  * The combat style a preset is built around. Multi-style bosses name the
  * style per preset ("Rex · Magic", "Ranged", "Melee (lance)") — parse the

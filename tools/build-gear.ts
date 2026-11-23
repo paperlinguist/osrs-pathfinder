@@ -43,6 +43,7 @@ const REQ_OVERRIDES: Record<string, { levels: Record<string, number>; quests?: s
   "spectral spirit shield": { levels: { Defence: 75, Prayer: 70, Magic: 65 }, why: "wiki: 75 Defence + 70 Prayer + 65 Magic (cache has none)" },
   "dragon hunter lance": { levels: { Attack: 78 }, quests: ["barbarian training"], why: "wiki: 78 Attack + Barbarian Training (cache has none)" },
   "abyssal bludgeon": { levels: { Attack: 70, Strength: 70 }, why: "wiki: 70 Attack + 70 Strength (cache has none)" },
+  "dragon crossbow": { levels: { Ranged: 64 }, why: "wiki: 64 Ranged (cache has none)" },
 };
 
 /** variant suffix preference when several osrs-db entries share a base name */
@@ -137,6 +138,13 @@ async function fetchPrice(id: number): Promise<number | null> {
 
 /* -------------------------------------------------------------- collection */
 
+/** optimizer-pool gap fillers — items no preset references but the loadout
+ *  optimizer should still compare against. Keep short and justified; these
+ *  get stats/reqs/price exactly like preset items. */
+const EXTRA_POOL_ITEMS: string[] = [
+  "Dragon crossbow", // the mid-tier crossbow between Rune (9k) and Armadyl (31m); fires dragon bolts
+];
+
 // every item name referenced by any preset (insertion order = boss order)
 const referenced: string[] = [];
 for (const boss of bossesJson.bosses) {
@@ -145,6 +153,9 @@ for (const boss of bossesJson.bosses) {
       if (typeof item === "string" && !referenced.includes(item)) referenced.push(item);
     }
   }
+}
+for (const extra of EXTRA_POOL_ITEMS) {
+  if (!referenced.includes(extra)) referenced.push(extra);
 }
 
 const misses: string[] = [];

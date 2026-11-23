@@ -49,8 +49,9 @@ describe("optimizeLoadout", () => {
     expect(bySlot.get("weapon")!.toItem.name).toBe("Armadyl crossbow");
     expect(bySlot.get("neck")!.toItem.name).toBe("Necklace of anguish");
     expect(bySlot.get("feet")!.toItem.name).toBe("Pegasian boots");
-    // ammo may upgrade within the crossbow's bolt family
-    expect(bySlot.get("ammo")!.toItem.name).toBe("Ruby dragon bolts (e)");
+    // ammo may upgrade within the crossbow's bolt family (ruby/diamond tie —
+    // the cheaper dragon bolts win the deterministic tie-break)
+    expect(bySlot.get("ammo")!.toItem.name).toContain("dragon bolts (e)");
     // Barrows gloves are untradeable and not owned → never a buy suggestion
     expect(bySlot.has("hands")).toBe(false);
 
@@ -92,13 +93,81 @@ describe("optimizeLoadout", () => {
   });
 
   it("never spends past the budget", () => {
-    const r = opt("fight-caves", "Budget", { coins: 500_000 });
+    // 100k can't buy any crossbow (dragon crossbow is 424.5k)
+    const r = opt("fight-caves", "Budget", { coins: 100_000 });
     for (const u of r?.upgrades ?? []) {
-      if (u.source === "buy") expect(u.price).toBeLessThanOrEqual(500_000);
+      if (u.source === "buy") expect(u.price).toBeLessThanOrEqual(100_000);
     }
-    expect(r!.totalCost).toBeLessThanOrEqual(500_000);
-    // the 31m crossbow is out of reach → weapon stays
+    expect(r!.totalCost).toBeLessThanOrEqual(100_000);
     expect(r!.upgrades.some((u) => u.slotKey === "weapon")).toBe(false);
+    // the best crossbow is named as the blocker (maxed char → not level-locked)
+    const weaponMiss = r!.nearMisses.find((m) => m.slotKey === "weapon");
+    expect(weaponMiss).toMatchObject({ item: { name: "Armadyl crossbow" }, reason: "over-budget" });
+  });
+
+  it("walks down to the mid-tier when the pool's best is out of reach", () => {
+    // 500k can't afford the Armadyl crossbow but lands the Dragon crossbow
+    const r = opt("fight-caves", "Budget", { coins: 500_000 });
+    const weapon = r!.upgrades.find((u) => u.slotKey === "weapon");
+    expect(weapon).toMatchObject({ toItem: { name: "Dragon crossbow" }, source: "buy" });
+    // and a dragon crossbow unlocks dragon bolts for the ammo slot
+    expect(r!.upgrades.find((u) => u.slotKey === "ammo")!.toItem.name).toContain("dragon bolts (e)");
+  });
+
+  it("never suggests ammo the (un-upgraded) weapon can't fire", () => {
+    // weapon stays a rune crossbow (both better crossbows over 100k) — dragon
+    // bolts only fire from dragon-tier crossbows, so the ammo upgrade must
+    // stay on normal bolts (wiki: Dragon bolts firing requirement)
+    const r = opt("fight-caves", "Budget", { coins: 100_000 });
+    const ammo = r!.upgrades.find((u) => u.slotKey === "ammo");
+    expect(ammo!.toItem.name).toBe("Ruby bolts (e)");
+  });
+
+  it("counts armour ties with better defence as comfort upgrades", () => {
+    // Karil's leathertop ties black d'hide body on offence (30) but tanks
+    // better — the old strictly-higher rule hid it entirely
+    const r = opt("fight-caves", "Budget", { coins: 5_000_000 });
+    const body = r!.upgrades.find((u) => u.slotKey === "body");
+    expect(body).toMatchObject({
+      toItem: { name: "Karil's leathertop" },
+      gain: 0,
+      source: "buy",
+    });
+    expect(body!.defGain).toBeGreaterThan(0);
+    expect(r!.upgrades.find((u) => u.slotKey === "legs")!.toItem.name).toBe("Karil's leatherskirt");
+    // jewellery is not a tank slot: fury ties glory for ranged and stays put
+    expect(r!.upgrades.some((u) => u.slotKey === "neck")).toBe(false);
+  });
+
+  it("explains empty slots with the closest blocked option", () => {
+    // mid-level character: Karil's/Armadyl are 70-gated, ranger boots are 31.8m
+    const mid: PlayerSkills = {
+      ...maxed,
+      levels: { ...maxed.levels, Ranged: 65, Defence: 60 },
+    };
+    const r = opt("fight-caves", "Budget", { coins: 1_500_000, player: mid });
+    // crossbow: dragon crossbow needs 64 Ranged → affordable, taken
+    expect(r!.upgrades.find((u) => u.slotKey === "weapon")!.toItem.name).toBe("Dragon crossbow");
+    const bodyMiss = r!.nearMisses.find((m) => m.slotKey === "body");
+    expect(bodyMiss!.reason).toBe("locked");
+    expect(
+      bodyMiss!.locks
+        .filter((l): l is Extract<typeof l, { type: "level" }> => l.type === "level")
+        .map((l) => `${l.skill} ${l.required}`)
+        .sort(),
+    ).toEqual(["Defence 70", "Ranged 70"]);
+    const feetMiss = r!.nearMisses.find((m) => m.slotKey === "feet");
+    expect(feetMiss).toMatchObject({ item: { name: "Pegasian boots" }, reason: "locked" });
+    // for a maxed character the same slot is blocked by money, not levels
+    const richMiss = opt("fight-caves", "Budget", { coins: 1_500_000 })!.nearMisses.find(
+      (m) => m.slotKey === "feet",
+    );
+    expect(richMiss).toMatchObject({ reason: "over-budget" });
+    // untradeable near-misses show when the item isn't owned
+    const capeMiss = opt("fight-caves", "Budget", { coins: 999_999_999 })!.nearMisses.find(
+      (m) => m.slotKey === "cape",
+    );
+    expect(capeMiss).toMatchObject({ item: { name: "Ava's assembler" }, reason: "untradeable" });
   });
 
   it("leaves mechanic gear untouched even when better-on-paper gear is available", () => {
@@ -120,9 +189,21 @@ describe("optimizeLoadout", () => {
     const scurrius = opt("scurrius", "Melee", { owned: ["Abyssal whip"], coins: 999_999_999 });
     expect(scurrius!.upgrades.some((u) => u.slotKey === "weapon")).toBe(false);
 
-    // obsidian/berserker necklace synergy survives an owned fury
-    const mole = opt("giant-mole", "Budget", { owned: ["Amulet of fury"], coins: 999_999_999 });
-    expect(mole!.upgrades.some((u) => u.slotKey === "neck")).toBe(false);
+    // obsidian set bonus (armour +10% dmg/acc with the weapon, wiki-verified):
+    // the whip doesn't displace the Toktz-xil-ak, and Bandos pieces don't
+    // break up the armour set around it
+    const mole = opt("giant-mole", "Budget", {
+      owned: ["Amulet of fury", "Abyssal whip", "Bandos chestplate"],
+      coins: 999_999_999,
+    });
+    expect(mole?.upgrades.some((u) => u.slotKey === "neck") ?? false).toBe(false);
+    expect(mole?.upgrades.some((u) => u.slotKey === "weapon") ?? false).toBe(false);
+    expect(mole?.upgrades.some((u) => u.slotKey === "body") ?? false).toBe(false);
+
+    // …but obsidian armour without an obsidian weapon is just budget armour —
+    // Chaos Elemental pairs it with a whip, so Bandos may upgrade it there
+    const ce = opt("chaos-elemental", "Melee", { coins: 999_999_999 });
+    expect(ce?.upgrades.some((u) => u.slotKey === "body") ?? false).toBe(true);
 
     // ring of dueling is teleport utility, not a stat ring
     const barrows = opt("barrows", "Budget", { owned: ["Seers ring"], coins: 999_999_999 });
@@ -140,13 +221,20 @@ describe("optimizeLoadout", () => {
     const r = opt("obor", "F2P melee", { coins: 999_999_999 });
     expect(r!.upgrades.length).toBeGreaterThan(0); // something to upgrade…
     expect(r!.upgrades.every((u) => !u.toItem.members)).toBe(true); // …but only F2P gear
+    // the members dragon crossbow never leaks in
+    expect(r!.upgrades.some((u) => u.toItem.name === "Dragon crossbow")).toBe(false);
     // amulet of strength → power is the one legal F2P neck upgrade in the pool
     expect(r!.upgrades.find((u) => u.slotKey === "neck")!.toItem.name).toBe("Amulet of power");
   });
 
-  it("allows members upgrades in a members preset of an F2P boss", () => {
+  it("allows members gear in a members preset of an F2P boss", () => {
+    // the whole obsidian set is synergy-locked so nothing upgrades here,
+    // but the members filter must not hide members items from this preset:
+    // the cape near-miss is the members-only Fire cape
     const r = opt("obor", "Members melee", { coins: 999_999_999 });
-    expect(r!.upgrades.some((u) => u.toItem.members)).toBe(true);
+    const capeMiss = r?.nearMisses.find((m) => m.slotKey === "cape");
+    expect(capeMiss).toMatchObject({ item: { name: "Fire cape" }, reason: "untradeable" });
+    expect(capeMiss!.item.members).toBe(true);
   });
 
   it("only upgrades ammo inside the weapon's family", () => {

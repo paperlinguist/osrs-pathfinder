@@ -1308,15 +1308,27 @@ function PresetCard({
         </div>
         )}
 
-        {/* comfort upgrades — better gear you own or could buy within budget */}
-        {optimization && optimization.upgrades.length > 0 && (
+        {/* comfort upgrades — better gear you own or could buy within budget,
+            plus the near-misses explaining slots that stayed put */}
+        {optimization && (optimization.upgrades.length > 0 || optimization.nearMisses.length > 0) && (
           <details className="rounded-md border border-emerald-800/40 bg-emerald-950/20 px-3 py-2">
             <summary className="cursor-pointer select-none text-xs font-medium text-emerald-200 marker:text-emerald-800/60 hover:text-emerald-100">
-              Comfort upgrades — {optimization.upgrades.length} slot
-              {optimization.upgrades.length === 1 ? "" : "s"} could be better
-              {optimization.buyCount > 0
-                ? ` (${optimization.buyCount} to buy · ${formatPrice(optimization.totalCost)} total)`
-                : " — all in your bank"}
+              {optimization.upgrades.length > 0 ? (
+                <>
+                  Comfort upgrades — {optimization.upgrades.length} slot
+                  {optimization.upgrades.length === 1 ? "" : "s"} could be better
+                  {optimization.buyCount > 0
+                    ? ` (${optimization.buyCount} to buy · ${formatPrice(optimization.totalCost)} total)`
+                    : " — all in your bank"}
+                  {optimization.nearMisses.length > 0 &&
+                    ` · ${optimization.nearMisses.length} just out of reach`}
+                </>
+              ) : (
+                <>
+                  Just out of reach — {optimization.nearMisses.length} better option
+                  {optimization.nearMisses.length === 1 ? "" : "s"}
+                </>
+              )}
             </summary>
             <div className="mt-2 space-y-1">
               {optimization.upgrades.map((u) => (
@@ -1337,7 +1349,7 @@ function PresetCard({
                     {u.toItem.name}
                   </a>
                   <span className="text-[11px] tabular-nums text-emerald-400/90">
-                    +{u.gain} score
+                    {u.gain > 0 ? `+${u.gain} score` : `+${u.defGain} def`}
                   </span>
                   <span className="ml-auto">
                     {u.source === "owned" ? (
@@ -1353,13 +1365,56 @@ function PresetCard({
                   </span>
                 </div>
               ))}
+              {optimization.nearMisses.length > 0 && (
+                <div className="space-y-0.5 border-t border-stone-800/60 pt-1.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-600">
+                    Just out of reach
+                  </p>
+                  {optimization.nearMisses.map((m) => (
+                    <div
+                      key={m.slotKey}
+                      className="flex flex-wrap items-baseline gap-x-2 text-[11px] text-stone-500"
+                    >
+                      <span className="w-16 shrink-0 uppercase tracking-wide text-stone-600">
+                        {SLOT_LABELS[m.slotKey]}
+                      </span>
+                      <a
+                        href={wikiUrl(m.item.name)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-stone-400 hover:text-amber-300 hover:underline"
+                      >
+                        {m.item.name}
+                      </a>
+                      <span className="tabular-nums">
+                        {m.gain > 0 ? `+${m.gain}` : `+${m.defGain} def`}
+                      </span>
+                      <span className="ml-auto text-stone-600">
+                        {m.reason === "locked"
+                          ? m.locks
+                              .slice(0, 3)
+                              .map((l) =>
+                                l.type === "level"
+                                  ? `${l.skill} ${l.required}`
+                                  : `quest: ${questName(l.key)}`,
+                              )
+                              .join(" · ")
+                          : m.reason === "over-budget"
+                            ? `${formatPrice(m.price ?? 0)} — over budget`
+                            : "untradeable — earn it"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
               <p className="pt-1 text-[11px] leading-relaxed text-stone-500">
-                The pool&apos;s best style score per slot (attack + damage, like the upgrade
-                advisor) from items you own or could buy together within your budget — so a
-                higher-tier bank makes the same boss more comfortable. Mechanic picks the score
-                can&apos;t value (anti-dragonfire, dragon-hunter, Corp&apos;s spear, teleport
-                rings) stay put; two-handers never displace an off-hand; weapons keep
-                firing the ammo the preset already uses.
+                Each slot takes the pool&apos;s best option you own or can afford (attack +
+                damage score, like the upgrade advisor), walking down to mid-tiers when the
+                best is out of reach; armour that ties on offence but tanks better counts
+                too. Mechanic picks and set bonuses the score can&apos;t value (anti-dragonfire,
+                dragon-hunter, Corp&apos;s spear, the obsidian set, teleport rings) stay put;
+                two-handers never displace an off-hand; weapons keep firing the ammo the
+                preset already uses (dragon bolts need a dragon-tier crossbow).
               </p>
             </div>
           </details>

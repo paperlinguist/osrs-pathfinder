@@ -72,14 +72,18 @@ visitor's browser (with export/import character backups in-app).
   your imported character. Each item shows equip/quest locks (`Defence 65 → 70`,
   `quest: Underground Pass`), an owned badge (bank **and worn** equipment), its
   GE price, and a cheapest-first shopping list against your imported coin pile.
-  **Comfort upgrades** sit under each loadout: when something in the planner's
-  gear pool scores higher than the preset pick and you either own it or could
-  buy all the upgrades together within your coin pile, the slot is bumped to
-  the pool's best — over-geared players see the comfier loadout they can field
-  today. Mechanic gear the score can't value (anti-dragonfire shields,
-  dragon-hunter weapons, Corp's spear, teleport rings) is deliberately left
-  alone; two-handed weapons never displace an off-hand, and a weapon upgrade
-  must keep firing the ammo the preset already uses.
+  **Comfort upgrades** sit under each loadout: each slot takes the best item
+  from the planner's gear pool that beats the preset pick and that you either
+  own or can afford within your coin pile — walking down to mid-tiers when the
+  pool's best is out of reach, so an owned Dragon crossbow displaces a Rune
+  crossbow long before an Armadyl one is in budget. Armour that ties on
+  offence but tanks better counts (Karil's over black d'hide), and slots that
+  stay put show the closest option and what's holding it back (equip levels,
+  quests, budget, untradeable). Mechanic gear and set bonuses the score can't
+  value (anti-dragonfire shields, dragon-hunter weapons, Corp's spear, the
+  obsidian set, teleport rings) are deliberately left alone; two-handed
+  weapons never displace an off-hand, and weapons keep firing the ammo the
+  preset already uses (dragon bolts need a dragon-tier crossbow).
   Search, a ready / not-yet filter, a tier filter and 12-per-page pagination
   keep the roster navigable; clicking a boss scrolls to its loadouts.
 - **Upgrade advisor** — a cross-boss "what should I buy next" view: every

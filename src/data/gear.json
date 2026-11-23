@@ -1,13 +1,13 @@
 {
  "meta": {
-  "generated": "2026-11-06",
+  "generated": "2026-11-23",
   "sources": [
    "wvanderp/osrs-db (MIT) — slotStats + itemRequirements, via git-lfs (see tools/build-gear.ts header)",
    "OSRS Wiki — requirement overrides marked per-item in `override`",
    "Jagex item DB API — GE price snapshot; price null = untradeable or unfetchable"
   ],
-  "priceSnapshot": "2026-11-06T23:11:21.980Z",
-  "items": 81
+  "priceSnapshot": "2026-11-23T18:38:25.835Z",
+  "items": 82
  },
  "items": [
   {
@@ -2377,6 +2377,36 @@
    "reqQuests": [],
    "override": "wiki: 70 Attack + 70 Strength (cache has none)",
    "price": 11000000
+  },
+  {
+   "id": 21902,
+   "name": "Dragon crossbow",
+   "rawName": "Dragon crossbow",
+   "slot": "Weapon",
+   "members": true,
+   "stats": {
+    "stabAttack": 0,
+    "slashAttack": 0,
+    "crushAttack": 0,
+    "magicAttack": 0,
+    "rangedAttack": 94,
+    "stabDefence": 0,
+    "slashDefence": 0,
+    "crushDefence": 0,
+    "magicDefence": 0,
+    "rangedDefence": 0,
+    "strengthBonus": 0,
+    "rangedStrength": 0,
+    "magicDamage": 0,
+    "prayerBonus": 0
+   },
+   "speed": 6,
+   "reqLevels": {
+    "Ranged": 64
+   },
+   "reqQuests": [],
+   "override": "wiki: 64 Ranged (cache has none)",
+   "price": 424500
   }
  ]
 }
