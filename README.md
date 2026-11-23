@@ -9,7 +9,7 @@ OSRS progress planner — three tools in one, sharing one imported character:
   tiers** track too — pick a tier (e.g. Karamja Elite) and the plan pulls in
   every lower tier, quest and skill level it needs.
 - **Boss gear planner** (`/bosses`) — readiness verdicts and budget-tier
-  loadouts for **50 bosses**, checked against your imported character, bank and
+  loadouts for **52 bosses**, checked against your imported character, bank and
   worn equipment, with per-loadout comfort upgrades from your bank or budget
   and an upgrade advisor for what to buy next. Bosses can also be gated on
   diary tiers (the wilderness singles bosses need the hard Wilderness diary)
@@ -19,7 +19,7 @@ OSRS progress planner — three tools in one, sharing one imported character:
   your next levels unlock, milestones with training estimates, and rough
   training methods per level bracket.
 
-215 quests · 48 diaries · 50 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
+215 quests · 48 diaries · 52 bosses · data: [wvanderp/osrs-db](https://github.com/wvanderp/osrs-db) (MIT) + [OSRS Wiki](https://oldschool.runescape.wiki/)
 
 Fully stateless: no database, no accounts — all player progress lives in each
 visitor's browser (with export/import character backups in-app).

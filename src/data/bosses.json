@@ -4207,6 +4207,226 @@
         }
       ],
       "notes": "Designed as a two-player fight (combat 90+ each) but solable with patience — a partner can join mid-fight until a titan drops below 75%. Death uses standard gravestone mechanics outside the entrance."
+    },
+    {
+      "key": "moons-of-peril",
+      "name": "Moons of Peril",
+      "tier": "Medium",
+      "tagline": "Three nagua imprisoned beneath Cam Torum — Varlamore's mid-game trio.",
+      "members": true,
+      "wiki": "Moons of Peril",
+      "location": "Neypotzli, beneath Cam Torum (Varlamore)",
+      "duration": "~3–5 min per moon",
+      "requirements": {
+        "quests": [
+          "perilous moons"
+        ],
+        "skills": []
+      },
+      "recommended": [
+        {
+          "skill": "Attack",
+          "level": 70,
+          "note": "Blood Moon — slash her down"
+        },
+        {
+          "skill": "Ranged",
+          "level": 70,
+          "note": "Eclipse Moon — clone phase rewards spread damage"
+        },
+        {
+          "skill": "Magic",
+          "level": 70,
+          "note": "Blue Moon — ice and lightning"
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Blood Moon's attacks are typeless, so food > prayers there"
+        }
+      ],
+      "styles": [
+        "Melee",
+        "Ranged",
+        "Magic"
+      ],
+      "presets": [
+        {
+          "name": "Blood Moon · Melee",
+          "description": "Whip + defender. Kill the bloodrager jaguars fast — they drain you.",
+          "slots": {
+            "head": "Helm of Neitiznot",
+            "cape": "Fire cape",
+            "neck": "Amulet of fury",
+            "weapon": "Abyssal whip",
+            "shield": "Dragon defender",
+            "body": "Bandos chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Bandos tassets",
+            "feet": "Dragon boots",
+            "ring": "Berserker ring"
+          },
+          "inventory": [
+            {
+              "name": "Super combat potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Sharks / monkfish",
+              "qty": "8–12",
+              "note": "Typeless hits mean you eat through this"
+            }
+          ],
+          "notes": "Her hits are typeless — protection prayers barely help, so keep the food coming and stand under her to stop the bleed-out phase."
+        },
+        {
+          "name": "Eclipse Moon · Ranged",
+          "description": "Crossbow + d'hide from range; hit every clone in the 100%-accuracy phase.",
+          "slots": {
+            "head": "Karil's coif",
+            "cape": "Ava's accumulator",
+            "neck": "Amulet of fury",
+            "ammo": "Ruby bolts (e)",
+            "weapon": "Rune crossbow",
+            "body": "Karil's leathertop",
+            "hands": "Barrows gloves",
+            "legs": "Karil's leatherskirt",
+            "feet": "Snakeskin boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Sharks / monkfish",
+              "qty": "8–12",
+              "note": ""
+            }
+          ],
+          "notes": "During the clone phase every attack has 100% accuracy — tag all the clones for a fast kill, then dodge the shard volleys."
+        },
+        {
+          "name": "Blue Moon · Magic",
+          "description": "Trident + Ahrim's. Watch the teleports and the ice/lightning splits.",
+          "slots": {
+            "head": "Ahrim's hood",
+            "cape": "Imbued saradomin cape",
+            "neck": "Occult necklace",
+            "weapon": "Trident of the seas",
+            "body": "Ahrim's robetop",
+            "hands": "Barrows gloves",
+            "legs": "Ahrim's robeskirt",
+            "feet": "Mystic boots",
+            "ring": "Seers ring"
+          },
+          "inventory": [
+            {
+              "name": "Magic potion(4)",
+              "qty": "1",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Sharks / monkfish",
+              "qty": "8–12",
+              "note": ""
+            }
+          ],
+          "notes": "Pray Magic to soften her lightning; step out of the expanding ice rings. Her spell splits after she teleports."
+        }
+      ],
+      "notes": "Requires the Perilous Moons quest. Fight the three moons one-by-one, restocking from Eyatlalli's supplies between kills. They drop the Blood/Eclipse/Blue moon armour sets and weapons — untradeable crafts, so the gear itself is the reward."
+    },
+    {
+      "key": "hueycoatl",
+      "name": "The Hueycoatl",
+      "tier": "Hard",
+      "tagline": "The dragon coiled in the Darkfrost — Varlamore's 'Tome of Night' boss.",
+      "members": true,
+      "wiki": "Hueycoatl",
+      "location": "The Darkfrost, Varlamore",
+      "duration": "5–10 min per kill",
+      "requirements": {
+        "quests": [],
+        "skills": []
+      },
+      "recommended": [
+        {
+          "skill": "Ranged",
+          "level": 80,
+          "note": "Crossbow + bolts for the body segments"
+        },
+        {
+          "skill": "Defence",
+          "level": 75,
+          "note": ""
+        },
+        {
+          "skill": "Prayer",
+          "level": 43,
+          "note": "Pray against her projectiles"
+        }
+      ],
+      "styles": [
+        "Ranged",
+        "Melee",
+        "Magic"
+      ],
+      "presets": [
+        {
+          "name": "Ranged",
+          "description": "Crossbow + armadyl from the arena; dragon-hunter gear gets its bonus on this dragon.",
+          "slots": {
+            "head": "Armadyl helmet",
+            "cape": "Ava's assembler",
+            "neck": "Necklace of anguish",
+            "ammo": "Ruby dragon bolts (e)",
+            "weapon": "Armadyl crossbow",
+            "body": "Armadyl chestplate",
+            "hands": "Barrows gloves",
+            "legs": "Armadyl chainskirt",
+            "feet": "Pegasian boots",
+            "ring": "Archers ring"
+          },
+          "inventory": [
+            {
+              "name": "Ranging potion(4)",
+              "qty": "1–2",
+              "note": ""
+            },
+            {
+              "name": "Prayer potion(4)",
+              "qty": "2–3",
+              "note": ""
+            },
+            {
+              "name": "Saradomin brew / sharks",
+              "qty": "6–10",
+              "note": ""
+            }
+          ],
+          "notes": "Break the five exposed body segments, then chase the tail up the mountain — the glyphs on the ground are traps, keep off them."
+        }
+      ],
+      "notes": "Dragon attribute, so the dragon-hunter lance and dragon-hunter crossbow apply their bonus. Groupable but comfortably solable. Drops pieces of the Tome of Night."
     }
   ]
 }
