@@ -88,9 +88,11 @@ const rawBosses = bossesJson as { meta: unknown; bosses: Boss[] };
 export const BOSSES: Boss[] = rawBosses.bosses;
 export const BOSS_BY_KEY: Record<string, Boss> = Object.fromEntries(BOSSES.map((b) => [b.key, b]));
 
-const rawGear = gearJson as unknown as { meta: unknown; items: GearItem[] };
+const rawGear = gearJson as unknown as { meta: { priceSnapshot?: string }; items: GearItem[] };
 export const GEAR: GearItem[] = rawGear.items;
 export const GEAR_BY_NAME: Map<string, GearItem> = new Map(GEAR.map((g) => [ownedKey(g.name), g]));
+/** when the committed price snapshot in gear.json was taken */
+export const PRICE_SNAPSHOT_AT: string = rawGear.meta.priceSnapshot ?? "";
 
 export function gearFor(name: string): GearItem | null {
   return GEAR_BY_NAME.get(ownedKey(name)) ?? null;
@@ -159,6 +161,24 @@ export function formatPrice(gp: number): string {
 /** quest display name for a requirement key ("underground pass" → "Underground Pass") */
 export function questName(key: string): string {
   return QUEST_BY_KEY[key]?.name ?? key;
+}
+
+/**
+ * Overlay live GE prices (id → gp, from /api/prices) onto the gear pool in
+ * place, then re-render — the page's memos depend on a tick the caller bumps.
+ * Only sane positive values override; a failed/absent fetch keeps the
+ * build-time snapshot. Returns how many items were refreshed.
+ */
+export function applyLivePrices(live: Record<string, number>): number {
+  let applied = 0;
+  for (const g of GEAR) {
+    const p = live[String(g.id)];
+    if (typeof p === "number" && Number.isFinite(p) && p > 0) {
+      g.price = p;
+      applied++;
+    }
+  }
+  return applied;
 }
 
 /**

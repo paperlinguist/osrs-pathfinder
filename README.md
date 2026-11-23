@@ -72,6 +72,11 @@ visitor's browser (with export/import character backups in-app).
   your imported character. Each item shows equip/quest locks (`Defence 65 → 70`,
   `quest: Underground Pass`), an owned badge (bank **and worn** equipment), its
   GE price, and a cheapest-first shopping list against your imported coin pile.
+  **GE prices refresh live**: on visit the page overlays current prices from
+  Jagex's item DB (bulk endpoint when reachable, otherwise a rate-limit-aware
+  crawl that tops up over a few minutes) on top of the build-time snapshot
+  that always stands as fallback — badge next to your coin pile says which
+  you're seeing.
   **Comfort upgrades** sit under each loadout: each slot takes the best item
   from the planner's gear pool that beats the preset pick and that you either
   own or can afford within your coin pile — walking down to mid-tiers when the
@@ -254,7 +259,9 @@ implementation, documentation, and for drafting the curated content:
   generated `gear.json` for audit.
 - **Generated files come from committed scripts.** `src/data/gear.json` is the
   output of `tools/build-gear.ts` over the MIT-licensed osrs-db dataset and the
-  Jagex item DB — never hand-edited. `src/data/diaries.json` is the output of
+  Jagex item DB — never hand-edited. Live price refreshes (`/api/prices`) read
+  the same Jagex sources at runtime, server-cached, with the committed
+  snapshot as fallback. `src/data/diaries.json` is the output of
   `tools/build-diaries.ts`, which parses the OSRS Wiki's per-area diary pages.
 - **PRs are labelled AI-generated** (the Claude Code attribution in their
   descriptions), and every page footer shows the exact build SHA for provenance.

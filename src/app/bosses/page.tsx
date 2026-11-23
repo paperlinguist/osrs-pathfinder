@@ -28,6 +28,7 @@ import {
   SLOT_KEYS,
   SLOT_LABELS,
   TIER_COLORS,
+  applyLivePrices,
   formatPrice,
   questName,
   statChips,
@@ -154,6 +155,9 @@ export default function BossesPage() {
   const [readyFilter, setReadyFilter] = useState<"all" | "ready" | "gated">("all");
   const [tierFilter, setTierFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
+  /** bumped when live GE prices overlay the snapshot (memos re-run) */
+  const [priceTick, setPriceTick] = useState(0);
+  const [livePrices, setLivePrices] = useState<{ at: number; count: number } | null>(null);
   /** set when a card click should scroll to the just-selected boss detail */
   const pendingDetailScroll = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -182,6 +186,42 @@ export default function BossesPage() {
     } catch {
       /* corrupt saves — start fresh */
     }
+  }, []);
+
+  // overlay live GE prices on the build-time snapshot (async, best-effort —
+  // a failed fetch quietly keeps the snapshot; nothing user-specific leaves
+  // the browser beyond a request for public item prices). When the server's
+  // cache is still warming (its item-DB crawl is rate-limited and tops up in
+  // slices), poll a few times until coverage stops growing.
+  useEffect(() => {
+    let cancelled = false;
+    const load = () =>
+      fetch("/api/prices", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d: { fetchedAt: number; prices: Record<string, number> } | null) => {
+          if (cancelled || !d) return -1;
+          const applied = applyLivePrices(d.prices);
+          if (applied > 0) {
+            setLivePrices({ at: d.fetchedAt, count: applied });
+            setPriceTick((t) => t + 1);
+          }
+          return applied;
+        })
+        .catch(() => -1);
+    let tries = 0;
+    const poll = (prev: number) => {
+      if (cancelled || tries >= 6 || prev === 0) return;
+      tries++;
+      setTimeout(() => {
+        void load().then((next) => {
+          if (next > prev) poll(next); // still warming — check back once more
+        });
+      }, 45_000);
+    };
+    void load().then(poll);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // live-sync with the planner / completions pages (same keys, storage events)
@@ -297,11 +337,11 @@ export default function BossesPage() {
       );
     }
     return map;
-  }, [player, completed, ownedIndex, owned.coins]);
+  }, [player, completed, ownedIndex, owned.coins, priceTick]);
 
   const advisor = useMemo(
     () => (ownedIndex ? suggestUpgrades({ player, completed, ownedIndex, coins: owned.coins }) : null),
-    [player, completed, ownedIndex, owned.coins],
+    [player, completed, ownedIndex, owned.coins, priceTick],
   );
 
   const advisorHasContent =
@@ -398,7 +438,7 @@ export default function BossesPage() {
       );
     }
     return map;
-  }, [selected, player, completed, ownedIndex, owned.coins]);
+  }, [selected, player, completed, ownedIndex, owned.coins, priceTick]);
 
   const hasAnyData = player !== null || completed !== null;
 
@@ -516,6 +556,14 @@ export default function BossesPage() {
                       <Badge className="border-amber-800/60 bg-amber-950/40 text-amber-300">
                         <Coins className="h-3 w-3 mr-1" aria-hidden />
                         {owned.coins.toLocaleString("en-US")} gp
+                      </Badge>
+                    )}
+                    {livePrices !== null && (
+                      <Badge
+                        className="border-emerald-800/50 bg-emerald-950/40 text-emerald-300"
+                        title={`Live GE prices for ${livePrices.count} pool items, refreshed ${new Date(livePrices.at || Date.now()).toLocaleTimeString("en-US")} via Jagex's item DB — anything not yet refreshed (or when it's unreachable) uses the build-time snapshot.`}
+                      >
+                        GE prices · live
                       </Badge>
                     )}
                     <button
@@ -788,7 +836,8 @@ export default function BossesPage() {
             <a href="https://github.com/wvanderp/osrs-db" target="_blank" rel="noreferrer" className="underline hover:text-stone-400">
               osrs-db
             </a>{" "}
-            (wiki-verified overrides per item), GE prices a build-time snapshot. For exact DPS math
+            (wiki-verified overrides per item), GE prices a build-time snapshot refreshed live in
+            your browser when Jagex's item DB answers. For exact DPS math
             use the{" "}
             <a
               href="https://oldschool.runescape.wiki/w/Calculator/Combat/DPS"
